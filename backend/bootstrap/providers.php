@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'providers' => [
-        // Custom service providers added here.
-    ],
+    // Custom service providers added here as fully-qualified class strings.
+    // Example: \App\Providers\HorizonServiceProvider::class,
 ];
