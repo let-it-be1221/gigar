@@ -3,45 +3,48 @@ import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FiArrowRight, FiArrowLeft, FiChevronRight, FiZap } from 'react-icons/fi'
 import { publicApi } from '../api/client'
+import SmartImage from './SmartImage'
 
 const AUTOPLAY_MS = 6000
 
-// Fallback slides if the API is unreachable (so the home page always looks great)
+// Fallback slides if the API is unreachable.
+// All URLs below have been verified to return HTTP 200 (or use SmartImage
+// which auto-falls back to picsum.photos on any 404).
 const FALLBACK_SLIDES = [
   {
     id: 1, badge: 'Vertical Transport', category: 'Elevators',
     title: 'Building Elevators & Escalators',
     subtitle: 'Traction, hydraulic & MRL elevator systems installed and serviced across Ethiopia.',
     image_url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80&auto=format&fit=crop',
-    cta_text: 'Explore elevators', cta_link: '/services',
+    cta_text: 'Explore elevators', cta_link: '/products',
   },
   {
     id: 2, badge: 'Authorized Distributor', category: 'Lifts',
     title: 'BendPak Car Lifts',
     subtitle: 'Premium two-post & four-post vehicle lifts for professional workshops.',
-    image_url: 'https://images.unsplash.com/photo-1486006920555-c77dcf2a718e?w=1920&q=80&auto=format&fit=crop',
-    cta_text: 'Explore lifts', cta_link: '/services',
+    image_url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80&auto=format&fit=crop',
+    cta_text: 'Explore lifts', cta_link: '/products',
   },
   {
     id: 3, badge: 'Workshop Solutions', category: 'Paint Booths',
     title: 'OMIA Paint Booths',
     subtitle: 'Dust-free, temperature-controlled spray booths for professional paintwork.',
-    image_url: 'https://images.unsplash.com/photo-1565043666747-526e43e1b75e?w=1920&q=80&auto=format&fit=crop',
-    cta_text: 'Explore paint booths', cta_link: '/services',
+    image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80&auto=format&fit=crop',
+    cta_text: 'Explore paint booths', cta_link: '/products',
   },
   {
     id: 4, badge: 'Inspection Technology', category: 'Vehicle Test Equipment',
     title: 'VTEQ Vehicle Test Equipment',
     subtitle: 'Brake, suspension, side-slip & headlight alignment test lanes for inspection centers.',
     image_url: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1920&q=80&auto=format&fit=crop',
-    cta_text: 'Explore test equipment', cta_link: '/services',
+    cta_text: 'Explore test equipment', cta_link: '/products',
   },
   {
     id: 5, badge: 'Facility Solutions', category: 'Facility Equipment',
     title: 'Facility Equipment & Air Conditioning',
     subtitle: 'Fujitsu VRF systems, washing machines and complete facility cooling solutions.',
-    image_url: 'https://images.unsplash.com/photo-1631545806609-39d6e6d8d8d4?w=1920&q=80&auto=format&fit=crop',
-    cta_text: 'Explore facility equipment', cta_link: '/services',
+    image_url: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1920&q=80&auto=format&fit=crop',
+    cta_text: 'Explore facility equipment', cta_link: '/products',
   },
 ]
 
@@ -109,9 +112,10 @@ export default function HeroCarousel() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0"
           >
-            <img
+            <SmartImage
               src={current.image_url}
               alt={current.title}
+              fallbackSeed={`gigar-carousel-${current.id}`}
               className="h-full w-full object-cover"
               loading="eager"
             />

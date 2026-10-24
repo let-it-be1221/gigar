@@ -9,6 +9,7 @@ import HeroCarousel from '../components/HeroCarousel'
 import BlogCard from '../components/BlogCard'
 import AnimatedSection from '../components/AnimatedSection'
 import Loader from '../components/Loader'
+import SmartImage from '../components/SmartImage'
 import { publicApi } from '../api/client'
 
 const WHY_US = [
@@ -25,7 +26,47 @@ const PROCESS_STEPS = [
   { step: '04', title: 'After-Sales',     text: 'Training, warranty support and annual maintenance keep your equipment running for decades.' },
 ]
 
-const BRAND_LOGOS = ['BendPak', 'Fujitsu', 'OMIA', 'VTEQ', 'Electrolux', 'LGS', 'Schindler', 'Otis']
+// Sample brand logos — each entry has a sample image URL the admin can later
+// replace with the real brand logos. Using picsum.photos seed URLs which are
+// 100% reliable. To swap a logo: edit the `image` field below to point to your
+// own /public/uploads/<brand>.png or any other URL.
+const BRAND_LOGOS = [
+  { name: 'BendPak',    image: 'https://picsum.photos/seed/bendpak/240/120' },
+  { name: 'Fujitsu',    image: 'https://picsum.photos/seed/fujitsu/240/120' },
+  { name: 'OMIA',       image: 'https://picsum.photos/seed/omia/240/120' },
+  { name: 'VTEQ',       image: 'https://picsum.photos/seed/vteq/240/120' },
+  { name: 'Electrolux', image: 'https://picsum.photos/seed/electrolux/240/120' },
+  { name: 'LGS',        image: 'https://picsum.photos/seed/lgs/240/120' },
+  { name: 'Schindler',  image: 'https://picsum.photos/seed/schindler/240/120' },
+  { name: 'Otis',       image: 'https://picsum.photos/seed/otis/240/120' },
+]
+
+// Sample service line cover images — admin can swap by editing this map.
+const SERVICE_IMAGES = {
+  'supplying-and-installing': 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80&auto=format&fit=crop',
+  'maintenance-service':     'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop',
+  'technical-consultancy':    'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80&auto=format&fit=crop',
+}
+
+const SERVICE_ICONS = {
+  'supplying-and-installing': '🔧',
+  'maintenance-service':     '🛠️',
+  'technical-consultancy':    '📐',
+}
+
+// Sample product images — these match the products in the API catalog.
+// Each entry: { icon, image }. The `icon` is used as an emoji overlay; the
+// `image` is the displayed photo. Admin can swap each by editing this map.
+const PRODUCT_IMAGES = {
+  'building-elevators':       { emoji: '🏗️', image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop' },
+  'building-lifts':           { emoji: '🛗', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&auto=format&fit=crop' },
+  'paint-booths':            { emoji: '🎨', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop' },
+  'vehicle-test-equipment':   { emoji: '📊', image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80&auto=format&fit=crop' },
+  'facility-equipment':       { emoji: '❄️', image: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&q=80&auto=format&fit=crop' },
+  'car-lifts':               { emoji: '🛗', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format&fit=crop' },
+  'gps-speed-limit':         { emoji: '⚡', image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80&auto=format&fit=crop' },
+  'heavy-equipment':         { emoji: '🚚', image: 'https://picsum.photos/seed/heavy-equipment/800/600' },
+}
 
 export default function Home() {
   const [services, setServices]       = useState([])
@@ -66,7 +107,7 @@ export default function Home() {
       {/* HERO CAROUSEL */}
       <HeroCarousel />
 
-      {/* BRANDS MARQUEE */}
+      {/* BRANDS MARQUEE — sample logo images the admin can later swap */}
       <section className="border-y border-gigar-navy/10 bg-gigar-mist py-8">
         <div className="container-page">
           <p className="mb-5 text-center text-xs font-bold uppercase tracking-[0.25em] text-gigar-navy/50">
@@ -75,18 +116,29 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
             {BRAND_LOGOS.map((b, i) => (
               <motion.div
-                key={b}
+                key={b.name}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                whileHover={{ scale: 1.08, color: '#c8102e' }}
-                className="flex items-center justify-center rounded-xl bg-white px-3 py-4 text-center font-display text-lg font-bold text-gigar-navy shadow-sm"
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="group relative flex flex-col items-center justify-center overflow-hidden rounded-xl bg-white px-3 py-4 shadow-sm ring-1 ring-gigar-navy/5 transition hover:shadow-gigar-soft hover:ring-gigar-red/20"
               >
-                {b}
+                <SmartImage
+                  src={b.image}
+                  alt={`${b.name} logo`}
+                  fallbackSeed={b.name.toLowerCase()}
+                  className="h-12 w-full max-w-[120px] object-contain opacity-70 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                />
+                <span className="mt-2 text-xs font-bold uppercase tracking-wider text-gigar-navy/60 transition group-hover:text-gigar-red">
+                  {b.name}
+                </span>
               </motion.div>
             ))}
           </div>
+          <p className="mt-4 text-center text-[10px] text-gigar-navy/40">
+            Sample brand logos — the admin can swap these for the real logos later in <code className="rounded bg-gigar-navy/5 px-1">Home.jsx → BRAND_LOGOS</code>.
+          </p>
         </div>
       </section>
 
@@ -106,41 +158,65 @@ export default function Home() {
           </AnimatedSection>
 
           {loading ? (
-            <div className="flex justify-center py-16"><Loader label="Loading services…" /></div>
+            <div className="grid gap-6 md:grid-cols-3">
+              {[0,1,2].map((i) => <div key={i} className="h-96 rounded-2xl shimmer" />)}
+            </div>
           ) : services.length === 0 ? null : (
             <div className="grid gap-6 md:grid-cols-3">
-              {services.map((s, i) => (
-                <motion.div
-                  key={s.id || s.title}
-                  initial={{ opacity: 0, y: 28 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ y: -6 }}
-                  className="card-soft p-8 hover:border-gigar-red/30"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="rounded-full bg-gigar-red/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gigar-red">
-                      {s.line || s.title}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 font-display text-xl font-bold text-gigar-navy">{s.title}</h3>
-                  <p className="mt-1 text-sm font-semibold text-gigar-red/80">{s.tagline}</p>
-                  <p className="mt-3 text-sm leading-relaxed text-gigar-navy/70">{s.description}</p>
-                  {s.highlights && s.highlights.length > 0 && (
-                    <ul className="mt-4 space-y-2">
-                      {s.highlights.map((h) => (
-                        <li key={h} className="flex items-start gap-2 text-sm text-gigar-navy/80">
-                          <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-red" /> {h}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <Link to={`/services#${s.id || ''}`} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gigar-red hover:gap-2.5 transition-all">
-                    Learn more <FiArrowRight className="h-4 w-4" />
-                  </Link>
-                </motion.div>
-              ))}
+              {services.map((s, i) => {
+                const img = SERVICE_IMAGES[s.id] || `https://picsum.photos/seed/${s.id}/800/600`
+                const emoji = SERVICE_ICONS[s.id] || '⚙️'
+                return (
+                  <motion.div
+                    key={s.id || s.title}
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    whileHover={{ y: -8 }}
+                    className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
+                  >
+                    {/* Cover image */}
+                    <div className="relative h-44 overflow-hidden">
+                      <SmartImage
+                        src={img}
+                        alt={s.title}
+                        fallbackSeed={s.id}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/90 via-gigar-navy/40 to-transparent" />
+                      {/* Emoji badge */}
+                      <div className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-2xl shadow-gigar-soft backdrop-blur transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                        {emoji}
+                      </div>
+                      {/* Service line label */}
+                      <div className="absolute inset-x-0 bottom-0 p-4">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-gigar-red px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+                          {s.line || s.title}
+                        </span>
+                        <h3 className="mt-2 font-display text-xl font-bold text-white drop-shadow-md">{s.title}</h3>
+                        <p className="mt-0.5 text-xs font-semibold text-gigar-gold drop-shadow">{s.tagline}</p>
+                      </div>
+                    </div>
+                    {/* Body */}
+                    <div className="flex flex-1 flex-col p-6">
+                      <p className="text-sm leading-relaxed text-gigar-navy/75">{s.description}</p>
+                      {s.highlights && s.highlights.length > 0 && (
+                        <ul className="mt-4 space-y-2">
+                          {s.highlights.map((h) => (
+                            <li key={h} className="flex items-start gap-2 text-sm text-gigar-navy/80">
+                              <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-red" /> {h}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      <Link to={`/services#${s.id || ''}`} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gigar-red hover:gap-2.5 transition-all">
+                        Learn more <FiArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                )
+              })}
             </div>
           )}
 
@@ -152,7 +228,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FEATURED PRODUCTS */}
+      {/* FEATURED PRODUCTS — image cards with hover zoom + overlay */}
       <section className="bg-gigar-mist py-20 lg:py-28">
         <div className="container-page">
           <AnimatedSection className="mx-auto mb-14 max-w-3xl text-center">
@@ -167,46 +243,66 @@ export default function Home() {
 
           {loading ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {[0,1,2,3].map((i) => <div key={i} className="h-64 rounded-2xl shimmer" />)}
+              {[0,1,2,3].map((i) => <div key={i} className="h-80 rounded-2xl shimmer" />)}
             </div>
           ) : products.length === 0 ? null : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {products.slice(0, 8).map((p, i) => (
-                <motion.div
-                  key={p.id || p.title}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                  whileHover={{ y: -6 }}
-                  className="card-soft overflow-hidden hover:border-gigar-red/30"
-                >
-                  <div className="bg-gradient-to-br from-gigar-navy to-gigar-red p-6 text-white">
-                    <div className="text-4xl">
-                      {p.icon === 'elevator' ? '🏗️' :
-                       p.icon === 'lift' ? '🛗' :
-                       p.icon === 'spray' ? '🎨' :
-                       p.icon === 'gauge' ? '📊' :
-                       p.icon === 'ac' ? '❄️' :
-                       p.icon === 'speed' ? '⚡' :
-                       p.icon === 'truck' ? '🚚' : '⚙️'}
+              {products.slice(0, 8).map((p, i) => {
+                const imgMeta = PRODUCT_IMAGES[p.id] || { emoji: '⚙️', image: `https://picsum.photos/seed/${p.id}/600/450` }
+                return (
+                  <motion.div
+                    key={p.id || p.title}
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.5, delay: i * 0.07 }}
+                    whileHover={{ y: -8 }}
+                    className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
+                  >
+                    {/* Image with hover zoom + overlay */}
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <SmartImage
+                        src={imgMeta.image}
+                        alt={p.title}
+                        fallbackSeed={p.id}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      {/* Dark gradient overlay for text legibility */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/80 via-gigar-navy/20 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-90" />
+                      {/* Floating emoji badge */}
+                      <div className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-lg shadow-gigar-soft backdrop-blur transition-transform duration-300 group-hover:scale-110">
+                        {imgMeta.emoji}
+                      </div>
+                      {/* Title overlay on image (appears on hover) */}
+                      <div className="absolute inset-x-0 bottom-0 p-4">
+                        <h3 className="font-display text-base font-bold text-white drop-shadow-md line-clamp-2">{p.title}</h3>
+                        <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider text-gigar-gold drop-shadow">{p.tagline}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-display text-base font-bold text-gigar-navy">{p.title}</h3>
-                    <p className="mt-1 text-xs font-semibold text-gigar-red/80">{p.tagline}</p>
-                    <p className="mt-2 text-sm text-gigar-navy/70 line-clamp-3">{p.description}</p>
-                    <Link to="/products" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-gigar-red hover:gap-2 transition-all">
-                      View details <FiArrowRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
+                    {/* Description */}
+                    <div className="flex flex-1 flex-col p-4">
+                      <p className="text-xs leading-relaxed text-gigar-navy/70 line-clamp-3">{p.description}</p>
+                      {p.features && p.features.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {p.features.slice(0, 2).map((f) => (
+                            <span key={f} className="rounded-md bg-gigar-red/8 px-2 py-0.5 text-[10px] font-semibold text-gigar-red">
+                              {f}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <Link to="/products" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-gigar-red transition-all hover:gap-2">
+                        View details <FiArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                )
+              })}
             </div>
           )}
 
           <AnimatedSection className="mt-12 text-center">
-            <Link to="/products" className="btn-outline">
+            <Link to="/products" className="btn-primary">
               View all products <FiArrowRight />
             </Link>
           </AnimatedSection>

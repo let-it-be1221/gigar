@@ -6,12 +6,26 @@ import {
 } from 'react-icons/fi'
 import AnimatedSection from '../components/AnimatedSection'
 import Loader from '../components/Loader'
+import SmartImage from '../components/SmartImage'
 import { publicApi } from '../api/client'
 
 const ICONS = {
   elevator: '🏗️', lift: '🛗', spray: '🎨', gauge: '📊',
   ac: '❄️', speed: '⚡', truck: '🚚', washer: '🧺',
   garage: '🔧',
+}
+
+// Sample product images (replaceable by the admin via PublicController::products()
+// backend, or by editing this map). Each entry maps a product id → photo URL.
+const PRODUCT_IMAGES = {
+  'building-elevators':       'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200&q=80&auto=format&fit=crop',
+  'building-lifts':           'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80&auto=format&fit=crop',
+  'paint-booths':            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80&auto=format&fit=crop',
+  'vehicle-test-equipment':   'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&q=80&auto=format&fit=crop',
+  'facility-equipment':       'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1200&q=80&auto=format&fit=crop',
+  'car-lifts':               'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80&auto=format&fit=crop',
+  'gps-speed-limit':         'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1200&q=80&auto=format&fit=crop',
+  'heavy-equipment':         'https://picsum.photos/seed/heavy-equipment/1200/900',
 }
 
 const FALLBACK_PRODUCTS = [
@@ -104,45 +118,70 @@ export default function Products() {
             <div className="flex justify-center py-16"><Loader label="Loading products…" /></div>
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {products.map((p, i) => (
-                <motion.div
-                  key={p.id || p.title}
-                  initial={{ opacity: 0, y: 28 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.5, delay: i * 0.06 }}
-                  whileHover={{ y: -6 }}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
-                >
-                  <div className="relative h-44 overflow-hidden bg-gradient-to-br from-gigar-navy to-gigar-red p-6">
-                    <div className="text-5xl transition-transform group-hover:scale-110">
-                      {ICONS[p.icon] || '⚙️'}
+              {products.map((p, i) => {
+                const img = PRODUCT_IMAGES[p.id] || `https://picsum.photos/seed/${p.id}/1200/900`
+                return (
+                  <motion.div
+                    key={p.id || p.title}
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    transition={{ duration: 0.5, delay: i * 0.06 }}
+                    whileHover={{ y: -8 }}
+                    className="group flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
+                  >
+                    {/* Image */}
+                    <div className="relative h-56 overflow-hidden">
+                      <SmartImage
+                        src={img}
+                        alt={p.title}
+                        fallbackSeed={p.id}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      {/* Dark gradient overlay for the title */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 via-gigar-navy/30 to-transparent" />
+                      {/* Floating emoji badge */}
+                      <div className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-xl shadow-gigar-soft backdrop-blur transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                        {ICONS[p.icon] || '⚙️'}
+                      </div>
+                      {/* Category chip */}
+                      <div className="absolute right-4 top-4">
+                        <span className="rounded-full bg-gigar-red/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
+                          {p.id.split('-')[0]}
+                        </span>
+                      </div>
+                      {/* Title overlay */}
+                      <div className="absolute inset-x-0 bottom-0 p-5">
+                        <h3 className="font-display text-xl font-bold text-white drop-shadow-md">{p.title}</h3>
+                        <p className="mt-1 text-sm font-semibold text-gigar-gold drop-shadow">{p.tagline}</p>
+                      </div>
                     </div>
-                    <div className="absolute bottom-3 right-4 text-xs font-semibold uppercase tracking-wider text-white/70">
-                      {p.id}
+                    {/* Body */}
+                    <div className="flex flex-1 flex-col p-6">
+                      <p className="flex-1 text-sm leading-relaxed text-gigar-navy/75">{p.description}</p>
+
+                      {p.features && p.features.length > 0 && (
+                        <div className="mt-4 grid grid-cols-2 gap-2">
+                          {p.features.map((f) => (
+                            <div key={f} className="flex items-start gap-1.5 rounded-lg bg-gigar-mist px-2.5 py-1.5 text-xs font-medium text-gigar-navy/80">
+                              <FiCheckCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-gigar-red" /> {f}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="mt-6 flex items-center justify-between border-t border-gigar-navy/10 pt-4">
+                        <Link to="/contact" className="inline-flex items-center gap-1.5 text-sm font-semibold text-gigar-red transition-all hover:gap-2.5">
+                          Request a quote <FiArrowRight className="h-4 w-4" />
+                        </Link>
+                        <Link to="/products" className="text-xs font-semibold text-gigar-navy/50 hover:text-gigar-red">
+                          #{p.id}
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="font-display text-xl font-bold text-gigar-navy">{p.title}</h3>
-                    <p className="mt-1 text-sm font-semibold text-gigar-red/80">{p.tagline}</p>
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-gigar-navy/70">{p.description}</p>
-
-                    {p.features && p.features.length > 0 && (
-                      <ul className="mt-4 space-y-1.5">
-                        {p.features.map((f) => (
-                          <li key={f} className="flex items-start gap-2 text-sm text-gigar-navy/80">
-                            <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-red" /> {f}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    <Link to="/contact" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gigar-red transition-all hover:gap-2.5">
-                      Request a quote <FiArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                )
+              })}
             </div>
           )}
         </div>
