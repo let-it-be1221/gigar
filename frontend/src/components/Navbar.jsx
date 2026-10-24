@@ -162,20 +162,57 @@ export default function Navbar() {
             )}
           </ul>
 
-          {/* CTA + Admin */}
+          {/* CTA + Admin avatar */}
           <div className="hidden items-center gap-3 lg:flex">
             {isAdmin ? (
               <div className="flex items-center gap-2">
-                <Link to="/admin" className="btn-primary !px-4 !py-2">
-                  <FiShield className="h-4 w-4" /> Admin
+                {/* Admin avatar (circular) — click → admin dashboard */}
+                <Link
+                  to="/admin"
+                  className="group flex items-center gap-2"
+                  title="Go to admin dashboard"
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.08, rotate: -4 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-gigar-red to-gigar-redDark text-xs font-extrabold text-white shadow-gigar-glow ring-2 ring-white"
+                  >
+                    {user?.name?.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() || 'GT'}
+                  </motion.div>
+                  <span className="hidden text-sm font-semibold text-gigar-navy group-hover:text-gigar-red transition xl:inline">
+                    Admin
+                  </span>
                 </Link>
-                <button onClick={logout} className="btn-ghost !px-4 !py-2 !text-gigar-navy !border-gigar-navy/20">
-                  <FiLogOut className="h-4 w-4" /> Logout
+                {/* Logout as a circular icon button */}
+                <button
+                  onClick={logout}
+                  title="Logout"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-gigar-navy/15 text-gigar-navy transition hover:bg-gigar-red hover:border-gigar-red hover:text-white hover:scale-105"
+                >
+                  <FiLogOut className="h-4 w-4" />
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="btn-outline !px-4 !py-2">
-                <FiShield className="h-4 w-4" /> Admin Login
+              // Logged-out: circular login avatar with a "user / shield" icon
+              <Link
+                to="/login"
+                title="Admin login"
+                className="group flex items-center gap-2"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.08, rotate: 4 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative flex h-10 w-10 items-center justify-center rounded-full border-2 border-gigar-navy/20 bg-white text-gigar-navy transition group-hover:border-gigar-red group-hover:text-gigar-red"
+                >
+                  <FiShield className="h-4 w-4" />
+                  {/* Tiny "login" dot — signals it's clickable */}
+                  <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gigar-red text-[8px] font-bold text-white ring-2 ring-white">
+                    →
+                  </span>
+                </motion.div>
+                <span className="hidden text-sm font-semibold text-gigar-navy group-hover:text-gigar-red transition xl:inline">
+                  Login
+                </span>
               </Link>
             )}
             <a href="tel:+251115518267" className="btn-primary !px-5 !py-2">Get a Quote</a>
@@ -227,14 +264,37 @@ export default function Navbar() {
                     )}
                   </motion.li>
                 ))}
-                <li className="mt-4 flex flex-col gap-2">
+                <li className="mt-4 flex flex-col gap-3">
                   {isAdmin ? (
-                    <>
-                      <Link to="/admin" className="btn-primary w-full">Admin Dashboard</Link>
-                      <button onClick={() => { logout(); navigate('/') }} className="btn-outline w-full">Logout</button>
-                    </>
+                    <div className="flex items-center gap-3 rounded-xl bg-gigar-mist p-3">
+                      <Link to="/admin" className="flex items-center gap-3 flex-1">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-gigar-red to-gigar-redDark text-xs font-extrabold text-white shadow-gigar-glow">
+                          {user?.name?.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase() || 'GT'}
+                        </div>
+                        <div>
+                          <div className="text-sm font-bold text-gigar-navy">{user?.name || 'Admin'}</div>
+                          <div className="text-xs text-gigar-navy/60">Admin Dashboard →</div>
+                        </div>
+                      </Link>
+                      <button
+                        onClick={() => { logout(); navigate('/') }}
+                        title="Logout"
+                        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-gigar-navy/15 text-gigar-navy hover:bg-gigar-red hover:text-white"
+                      >
+                        <FiLogOut className="h-4 w-4" />
+                      </button>
+                    </div>
                   ) : (
-                    <Link to="/login" className="btn-outline w-full">Admin Login</Link>
+                    <Link to="/login" className="flex items-center gap-3 rounded-xl bg-gigar-mist p-3 transition hover:bg-gigar-red/5">
+                      <div className="relative flex h-11 w-11 items-center justify-center rounded-full border-2 border-gigar-navy/20 bg-white text-gigar-navy">
+                        <FiShield className="h-5 w-5" />
+                        <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gigar-red text-[8px] font-bold text-white ring-2 ring-white">→</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-gigar-navy">Admin Login</div>
+                        <div className="text-xs text-gigar-navy/60">Sign in to manage content →</div>
+                      </div>
+                    </Link>
                   )}
                   <a href="tel:+251115518267" className="btn-primary w-full">Get a Quote</a>
                 </li>
