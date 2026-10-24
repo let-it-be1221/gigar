@@ -81,6 +81,9 @@ The setup script will:
 ```bash
 # 1. Backend
 cd backend
+# Windows (cmd / XAMPP shell):
+copy .env.example .env
+# Linux / macOS / Git Bash:
 cp .env.example .env
 composer install
 php artisan key:generate
@@ -90,9 +93,19 @@ php artisan storage:link
 
 # 2. Frontend
 cd ../frontend
-cp .env.example .env
+copy .env.example .env   # Windows
+cp .env.example .env     # Linux/macOS
 npm install
 ```
+
+> ⚠️ **If `composer install` fails with security-advisory blocks** on older Laravel 11.x,
+> the `composer.json` in this repo is already configured to ignore the listed advisories.
+> If you still hit blocks (newer advisories), you can bypass audit with:
+> ```bash
+> composer install --no-audit
+> # or temporarily disable blocking:
+> COMPOSER_AUDIT_ABANDONED=ignore composer install
+> ```
 
 ### Running the dev servers
 Open two terminals:
