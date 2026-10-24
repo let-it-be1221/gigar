@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gigar-red: #c8102e;
+  --gigar-navy: #1f2d4a;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: #ffffff;
+  color: #1f2d4a;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ----- Custom utility classes ----- */
+@layer components {
+  .container-page {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gigar-red px-6 py-3 text-sm font-semibold text-white shadow-gigar-glow transition-all duration-300 hover:bg-gigar-redDark hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-gigar-red focus:ring-offset-2 active:translate-y-0;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-white/10;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-gigar-navy/15 bg-white px-6 py-3 text-sm font-semibold text-gigar-navy transition-all duration-300 hover:border-gigar-red hover:text-gigar-red hover:-translate-y-0.5;
+  }
+
+  .card-soft {
+    @apply rounded-2xl border border-gigar-navy/8 bg-white shadow-gigar-soft transition-all duration-300;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-gigar-navy/15 bg-white px-4 py-3 text-sm text-gigar-navy placeholder:text-gigar-navy/40 focus:border-gigar-red focus:outline-none focus:ring-2 focus:ring-gigar-red/20;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full bg-gigar-red/10 px-3 py-1 text-xs font-semibold text-gigar-red;
+  }
+
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full bg-gigar-red/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-gigar-red;
+  }
+}
+
+/* ----- Scrollbar styling ----- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f4f6fb;
+}
+::-webkit-scrollbar-thumb {
+  background: #c8102e;
+  border-radius: 8px;
+  border: 2px solid #f4f6fb;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8b0a1f;
+}
+
+/* ----- Selection ----- */
+::selection {
+  background: #c8102e;
+  color: white;
+}
+
+/* ----- Markdown body ----- */
+.markdown-body {
+  @apply leading-relaxed text-gigar-navy;
+}
+.markdown-body h2 {
+  @apply mt-8 mb-3 text-2xl font-bold text-gigar-navy;
+}
+.markdown-body h3 {
+  @apply mt-6 mb-2 text-xl font-semibold text-gigar-navy;
+}
+.markdown-body p {
+  @apply mb-4 text-base leading-relaxed text-gigar-navy/85;
+}
+.markdown-body ul {
+  @apply mb-4 list-disc space-y-1 pl-6 text-gigar-navy/85;
+}
+.markdown-body ol {
+  @apply mb-4 list-decimal space-y-1 pl-6 text-gigar-navy/85;
+}
+.markdown-body a {
+  @apply font-medium text-gigar-red underline underline-offset-2 hover:text-gigar-redDark;
+}
+.markdown-body strong {
+  @apply font-semibold text-gigar-navy;
+}
+.markdown-body blockquote {
+  @apply my-4 border-l-4 border-gigar-red pl-4 italic text-gigar-navy/70;
+}
+
+/* ----- Loading shimmer ----- */
+.shimmer {
+  background: linear-gradient(90deg, #f4f6fb 25%, #e6ebf5 37%, #f4f6fb 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ----- Hide scrollbar but allow scrolling ----- */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

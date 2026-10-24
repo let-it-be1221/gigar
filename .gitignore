@@ -1,0 +1,32 @@
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Build artifacts
+dist/
+build/
+*.log
+node_modules/
+vendor/
+
+# Laravel
+backend/storage/
+backend/vendor/
+backend/.env
+backend/.env.backup
+
+# Vite
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.vite

@@ -1,0 +1,11 @@
+{
+    "name": "Gigar API Backend",
+    "description": "Laravel 11 API backend for the Gigar Trading website.",
+    "private": true,
+    "type": "project",
+    "scripts": {
+        "dev": "php artisan serve --host=0.0.0.0 --port=8000",
+        "serve": "php artisan serve --host=0.0.0.0 --port=8000"
+    },
+    "devDependencies": {}
+}
