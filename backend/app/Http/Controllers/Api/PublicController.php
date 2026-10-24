@@ -85,78 +85,137 @@ class PublicController extends Controller
     }
 
     /**
-     * Static list of services offered by Gigar Trading, mirrored
-     * from the live reference site gigartrading.com.
+     * Static list of service lines offered by Gigar Trading.
+     * Organized into the three service lines the company sells:
+     *   1. Supplying & Installing Equipments
+     *   2. Maintenance Service
+     *   3. Technical Consultancy
      */
     public function services()
     {
         $services = [
             [
-                'id'      => 'gps-speed-limit',
-                'icon'    => 'speed',
-                'title'   => 'GPS & Speed Limit Devices',
-                'tagline' => 'Vehicle speed monitoring & compliance',
-                'description' => 'Installation and certification of GPS-based speed-limiting devices for fleet and commercial vehicles, fully compliant with Ethiopian transport regulations.',
+                'id'      => 'supplying-and-installing',
+                'icon'    => 'toolbox',
+                'line'    => 'Supplying & Installing Equipments',
+                'title'   => 'Equipment Supply & Installation',
+                'tagline' => 'Importing & commissioning world-class equipment',
+                'description' => 'Gigar Trading imports and professionally installs a complete portfolio of industrial equipment — BendPak car lifts, building elevators & escalators, OMIA paint booths, VTEQ vehicle test lanes, Fujitsu air conditioners and LGS duty washing machines. Every project includes site survey, supply, installation, commissioning and operator training.',
+                'highlights' => [
+                    'Authorized distributor of BendPak, Fujitsu, OMIA, VTEQ and Electrolux',
+                    'Full turnkey installation by certified technicians',
+                    '5-year structural warranty on major equipment',
+                    'Operator training included with every install',
+                ],
             ],
             [
-                'id'      => 'car-lifts',
-                'icon'    => 'lift',
-                'title'   => 'Car Lifts (BendPak)',
-                'tagline' => 'Premium BendPak two-post & four-post lifts',
-                'description' => 'Authorized distributor of BendPak vehicle lifts — built for workshops, garages and industrial use with industry-leading safety ratings.',
+                'id'      => 'maintenance-service',
+                'icon'    => 'wrench',
+                'line'    => 'Maintenance Service',
+                'title'   => 'Preventive & Emergency Maintenance',
+                'tagline' => 'Keeping your equipment productive for decades',
+                'description' => 'Annual maintenance contracts (AMC) and 24/7 emergency call-out support for every installation. Our certified technicians perform scheduled preventive maintenance, safety inspections, parts replacement and breakdown repairs — minimizing downtime and extending equipment lifespan.',
+                'highlights' => [
+                    'Annual Maintenance Contracts (AMC) with fixed response times',
+                    '24/7 emergency breakdown call-out across Addis Ababa',
+                    'Genuine OEM spare parts inventory',
+                    'Safety inspection & certification reports',
+                ],
             ],
             [
-                'id'      => 'garage-equipment',
-                'icon'    => 'garage',
-                'title'   => 'Build Your Garage With Us',
-                'tagline' => 'Complete garage setup & fit-out',
-                'description' => 'Full garage fit-outs: lifts, tool benches, compressed-air systems, and storage — designed, supplied and installed by certified technicians.',
-            ],
-            [
-                'id'      => 'elevators-escalators',
-                'icon'    => 'elevator',
-                'title'   => 'Lifts, Escalators & Stair Lifts',
-                'tagline' => 'Vertical transport solutions',
-                'description' => 'Supply, installation and maintenance of building elevators, escalators and stair lifts for residential and commercial properties.',
-            ],
-            [
-                'id'      => 'washing-machines',
-                'icon'    => 'washer',
-                'title'   => 'LGS Duty Washing Machines',
-                'tagline' => 'Industrial laundry equipment',
-                'description' => 'Heavy-duty washing machines engineered for laundromats, hotels and hospitals — low water and energy consumption.',
-            ],
-            [
-                'id'      => 'heavy-equipment',
-                'icon'    => 'truck',
-                'title'   => 'Heavy Equipment',
-                'tagline' => 'Construction & industrial machinery',
-                'description' => 'Import and distribution of heavy machinery — excavators, loaders, generators and material-handling equipment with after-sales support.',
-            ],
-            [
-                'id'      => 'paint-booths',
-                'icon'    => 'spray',
-                'title'   => 'OMIA Paint Booths',
-                'tagline' => 'Professional spray-paint booths',
-                'description' => 'OMIA vehicle paint booths with advanced ventilation and temperature control for dust-free, professional finishes.',
-            ],
-            [
-                'id'      => 'vehicle-test',
-                'icon'    => 'gauge',
-                'title'   => 'VTEQ Vehicle Test Equipment',
-                'tagline' => 'Diagnostic & inspection systems',
-                'description' => 'VTEQ vehicle test lanes — brake, suspension, side-slip and headlight alignment for inspection centers.',
-            ],
-            [
-                'id'      => 'air-conditioners',
-                'icon'    => 'ac',
-                'title'   => 'Fujitsu Air Conditioners',
-                'tagline' => 'Cooling solutions for any space',
-                'description' => 'Fujitsu split, cassette and VRF air-conditioning systems for offices, homes and industrial facilities.',
+                'id'      => 'technical-consultancy',
+                'icon'    => 'compass',
+                'line'    => 'Technical Consultancy',
+                'title'   => 'Workshop & Facility Design Consultancy',
+                'tagline' => 'Engineering the right solution from day one',
+                'description' => 'Our engineers help you plan, design and optimize your workshop or facility before you buy. We provide load calculations, equipment sizing, layout design, capacity planning and project cost analysis — ensuring you invest in the right equipment the first time.',
+                'highlights' => [
+                    'Workshop layout & equipment sizing consultancy',
+                    'Elevator load & traffic analysis for buildings',
+                    'Project cost estimation & ROI analysis',
+                    'Compliance review with Ethiopian regulations',
+                ],
             ],
         ];
 
         return response()->json(['services' => $services]);
+    }
+
+    /**
+     * Product catalog — the equipment categories Gigar Trading supplies.
+     * Each product can also be added/removed by the admin as a blog post
+     * tagged with the matching category.
+     */
+    public function products()
+    {
+        $products = [
+            [
+                'id'          => 'building-elevators',
+                'icon'        => 'elevator',
+                'title'       => 'Building Elevators',
+                'tagline'     => 'Traction, hydraulic & MRL elevator systems',
+                'description' => 'Traction elevators for mid/high-rise buildings, hydraulic elevators for low-rise installations, and machine-room-less (MRL) elevators for modern commercial buildings. All systems include steel ropes, counterweights, regenerative drives and emergency backup.',
+                'features'    => ['Traction (6+ floors)', 'Hydraulic (2-5 floors)', 'MRL systems', '24/7 emergency support'],
+            ],
+            [
+                'id'          => 'building-lifts',
+                'icon'        => 'lift',
+                'title'       => 'Building Lifts & Stair Lifts',
+                'tagline'     => 'Vertical mobility for any staircase',
+                'description' => 'Stair lifts for elderly and mobility-impaired residents, curved and straight rail systems with custom 3D-measured rails. Includes seatbelts, obstruction sensors, swivel seats, battery backup and remote control call-and-send operation.',
+                'features'    => ['Straight-rail stair lifts', 'Curved-rail stair lifts', 'Battery backup', 'Same-day installation'],
+            ],
+            [
+                'id'          => 'paint-booths',
+                'icon'        => 'spray',
+                'title'       => 'OMIA Paint Booths',
+                'tagline'     => 'Dust-free, temperature-controlled spray booths',
+                'description' => 'OMIA vehicle paint booths with advanced downdraft ventilation, precise temperature control (20-25°C) and humidity management for professional paint finishes. Full installation includes foundation, electrical, exhaust ducting and air-balance certification.',
+                'features'    => ['Downdraft ventilation', 'Temperature control 20-25°C', 'Humidity management', 'Air-balance certification'],
+            ],
+            [
+                'id'          => 'vehicle-test-equipment',
+                'icon'        => 'gauge',
+                'title'       => 'Vehicle Test Equipment (VTEQ)',
+                'tagline'     => 'Brake, suspension, side-slip & headlight testing',
+                'description' => 'VTEQ vehicle test lanes for inspection centers — brake testers (per-wheel force + imbalance), suspension testers, side-slip plates and headlight aligners. Complete installation includes mechanical, electrical, software commissioning and operator training.',
+                'features'    => ['Brake tester', 'Suspension tester', 'Side-slip plate', 'Headlight aligner'],
+            ],
+            [
+                'id'          => 'facility-equipment',
+                'icon'        => 'ac',
+                'title'       => 'Facility Equipment',
+                'tagline'     => 'Air conditioning, washing machines & power systems',
+                'description' => 'Fujitsu split, cassette and VRF air-conditioning systems, LGS duty washing machines for hotels/hospitals/laundromats, and complete facility equipment supply. Low water and energy consumption, with full preventive-maintenance contracts.',
+                'features'    => ['Fujitsu VRF systems', 'Industrial washing machines', 'Energy efficient', 'Full AMC available'],
+            ],
+            [
+                'id'          => 'car-lifts',
+                'icon'        => 'lift',
+                'title'       => 'BendPak Car Lifts',
+                'tagline'     => 'Premium two-post & four-post vehicle lifts',
+                'description' => 'Authorized distributor of BendPak vehicle lifts — heavy-duty steel construction rated up to 7,000 kg, dual-direct drive technology, automatic arm restraints and slack-cable safety systems. ASE-certified lift columns engineered for decades of daily use.',
+                'features'    => ['Two-post lifts', 'Four-post lifts', '7,000 kg capacity', '5-year structural warranty'],
+            ],
+            [
+                'id'          => 'gps-speed-limit',
+                'icon'        => 'speed',
+                'title'       => 'GPS & Speed Limit Devices',
+                'tagline'     => 'Fleet speed-limiting & GPS tracking',
+                'description' => 'GPS-based speed-limiting devices certified by the Ethiopian Ministry of Transport. Real-time satellite positioning, context-aware speed control, live GPS tracking with route replay and driver-behavior scoring.',
+                'features'    => ['GPS speed-limiting', 'Live tracking', 'Driver scoring', 'Compliance certified'],
+            ],
+            [
+                'id'          => 'heavy-equipment',
+                'icon'        => 'truck',
+                'title'       => 'Heavy Equipment',
+                'tagline'     => 'Construction & industrial machinery',
+                'description' => 'Import and distribution of heavy machinery — excavators, loaders, generators and material-handling equipment with full after-sales support. Includes operator training and genuine spare parts inventory.',
+                'features'    => ['Excavators', 'Loaders', 'Generators', 'Material handling'],
+            ],
+        ];
+
+        return response()->json(['products' => $products]);
     }
 
     /**

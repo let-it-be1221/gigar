@@ -1,15 +1,16 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
-  FiLayout, FiFileText, FiPlus, FiLogOut, FiExternalLink,
+  FiLayout, FiFileText, FiPlus, FiImage, FiLogOut, FiExternalLink,
   FiChevronLeft,
 } from 'react-icons/fi'
 import { useAuth } from '../context/AuthContext'
 
 const NAV = [
-  { to: '/admin',          label: 'Dashboard',     icon: FiLayout, end: true },
-  { to: '/admin/posts',    label: 'All Posts',    icon: FiFileText },
-  { to: '/admin/posts/new', label: 'New Post',    icon: FiPlus },
+  { to: '/admin',           label: 'Dashboard',  icon: FiLayout, end: true },
+  { to: '/admin/posts',     label: 'All Posts',  icon: FiFileText },
+  { to: '/admin/posts/new', label: 'New Post',   icon: FiPlus },
+  { to: '/admin/carousel',  label: 'Carousel',   icon: FiImage },
 ]
 
 export default function AdminShell({ title = 'Admin', subtitle, action, children }) {

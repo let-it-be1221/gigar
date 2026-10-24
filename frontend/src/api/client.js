@@ -44,6 +44,8 @@ export const publicApi = {
   postBySlug: (slug) => api.get(`/public/posts/slug/${slug}`),
   stats: () => api.get('/public/stats'),
   services: () => api.get('/public/services'),
+  products: () => api.get('/public/products'),
+  carousel: () => api.get('/public/carousel'),
   contact: (payload) => api.post('/public/contact', payload),
 }
 
@@ -71,4 +73,11 @@ export const adminApi = {
   },
   deleteMedia: (path) => api.delete(`/admin/media/${encodeURIComponent(path)}`),
   dashboard: () => api.get('/admin/dashboard'),
+
+  // Carousel slides
+  listCarousel: (params = {}) => api.get('/admin/carousel', { params }),
+  createCarouselSlide: (data) => api.post('/admin/carousel', data),
+  updateCarouselSlide: (id, data) => api.put(`/admin/carousel/${id}`, data),
+  deleteCarouselSlide: (id) => api.delete(`/admin/carousel/${id}`),
+  toggleCarouselSlide: (id) => api.post(`/admin/carousel/${id}/toggle`),
 }

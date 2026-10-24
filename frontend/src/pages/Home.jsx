@@ -5,8 +5,7 @@ import {
   FiArrowRight, FiCheckCircle, FiAward, FiTruck,
   FiShield, FiHeadphones, FiZap,
 } from 'react-icons/fi'
-import Hero from '../components/Hero'
-import ServiceCard from '../components/ServiceCard'
+import HeroCarousel from '../components/HeroCarousel'
 import BlogCard from '../components/BlogCard'
 import AnimatedSection from '../components/AnimatedSection'
 import Loader from '../components/Loader'
@@ -30,6 +29,7 @@ const BRAND_LOGOS = ['BendPak', 'Fujitsu', 'OMIA', 'VTEQ', 'Electrolux', 'LGS', 
 
 export default function Home() {
   const [services, setServices]       = useState([])
+  const [products, setProducts]       = useState([])
   const [featured, setFeatured]       = useState([])
   const [loading, setLoading]         = useState(true)
 
@@ -37,21 +37,19 @@ export default function Home() {
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
 
   useEffect(() => {
-    Promise.all([publicApi.services(), publicApi.featuredPosts()])
-      .then(([s, f]) => {
+    Promise.all([
+      publicApi.services(),
+      publicApi.products(),
+      publicApi.featuredPosts(),
+    ])
+      .then(([s, p, f]) => {
         setServices(s.data.services || [])
+        setProducts(p.data.products || [])
         setFeatured(f.data || [])
       })
       .catch(() => {
-        // Fallback services if backend is not running
-        setServices([
-          { icon: 'lift', title: 'BendPak Car Lifts', tagline: 'Premium vehicle lifts', description: 'Two-post and four-post lifts for workshops and garages.' },
-          { icon: 'speed', title: 'GPS & Speed Limit Devices', tagline: 'Fleet safety compliance', description: 'GPS-based speed-limiting devices for commercial vehicles.' },
-          { icon: 'elevator', title: 'Elevators & Escalators', tagline: 'Vertical transport', description: 'Building elevators, escalators and stair lifts.' },
-          { icon: 'spray', title: 'OMIA Paint Booths', tagline: 'Professional paint booths', description: 'Dust-free, temperature-controlled spray environments.' },
-          { icon: 'ac', title: 'Fujitsu Air Conditioners', tagline: 'Cooling solutions', description: 'Split, cassette and VRF AC systems for any space.' },
-          { icon: 'truck', title: 'Heavy Equipment', tagline: 'Industrial machinery', description: 'Excavators, loaders, generators and material-handling equipment.' },
-        ])
+        setServices([])
+        setProducts([])
         setFeatured([])
       })
       .finally(() => setLoading(false))
@@ -65,8 +63,8 @@ export default function Home() {
         className="fixed left-0 top-0 z-50 h-1 bg-gigar-red"
       />
 
-      {/* HERO */}
-      <Hero />
+      {/* HERO CAROUSEL */}
+      <HeroCarousel />
 
       {/* BRANDS MARQUEE */}
       <section className="border-y border-gigar-navy/10 bg-gigar-mist py-8">
@@ -92,7 +90,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SERVICES GRID */}
+      {/* SERVICE LINES — the 3 core services */}
       <section id="services" className="relative py-20 lg:py-28">
         <div className="container-page">
           <AnimatedSection className="mx-auto mb-14 max-w-3xl text-center">
@@ -100,20 +98,48 @@ export default function Home() {
               <FiZap className="h-3.5 w-3.5" /> Our Services
             </span>
             <h2 className="mt-4 font-display text-3xl font-extrabold text-gigar-navy sm:text-4xl">
-              Everything your workshop & facility needs — under one roof
+              Three ways we power your operation
             </h2>
             <p className="mt-4 text-base leading-relaxed text-gigar-navy/70">
-              From imported premium equipment to professional installation and lifetime after-sales
-              support, Gigar Trading delivers end-to-end industrial solutions across Ethiopia.
+              From equipment supply and installation to lifetime maintenance and engineering consultancy — Gigar Trading is your full-service industrial partner.
             </p>
           </AnimatedSection>
 
           {loading ? (
             <div className="flex justify-center py-16"><Loader label="Loading services…" /></div>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          ) : services.length === 0 ? null : (
+            <div className="grid gap-6 md:grid-cols-3">
               {services.map((s, i) => (
-                <ServiceCard key={s.id || s.title} service={s} index={i} />
+                <motion.div
+                  key={s.id || s.title}
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ y: -6 }}
+                  className="card-soft p-8 hover:border-gigar-red/30"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="rounded-full bg-gigar-red/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gigar-red">
+                      {s.line || s.title}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-display text-xl font-bold text-gigar-navy">{s.title}</h3>
+                  <p className="mt-1 text-sm font-semibold text-gigar-red/80">{s.tagline}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-gigar-navy/70">{s.description}</p>
+                  {s.highlights && s.highlights.length > 0 && (
+                    <ul className="mt-4 space-y-2">
+                      {s.highlights.map((h) => (
+                        <li key={h} className="flex items-start gap-2 text-sm text-gigar-navy/80">
+                          <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-red" /> {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <Link to={`/services#${s.id || ''}`} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gigar-red hover:gap-2.5 transition-all">
+                    Learn more <FiArrowRight className="h-4 w-4" />
+                  </Link>
+                </motion.div>
               ))}
             </div>
           )}
@@ -121,6 +147,67 @@ export default function Home() {
           <AnimatedSection className="mt-12 text-center">
             <Link to="/services" className="btn-primary">
               See all services <FiArrowRight />
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* FEATURED PRODUCTS */}
+      <section className="bg-gigar-mist py-20 lg:py-28">
+        <div className="container-page">
+          <AnimatedSection className="mx-auto mb-14 max-w-3xl text-center">
+            <span className="section-eyebrow">Our Products</span>
+            <h2 className="mt-4 font-display text-3xl font-extrabold text-gigar-navy sm:text-4xl">
+              Equipment we supply, install & maintain
+            </h2>
+            <p className="mt-4 text-gigar-navy/70">
+              Building elevators, lifts, paint booths, vehicle test equipment, facility equipment and more — backed by authorized distributor partnerships.
+            </p>
+          </AnimatedSection>
+
+          {loading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {[0,1,2,3].map((i) => <div key={i} className="h-64 rounded-2xl shimmer" />)}
+            </div>
+          ) : products.length === 0 ? null : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {products.slice(0, 8).map((p, i) => (
+                <motion.div
+                  key={p.id || p.title}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  whileHover={{ y: -6 }}
+                  className="card-soft overflow-hidden hover:border-gigar-red/30"
+                >
+                  <div className="bg-gradient-to-br from-gigar-navy to-gigar-red p-6 text-white">
+                    <div className="text-4xl">
+                      {p.icon === 'elevator' ? '🏗️' :
+                       p.icon === 'lift' ? '🛗' :
+                       p.icon === 'spray' ? '🎨' :
+                       p.icon === 'gauge' ? '📊' :
+                       p.icon === 'ac' ? '❄️' :
+                       p.icon === 'speed' ? '⚡' :
+                       p.icon === 'truck' ? '🚚' : '⚙️'}
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-display text-base font-bold text-gigar-navy">{p.title}</h3>
+                    <p className="mt-1 text-xs font-semibold text-gigar-red/80">{p.tagline}</p>
+                    <p className="mt-2 text-sm text-gigar-navy/70 line-clamp-3">{p.description}</p>
+                    <Link to="/products" className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-gigar-red hover:gap-2 transition-all">
+                      View details <FiArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          <AnimatedSection className="mt-12 text-center">
+            <Link to="/products" className="btn-outline">
+              View all products <FiArrowRight />
             </Link>
           </AnimatedSection>
         </div>
