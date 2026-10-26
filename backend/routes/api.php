@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CarouselController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PublicController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,14 @@ Route::prefix('public')->group(function () {
     Route::get('/stats', [PublicController::class, 'stats']);           // public stats (post count, etc.)
     Route::get('/services', [PublicController::class, 'services']);      // services list (with the 3 service lines)
     Route::get('/products', [PublicController::class, 'products']);       // product catalog
+
+    // Customers
+    Route::get('/customers', [CustomerController::class, 'publicIndex']);
+    Route::get('/customers/featured', [CustomerController::class, 'featured']);
+    Route::get('/customers/sectors', [CustomerController::class, 'sectors']);
+    Route::get('/customers/stats', [CustomerController::class, 'stats']);
+    Route::get('/customers/{slug}', [CustomerController::class, 'show']);
+
     Route::post('/contact', [PublicController::class, 'contact']);        // contact form submission
 });
 
@@ -59,6 +68,13 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::delete('/carousel/{slide}', [CarouselController::class, 'destroy']);
     Route::post('/carousel/{slide}/toggle', [CarouselController::class, 'toggleActive']);
 
+    // Customers CRUD
+    Route::get('/customers', [CustomerController::class, 'index']);
+    Route::post('/customers', [CustomerController::class, 'store']);
+    Route::put('/customers/{customer}', [CustomerController::class, 'update']);
+    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy']);
+    Route::post('/customers/{customer}/feature', [CustomerController::class, 'toggleFeatured']);
+
     // Media upload (image/video)
     Route::post('/media', [PostController::class, 'uploadMedia']);
     Route::delete('/media/{path?}', [PostController::class, 'deleteMedia'])
@@ -67,4 +83,5 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     // Dashboard
     Route::get('/dashboard', [PostController::class, 'dashboard']);
 });
+
 

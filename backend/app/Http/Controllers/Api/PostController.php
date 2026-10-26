@@ -117,12 +117,17 @@ class PostController extends Controller
      */
     public function dashboard()
     {
+        $carouselCount = \App\Models\CarouselSlide::count();
+        $customerCount = \App\Models\Customer::count();
+
         return response()->json([
-            'total_posts'     => Post::count(),
-            'published_posts' => Post::where('status', 'published')->count(),
-            'draft_posts'     => Post::where('status', 'draft')->count(),
-            'featured_posts'  => Post::where('is_featured', true)->count(),
-            'recent_posts'    => Post::latest()->limit(5)->get(['id', 'title', 'status', 'is_featured', 'created_at']),
+            'total_posts'      => Post::count(),
+            'published_posts'  => Post::where('status', 'published')->count(),
+            'draft_posts'      => Post::where('status', 'draft')->count(),
+            'featured_posts'   => Post::where('is_featured', true)->count(),
+            'carousel_slides'  => $carouselCount,
+            'customers'        => $customerCount,
+            'recent_posts'     => Post::latest()->limit(5)->get(['id', 'title', 'status', 'is_featured', 'created_at']),
         ]);
     }
 }
