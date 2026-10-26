@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fi'
 import HeroCarousel from '../components/HeroCarousel'
 import BlogCard from '../components/BlogCard'
+import FeaturedCustomers from '../components/FeaturedCustomers'
 import AnimatedSection from '../components/AnimatedSection'
 import Loader from '../components/Loader'
 import SmartImage from '../components/SmartImage'
@@ -72,6 +73,7 @@ export default function Home() {
   const [services, setServices] = useState([])
   const [products, setProducts] = useState([])
   const [featured, setFeatured] = useState([])
+  const [custStats, setCustStats] = useState({})
   const [loading, setLoading] = useState(true)
 
   const { scrollYProgress } = useScroll()
@@ -82,16 +84,19 @@ export default function Home() {
       publicApi.services(),
       publicApi.products(),
       publicApi.featuredPosts(),
+      publicApi.customerStats(),
     ])
-      .then(([s, p, f]) => {
+      .then(([s, p, f, cs]) => {
         setServices(s.data.services || [])
         setProducts(p.data.products || [])
         setFeatured(f.data || [])
+        setCustStats(cs.data.stats || {})
       })
       .catch(() => {
         setServices([])
         setProducts([])
         setFeatured([])
+        setCustStats({})
       })
       .finally(() => setLoading(false))
   }, [])
@@ -249,6 +254,7 @@ export default function Home() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {products.slice(0, 8).map((p, i) => {
                 const imgMeta = PRODUCT_IMAGES[p.id] || { emoji: '⚙️', image: `https://picsum.photos/seed/${p.id}/600/450` }
+                const cs = custStats[p.id] || { clients: 0, units: 0 }
                 return (
                   <motion.div
                     key={p.id || p.title}
@@ -272,6 +278,15 @@ export default function Home() {
                       {/* Floating emoji badge */}
                       <div className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-lg shadow-gigar-soft backdrop-blur transition-transform duration-300 group-hover:scale-110">
                         {imgMeta.emoji}
+                      </div>
+                      {/* Client count + units installed badges (top-right) */}
+                      <div className="absolute right-3 top-3 flex flex-col gap-1">
+                        <span className="rounded-full bg-gigar-red px-2 py-0.5 text-[10px] font-bold text-white shadow">
+                          {cs.clients}+ clients
+                        </span>
+                        <span className="rounded-full bg-gigar-gold px-2 py-0.5 text-[10px] font-bold text-gigar-navy shadow">
+                          {(cs.units || 0).toLocaleString()} installed
+                        </span>
                       </div>
                       {/* Title overlay on image (appears on hover) */}
                       <div className="absolute inset-x-0 bottom-0 p-4">
@@ -444,6 +459,9 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {/* TRUSTED CUSTOMERS */}
+      <FeaturedCustomers />
 
       {/* STATS BANNER */}
       <section className="relative overflow-hidden bg-gigar-red py-16 text-white">

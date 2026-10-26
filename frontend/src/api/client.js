@@ -47,6 +47,13 @@ export const publicApi = {
   products: () => api.get('/public/products'),
   carousel: () => api.get('/public/carousel'),
   contact: (payload) => api.post('/public/contact', payload),
+
+  // Customers
+  customers: (params = {}) => api.get('/public/customers', { params }),
+  featuredCustomers: () => api.get('/public/customers/featured'),
+  customerSectors: () => api.get('/public/customers/sectors'),
+  customerStats: () => api.get('/public/customers/stats'),
+  customerBySlug: (slug) => api.get(`/public/customers/${slug}`),
 }
 
 /* ----- Auth ----- */
@@ -80,4 +87,11 @@ export const adminApi = {
   updateCarouselSlide: (id, data) => api.put(`/admin/carousel/${id}`, data),
   deleteCarouselSlide: (id) => api.delete(`/admin/carousel/${id}`),
   toggleCarouselSlide: (id) => api.post(`/admin/carousel/${id}/toggle`),
+
+  // Customers
+  listCustomers: (params = {}) => api.get('/admin/customers', { params }),
+  createCustomer: (data) => api.post('/admin/customers', data),
+  updateCustomer: (id, data) => api.put(`/admin/customers/${id}`, data),
+  deleteCustomer: (id) => api.delete(`/admin/customers/${id}`),
+  toggleCustomerFeature: (id) => api.post(`/admin/customers/${id}/feature`),
 }

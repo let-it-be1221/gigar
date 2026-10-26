@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   FiFileText, FiEdit3, FiPlus, FiStar, FiTrendingUp,
-  FiCheckCircle, FiClock, FiArrowRight, FiGrid,
+  FiCheckCircle, FiClock, FiArrowRight, FiGrid, FiImage, FiUsers,
 } from 'react-icons/fi'
 import AdminShell from '../../components/AdminShell'
 import Loader from '../../components/Loader'
@@ -24,33 +24,36 @@ export default function AdminDashboard() {
   if (loading) return <AdminShell><Loader fullscreen label="Loading dashboard…" /></AdminShell>
 
   const cards = [
-    { label: 'Total Posts',     value: stats?.total_posts ?? 0,     icon: FiFileText,    color: 'bg-gigar-navy text-white' },
-    { label: 'Published',       value: stats?.published_posts ?? 0, icon: FiCheckCircle,  color: 'bg-green-600 text-white' },
-    { label: 'Drafts',          value: stats?.draft_posts ?? 0,     icon: FiClock,        color: 'bg-gigar-gold text-gigar-navy' },
-    { label: 'Featured',        value: stats?.featured_posts ?? 0, icon: FiStar,         color: 'bg-gigar-red text-white' },
+    { label: 'Total Posts',        value: stats?.total_posts ?? 0,       icon: FiFileText,    color: 'bg-gigar-navy text-white',     link: '/admin/posts' },
+    { label: 'Published',          value: stats?.published_posts ?? 0,   icon: FiCheckCircle,  color: 'bg-green-600 text-white',     link: '/admin/posts' },
+    { label: 'Drafts',             value: stats?.draft_posts ?? 0,       icon: FiClock,        color: 'bg-gigar-gold text-gigar-navy', link: '/admin/posts' },
+    { label: 'Featured Posts',     value: stats?.featured_posts ?? 0,    icon: FiStar,         color: 'bg-gigar-red text-white',     link: '/admin/posts' },
+    { label: 'Carousel Slides',    value: stats?.carousel_slides ?? 0,   icon: FiImage,        color: 'bg-indigo-600 text-white',    link: '/admin/carousel' },
+    { label: 'Customers',          value: stats?.customers ?? 0,         icon: FiUsers,        color: 'bg-amber-700 text-white',     link: '/admin/customers' },
   ]
 
   return (
     <AdminShell title="Dashboard" subtitle="Welcome back, here's what's happening on your site.">
       {/* Stat cards */}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {cards.map((c, i) => (
-          <motion.div
-            key={c.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.08 }}
-            whileHover={{ y: -4 }}
-            className={`relative overflow-hidden rounded-2xl p-6 shadow-gigar-soft ${c.color}`}
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-xs font-bold uppercase tracking-widest opacity-70">{c.label}</div>
-                <div className="mt-2 font-display text-4xl font-extrabold">{c.value}</div>
+          <Link to={c.link} key={c.label}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              whileHover={{ y: -4 }}
+              className={`relative overflow-hidden rounded-2xl p-5 shadow-gigar-soft transition ${c.color}`}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest opacity-70">{c.label}</div>
+                  <div className="mt-2 font-display text-3xl font-extrabold">{c.value}</div>
+                </div>
+                <c.icon className="h-8 w-8 opacity-30" />
               </div>
-              <c.icon className="h-10 w-10 opacity-30" />
-            </div>
-          </motion.div>
+            </motion.div>
+          </Link>
         ))}
       </div>
 
@@ -63,11 +66,16 @@ export default function AdminDashboard() {
       >
         <div>
           <h3 className="font-display text-xl font-extrabold">Ready to publish?</h3>
-          <p className="mt-1 text-sm text-white/80">Create a new blog post with images or video in just a few clicks.</p>
+          <p className="mt-1 text-sm text-white/80">Create a new blog post, add a customer story, or update the carousel — all from the admin sidebar.</p>
         </div>
-        <Link to="/admin/posts/new" className="btn-primary !bg-white !text-gigar-red hover:!bg-gigar-gold hover:!text-gigar-navy">
-          <FiPlus /> New Post
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link to="/admin/posts/new" className="btn-primary !bg-white !text-gigar-red hover:!bg-gigar-gold hover:!text-gigar-navy">
+            <FiPlus /> New Post
+          </Link>
+          <Link to="/admin/customers" className="btn-ghost !border-white/30 !bg-white/5 !text-white hover:!bg-white/10">
+            <FiUsers /> Add Customer
+          </Link>
+        </div>
       </motion.div>
 
       {/* Recent posts */}
@@ -131,10 +139,12 @@ export default function AdminDashboard() {
               {[
                 { label: 'New post',         to: '/admin/posts/new', icon: FiPlus },
                 { label: 'All posts',        to: '/admin/posts',     icon: FiGrid },
-                { label: 'View site',        to: '/',                icon: FiTrendingUp, external: true },
+                { label: 'Carousel slides', to: '/admin/carousel',  icon: FiImage },
+                { label: 'Customers',        to: '/admin/customers', icon: FiUsers },
+                { label: 'View site',        to: '/',                icon: FiTrendingUp },
               ].map((a) => (
                 <Link
-                  key={a.to}
+                  key={a.to + a.label}
                   to={a.to}
                   className="flex items-center justify-between rounded-xl bg-gigar-navy/5 px-4 py-3 text-sm font-medium text-gigar-navy transition hover:bg-gigar-navy/10 hover:translate-x-1"
                 >
@@ -153,6 +163,7 @@ export default function AdminDashboard() {
               <li>• Write a short excerpt (140–200 chars) for previews.</li>
               <li>• Tag and categorize posts to help readers find content.</li>
               <li>• Mark important posts as “Featured” to surface them on the homepage.</li>
+              <li>• Add customer stories to build trust on the Customers page.</li>
             </ul>
           </div>
         </div>
