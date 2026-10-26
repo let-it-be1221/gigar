@@ -2,15 +2,15 @@ import { motion } from 'framer-motion'
 import { FiArrowRight } from 'react-icons/fi'
 
 const ICONS = {
-  speed:    '⚡',
-  lift:     '🛗',
-  garage:   '🔧',
+  speed: '⚡',
+  lift: '🛗',
+  garage: '🔧',
   elevator: '🏗️',
-  washer:   '🧺',
-  truck:    '🚚',
-  spray:    '🎨',
-  gauge:    '📊',
-  ac:       '❄️',
+  washer: '🧺',
+  truck: '🚚',
+  spray: '🎨',
+  gauge: '📊',
+  ac: '❄️',
 }
 
 export default function ServiceCard({ service, index = 0 }) {
