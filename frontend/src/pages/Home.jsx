@@ -13,17 +13,17 @@ import SmartImage from '../components/SmartImage'
 import { publicApi } from '../api/client'
 
 const WHY_US = [
-  { icon: FiAward,      title: '39+ Years of Trust', text: 'Serving Ethiopian industry since 1985 E.C. with consistent, certified quality.' },
-  { icon: FiShield,     title: 'Authorized Distributor', text: 'Official partner of BendPak, Fujitsu, OMIA, VTEQ and Electrolux.' },
-  { icon: FiTruck,      title: 'Full Installation', text: 'From site survey to commissioning — our team handles the entire project.' },
+  { icon: FiAward, title: '39+ Years of Trust', text: 'Serving Ethiopian industry since 1985 E.C. with consistent, certified quality.' },
+  { icon: FiShield, title: 'Authorized Distributor', text: 'Official partner of BendPak, Fujitsu, OMIA, VTEQ and Electrolux.' },
+  { icon: FiTruck, title: 'Full Installation', text: 'From site survey to commissioning — our team handles the entire project.' },
   { icon: FiHeadphones, title: '24/7 After-Sales', text: 'Maintenance contracts and emergency call-out support across the country.' },
 ]
 
 const PROCESS_STEPS = [
-  { step: '01', title: 'Consultation',    text: 'Tell us about your workshop or facility — our engineers will recommend the right equipment.' },
-  { step: '02', title: 'Site Survey',     text: 'We visit your location, take measurements and prepare a detailed proposal.' },
+  { step: '01', title: 'Consultation', text: 'Tell us about your workshop or facility — our engineers will recommend the right equipment.' },
+  { step: '02', title: 'Site Survey', text: 'We visit your location, take measurements and prepare a detailed proposal.' },
   { step: '03', title: 'Supply & Install', text: 'Equipment is imported, delivered and professionally installed by certified technicians.' },
-  { step: '04', title: 'After-Sales',     text: 'Training, warranty support and annual maintenance keep your equipment running for decades.' },
+  { step: '04', title: 'After-Sales', text: 'Training, warranty support and annual maintenance keep your equipment running for decades.' },
 ]
 
 // Sample brand logos — each entry has a sample image URL the admin can later
@@ -31,48 +31,48 @@ const PROCESS_STEPS = [
 // 100% reliable. To swap a logo: edit the `image` field below to point to your
 // own /public/uploads/<brand>.png or any other URL.
 const BRAND_LOGOS = [
-  { name: 'BendPak',    image: 'https://picsum.photos/seed/bendpak/240/120' },
-  { name: 'Fujitsu',    image: 'https://picsum.photos/seed/fujitsu/240/120' },
-  { name: 'OMIA',       image: 'https://picsum.photos/seed/omia/240/120' },
-  { name: 'VTEQ',       image: 'https://picsum.photos/seed/vteq/240/120' },
+  { name: 'BendPak', image: 'https://picsum.photos/seed/bendpak/240/120' },
+  { name: 'Fujitsu', image: 'https://picsum.photos/seed/fujitsu/240/120' },
+  { name: 'OMIA', image: 'https://picsum.photos/seed/omia/240/120' },
+  { name: 'VTEQ', image: 'https://picsum.photos/seed/vteq/240/120' },
   { name: 'Electrolux', image: 'https://picsum.photos/seed/electrolux/240/120' },
-  { name: 'LGS',        image: 'https://picsum.photos/seed/lgs/240/120' },
-  { name: 'Schindler',  image: 'https://picsum.photos/seed/schindler/240/120' },
-  { name: 'Otis',       image: 'https://picsum.photos/seed/otis/240/120' },
+  { name: 'LGS', image: 'https://picsum.photos/seed/lgs/240/120' },
+  { name: 'Schindler', image: 'https://picsum.photos/seed/schindler/240/120' },
+  { name: 'Otis', image: 'https://picsum.photos/seed/otis/240/120' },
 ]
 
 // Sample service line cover images — admin can swap by editing this map.
 const SERVICE_IMAGES = {
   'supplying-and-installing': 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80&auto=format&fit=crop',
-  'maintenance-service':     'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop',
-  'technical-consultancy':    'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80&auto=format&fit=crop',
+  'maintenance-service': 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop',
+  'technical-consultancy': 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80&auto=format&fit=crop',
 }
 
 const SERVICE_ICONS = {
   'supplying-and-installing': '🔧',
-  'maintenance-service':     '🛠️',
-  'technical-consultancy':    '📐',
+  'maintenance-service': '🛠️',
+  'technical-consultancy': '📐',
 }
 
 // Sample product images — these match the products in the API catalog.
 // Each entry: { icon, image }. The `icon` is used as an emoji overlay; the
 // `image` is the displayed photo. Admin can swap each by editing this map.
 const PRODUCT_IMAGES = {
-  'building-elevators':       { emoji: '🏗️', image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop' },
-  'building-lifts':           { emoji: '🛗', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&auto=format&fit=crop' },
-  'paint-booths':            { emoji: '🎨', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop' },
-  'vehicle-test-equipment':   { emoji: '📊', image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80&auto=format&fit=crop' },
-  'facility-equipment':       { emoji: '❄️', image: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&q=80&auto=format&fit=crop' },
-  'car-lifts':               { emoji: '🛗', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format&fit=crop' },
-  'gps-speed-limit':         { emoji: '⚡', image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80&auto=format&fit=crop' },
-  'heavy-equipment':         { emoji: '🚚', image: 'https://picsum.photos/seed/heavy-equipment/800/600' },
+  'building-elevators': { image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop' },
+  'building-lifts': { image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&auto=format&fit=crop' },
+  'paint-booths': { image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop' },
+  'vehicle-test-equipment': { image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80&auto=format&fit=crop' },
+  'facility-equipment': { image: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&q=80&auto=format&fit=crop' },
+  'car-lifts': { image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format&fit=crop' },
+  'gps-speed-limit': { image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80&auto=format&fit=crop' },
+  'heavy-equipment': { image: 'https://picsum.photos/seed/heavy-equipment/800/600' },
 }
 
 export default function Home() {
-  const [services, setServices]       = useState([])
-  const [products, setProducts]       = useState([])
-  const [featured, setFeatured]       = useState([])
-  const [loading, setLoading]         = useState(true)
+  const [services, setServices] = useState([])
+  const [products, setProducts] = useState([])
+  const [featured, setFeatured] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const { scrollYProgress } = useScroll()
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
@@ -159,7 +159,7 @@ export default function Home() {
 
           {loading ? (
             <div className="grid gap-6 md:grid-cols-3">
-              {[0,1,2].map((i) => <div key={i} className="h-96 rounded-2xl shimmer" />)}
+              {[0, 1, 2].map((i) => <div key={i} className="h-96 rounded-2xl shimmer" />)}
             </div>
           ) : services.length === 0 ? null : (
             <div className="grid gap-6 md:grid-cols-3">
@@ -243,7 +243,7 @@ export default function Home() {
 
           {loading ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {[0,1,2,3].map((i) => <div key={i} className="h-80 rounded-2xl shimmer" />)}
+              {[0, 1, 2, 3].map((i) => <div key={i} className="h-80 rounded-2xl shimmer" />)}
             </div>
           ) : products.length === 0 ? null : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -451,8 +451,8 @@ export default function Home() {
           <div className="grid gap-8 text-center md:grid-cols-4">
             {[
               { v: '1985', l: 'Year established' },
-              { v: '39+',  l: 'Years of experience' },
-              { v: '12',   l: 'Global brand partners' },
+              { v: '39+', l: 'Years of experience' },
+              { v: '12', l: 'Global brand partners' },
               { v: '500+', l: 'Projects delivered' },
             ].map((s, i) => (
               <motion.div

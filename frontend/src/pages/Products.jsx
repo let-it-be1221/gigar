@@ -18,14 +18,14 @@ const ICONS = {
 // Sample product images (replaceable by the admin via PublicController::products()
 // backend, or by editing this map). Each entry maps a product id → photo URL.
 const PRODUCT_IMAGES = {
-  'building-elevators':       'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200&q=80&auto=format&fit=crop',
-  'building-lifts':           'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80&auto=format&fit=crop',
-  'paint-booths':            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80&auto=format&fit=crop',
-  'vehicle-test-equipment':   'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&q=80&auto=format&fit=crop',
-  'facility-equipment':       'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1200&q=80&auto=format&fit=crop',
-  'car-lifts':               'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80&auto=format&fit=crop',
-  'gps-speed-limit':         'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1200&q=80&auto=format&fit=crop',
-  'heavy-equipment':         'https://picsum.photos/seed/heavy-equipment/1200/900',
+  'building-elevators': 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200&q=80&auto=format&fit=crop',
+  'building-lifts': 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80&auto=format&fit=crop',
+  'paint-booths': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80&auto=format&fit=crop',
+  'vehicle-test-equipment': 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&q=80&auto=format&fit=crop',
+  'facility-equipment': 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1200&q=80&auto=format&fit=crop',
+  'car-lifts': 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80&auto=format&fit=crop',
+  'gps-speed-limit': 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1200&q=80&auto=format&fit=crop',
+  'heavy-equipment': 'https://picsum.photos/seed/heavy-equipment/1200/900',
 }
 
 const FALLBACK_PRODUCTS = [
@@ -81,7 +81,7 @@ const FALLBACK_PRODUCTS = [
 
 export default function Products() {
   const [products, setProducts] = useState([])
-  const [loading, setLoading]     = useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     publicApi.products()
