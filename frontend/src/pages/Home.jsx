@@ -49,15 +49,10 @@ const SERVICE_IMAGES = {
   'technical-consultancy': 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80&auto=format&fit=crop',
 }
 
-const SERVICE_ICONS = {
-  'supplying-and-installing': '🔧',
-  'maintenance-service': '🛠️',
-  'technical-consultancy': '📐',
-}
-
 // Sample product images — these match the products in the API catalog.
-// Each entry: { icon, image }. The `icon` is used as an emoji overlay; the
-// `image` is the displayed photo. Admin can swap each by editing this map.
+// Each entry: { image }. The `image` is the displayed photo. Admin can swap
+// each by editing this map or by updating PublicController::products() on
+// the backend. (No emoji icons per user request — text + image only.)
 const PRODUCT_IMAGES = {
   'building-elevators': { image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop' },
   'building-lifts': { image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&auto=format&fit=crop' },
@@ -170,7 +165,6 @@ export default function Home() {
             <div className="grid gap-6 md:grid-cols-3">
               {services.map((s, i) => {
                 const img = SERVICE_IMAGES[s.id] || `https://picsum.photos/seed/${s.id}/800/600`
-                const emoji = SERVICE_ICONS[s.id] || '⚙️'
                 return (
                   <motion.div
                     key={s.id || s.title}
@@ -190,9 +184,9 @@ export default function Home() {
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/90 via-gigar-navy/40 to-transparent" />
-                      {/* Emoji badge */}
-                      <div className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-2xl shadow-gigar-soft backdrop-blur transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
-                        {emoji}
+                      {/* Service-line index badge (no emoji) */}
+                      <div className="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-full bg-white/95 font-display text-base font-extrabold text-gigar-red shadow-gigar-soft backdrop-blur transition-transform duration-300 group-hover:scale-110">
+                        {String(i + 1).padStart(2, '0')}
                       </div>
                       {/* Service line label */}
                       <div className="absolute inset-x-0 bottom-0 p-4">
@@ -253,7 +247,7 @@ export default function Home() {
           ) : products.length === 0 ? null : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {products.slice(0, 8).map((p, i) => {
-                const imgMeta = PRODUCT_IMAGES[p.id] || { emoji: '⚙️', image: `https://picsum.photos/seed/${p.id}/600/450` }
+                const imgMeta = PRODUCT_IMAGES[p.id] || { image: `https://picsum.photos/seed/${p.id}/600/450` }
                 const cs = custStats[p.id] || { clients: 0, units: 0 }
                 return (
                   <motion.div
@@ -275,10 +269,6 @@ export default function Home() {
                       />
                       {/* Dark gradient overlay for text legibility */}
                       <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/80 via-gigar-navy/20 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-90" />
-                      {/* Floating emoji badge */}
-                      <div className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-lg shadow-gigar-soft backdrop-blur transition-transform duration-300 group-hover:scale-110">
-                        {imgMeta.emoji}
-                      </div>
                       {/* Client count + units installed badges (top-right) */}
                       <div className="absolute right-3 top-3 flex flex-col gap-1">
                         <span className="rounded-full bg-gigar-red px-2 py-0.5 text-[10px] font-bold text-white shadow">

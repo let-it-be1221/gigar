@@ -9,12 +9,6 @@ import Loader from '../components/Loader'
 import SmartImage from '../components/SmartImage'
 import { publicApi } from '../api/client'
 
-const ICONS = {
-  elevator: '🏗️', lift: '🛗', spray: '🎨', gauge: '📊',
-  ac: '❄️', speed: '⚡', truck: '🚚', washer: '🧺',
-  garage: '🔧',
-}
-
 // Sample product images (replaceable by the admin via PublicController::products()
 // backend, or by editing this map). Each entry maps a product id → photo URL.
 const PRODUCT_IMAGES = {
@@ -140,10 +134,6 @@ export default function Products() {
                       />
                       {/* Dark gradient overlay for the title */}
                       <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 via-gigar-navy/30 to-transparent" />
-                      {/* Floating emoji badge */}
-                      <div className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-xl shadow-gigar-soft backdrop-blur transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
-                        {ICONS[p.icon] || '⚙️'}
-                      </div>
                       {/* Category chip */}
                       <div className="absolute right-4 top-4">
                         <span className="rounded-full bg-gigar-red/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">

@@ -128,7 +128,7 @@ export default function Footer() {
             </li>
             <li className="flex items-start gap-3">
               <FiClock className="mt-0.5 h-4 w-4 text-gigar-red" />
-              <span>Mon – Fri: 8:00 AM – 6:00 PM<br/>Saturday: 8:00 AM – 12:00 PM · Sunday: Closed</span>
+              <span>Mon – Fri: 8:00 AM – 6:00 PM<br />Saturday: 8:00 AM – 12:00 PM · Sunday: Closed</span>
             </li>
           </ul>
         </div>
@@ -138,7 +138,6 @@ export default function Footer() {
       <div className="relative border-t border-white/10">
         <div className="container-page flex flex-col items-center justify-between gap-4 py-6 text-xs text-white/60 sm:flex-row">
           <p>© {new Date().getFullYear()} Gigar Trading & Technical Center. All rights reserved.</p>
-          <p>Built with React + Laravel + MySQL · Crafted with passion in Addis Ababa.</p>
           <button
             onClick={scrollTop}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-gigar-red hover:scale-110"

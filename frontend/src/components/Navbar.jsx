@@ -53,11 +53,11 @@ const MEGA_CATEGORIES = [
   },
 ]
 
-// The 3 service lines.
+// The 3 service lines. (No emoji icons — UI is text-driven.)
 const SERVICE_LINES = [
-  { id: 'supplying-and-installing', label: 'Supplying & Installing Equipments', desc: 'Import, supply & professional installation', icon: '🔧' },
-  { id: 'maintenance-service',     label: 'Maintenance Service',                desc: 'AMC contracts & 24/7 emergency support',    icon: '🛠️' },
-  { id: 'technical-consultancy',    label: 'Technical Consultancy',            desc: 'Workshop design & equipment sizing',       icon: '📐' },
+  { id: 'supplying-and-installing', label: 'Supplying & Installing Equipments', desc: 'Import, supply & professional installation' },
+  { id: 'maintenance-service',     label: 'Maintenance Service',                desc: 'AMC contracts & 24/7 emergency support' },
+  { id: 'technical-consultancy',    label: 'Technical Consultancy',            desc: 'Workshop design & equipment sizing' },
 ]
 
 function ServicesMegaMenu({ onClose }) {
@@ -104,7 +104,6 @@ function ServicesMegaMenu({ onClose }) {
                 activeLine === s.id ? 'bg-gigar-red text-white shadow-gigar-glow' : 'bg-white text-gigar-navy hover:bg-gigar-navy/5'
               }`}
             >
-              <span className="text-xl">{s.icon}</span>
               <div className="min-w-0 flex-1">
                 <div className="truncate text-xs font-bold uppercase tracking-wider">{s.label}</div>
                 <div className={`truncate text-[10px] ${activeLine === s.id ? 'text-white/80' : 'text-gigar-navy/60'}`}>{s.desc}</div>
@@ -275,9 +274,9 @@ export default function Navbar() {
       <div className="hidden bg-gigar-navy text-white/80 lg:block">
         <div className="container-page flex h-10 items-center justify-between text-xs">
           <div className="flex items-center gap-6">
-            <a href="mailto:info@gigartrading.com" className="hover:text-gigar-gold">✉ info@gigartrading.com</a>
-            <a href="tel:+251115518267" className="hover:text-gigar-gold">☎ +251 115 51 82 67</a>
-            <span className="hidden items-center gap-1.5 xl:flex">📍 Ledeta St, Addis Ababa, Ethiopia</span>
+            <a href="mailto:info@gigartrading.com" className="hover:text-gigar-gold">info@gigartrading.com</a>
+            <a href="tel:+251115518267" className="hover:text-gigar-gold">+251 115 51 82 67</a>
+            <span className="hidden items-center gap-1.5 xl:flex">Ledeta St, Addis Ababa, Ethiopia</span>
           </div>
           <div className="flex items-center gap-4">
             <span>Mon – Fri: 8:00 AM – 6:00 PM</span>
@@ -295,20 +294,22 @@ export default function Navbar() {
         }`}
       >
         <nav className="container-page flex h-16 items-center justify-between lg:h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <motion.img
-              src="/logo.png" alt="Gigar Trading logo"
-              className="h-10 w-auto rounded-md shadow-gigar-soft lg:h-12"
-              initial={{ rotate: -8, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              whileHover={{ rotate: -2, scale: 1.04 }}
-            />
-            <div className="hidden flex-col leading-none sm:flex">
-              <span className="font-display text-base font-extrabold tracking-tight text-gigar-navy lg:text-lg">GIGAR</span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gigar-red">Trading & Technical Center</span>
-            </div>
+          {/* Logo — text only, no square icon */}
+          <Link to="/" className="flex items-center">
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ scale: 1.02 }}
+              className="flex flex-col leading-none"
+            >
+              <span className="font-display text-xl font-extrabold tracking-tight text-gigar-navy lg:text-2xl">
+                GIGAR
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-gigar-red sm:text-xs">
+                Trading & Technical Center
+              </span>
+            </motion.div>
           </Link>
 
           {/* Desktop nav */}

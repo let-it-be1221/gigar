@@ -145,49 +145,65 @@ class PublicController extends Controller
      * Product catalog — the equipment categories Gigar Trading supplies.
      * Each product can also be added/removed by the admin as a blog post
      * tagged with the matching category.
+     *
+     * The 5 categories highlighted in the Services sidebar each carry
+     * a `long_description` (shown on the Services page right panel) and a
+     * `cover_image` URL. Client count + units installed are joined in
+     * from the customers table by the /public/customers/stats endpoint
+     * on the frontend.
      */
     public function products()
     {
         $products = [
             [
-                'id'          => 'building-elevators',
-                'icon'        => 'elevator',
-                'title'       => 'Building Elevators',
-                'tagline'     => 'Traction, hydraulic & MRL elevator systems',
-                'description' => 'Traction elevators for mid/high-rise buildings, hydraulic elevators for low-rise installations, and machine-room-less (MRL) elevators for modern commercial buildings. All systems include steel ropes, counterweights, regenerative drives and emergency backup.',
-                'features'    => ['Traction (6+ floors)', 'Hydraulic (2-5 floors)', 'MRL systems', '24/7 emergency support'],
+                'id'               => 'building-elevators',
+                'icon'             => 'elevator',
+                'title'            => 'Building Elevators',
+                'tagline'          => 'Traction, hydraulic & MRL elevator systems',
+                'description'      => 'Traction elevators for mid/high-rise buildings, hydraulic elevators for low-rise installations, and machine-room-less (MRL) elevators for modern commercial buildings. All systems include steel ropes, counterweights, regenerative drives and emergency backup.',
+                'long_description' => 'Gigar Trading is renowned for importing high-quality building elevators and equipping them with professional installation teams. We have successfully installed elevators for government agencies and private commercial buildings across Ethiopia, with full traffic analysis, load calculations and 24/7 emergency call-out support. Every installation is backed by a multi-year Annual Maintenance Contract and genuine OEM spare parts inventory.',
+                'cover_image'      => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200&q=80&auto=format&fit=crop',
+                'features'         => ['Traction (6+ floors)', 'Hydraulic (2-5 floors)', 'MRL systems', '24/7 emergency support'],
             ],
             [
-                'id'          => 'building-lifts',
-                'icon'        => 'lift',
-                'title'       => 'Building Lifts & Stair Lifts',
-                'tagline'     => 'Vertical mobility for any staircase',
-                'description' => 'Stair lifts for elderly and mobility-impaired residents, curved and straight rail systems with custom 3D-measured rails. Includes seatbelts, obstruction sensors, swivel seats, battery backup and remote control call-and-send operation.',
-                'features'    => ['Straight-rail stair lifts', 'Curved-rail stair lifts', 'Battery backup', 'Same-day installation'],
+                'id'               => 'building-lifts',
+                'icon'             => 'lift',
+                'title'            => 'Building Lifts',
+                'tagline'          => 'Vertical mobility for any staircase',
+                'description'      => 'Stair lifts for elderly and mobility-impaired residents, curved and straight rail systems with custom 3D-measured rails. Includes seatbelts, obstruction sensors, swivel seats, battery backup and remote control call-and-send operation.',
+                'long_description' => 'Gigar Trading supplies and installs stair lifts for residential and commercial buildings, restoring independent mobility for elderly and mobility-impaired residents. Every rail is custom 3D-measured to follow the exact geometry of your staircase — straight or curved, single-flight or multi-landing. Our team handles installation in a single day with no structural modifications, and every unit includes battery backup for power cuts, obstruction sensors, swivel seats and remote call-and-send operation.',
+                'cover_image'      => 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80&auto=format&fit=crop',
+                'features'         => ['Straight-rail stair lifts', 'Curved-rail stair lifts', 'Battery backup', 'Same-day installation'],
             ],
             [
-                'id'          => 'paint-booths',
-                'icon'        => 'spray',
-                'title'       => 'OMIA Paint Booths',
-                'tagline'     => 'Dust-free, temperature-controlled spray booths',
-                'description' => 'OMIA vehicle paint booths with advanced downdraft ventilation, precise temperature control (20-25°C) and humidity management for professional paint finishes. Full installation includes foundation, electrical, exhaust ducting and air-balance certification.',
-                'features'    => ['Downdraft ventilation', 'Temperature control 20-25°C', 'Humidity management', 'Air-balance certification'],
+                'id'               => 'paint-booths',
+                'icon'             => 'spray',
+                'title'            => 'Paint Booths',
+                'tagline'          => 'Dust-free, temperature-controlled spray booths',
+                'description'      => 'OMIA vehicle paint booths with advanced downdraft ventilation, precise temperature control (20-25°C) and humidity management for professional paint finishes. Full installation includes foundation, electrical, exhaust ducting and air-balance certification.',
+                'long_description' => 'Gigar Trading supplies and installs OMIA paint booths for professional vehicle paint shops. Each booth features advanced downdraft ventilation that removes overspray and dust, precise temperature control (20-25°C) for optimal paint flow, and humidity management to eliminate defects. We handle the full installation — foundation preparation, electrical connections, exhaust ducting and final air-balance certification — so your booth is ready for production on day one. Every installation includes operator training and a preventive maintenance contract.',
+                'cover_image'      => 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80&auto=format&fit=crop',
+                'features'         => ['Downdraft ventilation', 'Temperature control 20-25°C', 'Humidity management', 'Air-balance certification'],
             ],
             [
-                'id'          => 'vehicle-test-equipment',
-                'icon'        => 'gauge',
-                'title'       => 'Vehicle Test Equipment (VTEQ)',
-                'tagline'     => 'Brake, suspension, side-slip & headlight testing',
-                'description' => 'VTEQ vehicle test lanes for inspection centers — brake testers (per-wheel force + imbalance), suspension testers, side-slip plates and headlight aligners. Complete installation includes mechanical, electrical, software commissioning and operator training.',
-                'features'    => ['Brake tester', 'Suspension tester', 'Side-slip plate', 'Headlight aligner'],
+                'id'               => 'facility-equipment',
+                'icon'             => 'ac',
+                'title'            => 'Facility Equipments',
+                'tagline'          => 'Air conditioning, washing machines & power systems',
+                'description'      => 'Fujitsu split, cassette and VRF air-conditioning systems, LGS duty washing machines for hotels/hospitals/laundromats, and complete facility equipment supply. Low water and energy consumption, with full preventive-maintenance contracts.',
+                'long_description' => 'Gigar Trading equips hotels, hospitals, laundromats and office towers with the full spectrum of facility equipment — Fujitsu VRF and split air-conditioning systems, LGS heavy-duty industrial washing machines, backup generators and material-handling equipment. We design each installation around the customer\'s daily volume and energy budget, and back it with one annual maintenance contract that covers all equipment — simplified operations, lower total cost of ownership, and a single call-out number for everything.',
+                'cover_image'      => 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1200&q=80&auto=format&fit=crop',
+                'features'         => ['Fujitsu VRF systems', 'Industrial washing machines', 'Energy efficient', 'Full AMC available'],
             ],
             [
-                'id'          => 'facility-equipment',
-                'icon'        => 'ac',
-                'title'       => 'Facility Equipment',
-                'tagline'     => 'Air conditioning, washing machines & power systems',
-                'description' => 'Fujitsu split, cassette and VRF air-conditioning systems, LGS duty washing machines for hotels/hospitals/laundromats, and complete facility equipment supply. Low water and energy consumption, with full preventive-maintenance contracts.',
-                'features'    => ['Fujitsu VRF systems', 'Industrial washing machines', 'Energy efficient', 'Full AMC available'],
+                'id'               => 'vehicle-test-equipment',
+                'icon'             => 'gauge',
+                'title'            => 'Vehicle Test Equipments',
+                'tagline'          => 'Brake, suspension, side-slip & headlight testing',
+                'description'      => 'VTEQ vehicle test lanes for inspection centers — brake testers (per-wheel force + imbalance), suspension testers, side-slip plates and headlight aligners. Complete installation includes mechanical, electrical, software commissioning and operator training.',
+                'long_description' => 'Gigar Trading supplies and installs complete VTEQ vehicle test lanes for government and private inspection centers. Each lane includes four core measurement stations — brake testers (per-wheel force and imbalance), suspension testers, side-slip plates and headlight aligners — integrated through a unified software platform. Our engineers handle the full installation: mechanical foundations, electrical connections, software commissioning and operator training. The result is a test lane that delivers international-standard measurement accuracy under continuous daily use, with annual recertification support.',
+                'cover_image'      => 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&q=80&auto=format&fit=crop',
+                'features'         => ['Brake tester', 'Suspension tester', 'Side-slip plate', 'Headlight aligner'],
             ],
             [
                 'id'          => 'car-lifts',
