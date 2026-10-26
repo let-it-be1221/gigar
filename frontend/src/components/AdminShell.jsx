@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   FiLayout, FiFileText, FiPlus, FiImage, FiLogOut, FiExternalLink,
