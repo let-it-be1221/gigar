@@ -59,14 +59,15 @@ export default function Login() {
           transition={{ duration: 0.6 }}
           className="hidden lg:block"
         >
-          <motion.img
-            src="/logo.png"
-            alt="Gigar Trading"
-            className="h-20 w-auto rounded-lg shadow-2xl"
-            initial={{ rotate: -8, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-          />
+            className="flex flex-col leading-none"
+          >
+            <span className="font-display text-3xl font-extrabold tracking-tight text-white">GIGAR</span>
+            <span className="mt-1 text-xs font-semibold uppercase tracking-[0.22em] text-gigar-gold">Trading & Technical Center</span>
+          </motion.div>
           <h1 className="mt-6 font-display text-4xl font-extrabold leading-tight">
             Welcome back, <span className="text-gigar-red">Administrator</span>.
           </h1>

@@ -90,8 +90,7 @@ export default function BlogCard({ post, index = 0, compact = false }) {
             Read more <FiArrowRight className="h-4 w-4" />
           </Link>
           <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="Gigar" className="h-6 w-6 rounded" />
-            <span className="text-xs font-medium text-gigar-navy/60">Gigar Team</span>
+            <span className="font-display text-xs font-bold uppercase tracking-wider text-gigar-navy/60">Gigar Team</span>
           </div>
         </div>
       </div>

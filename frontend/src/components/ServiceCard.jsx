@@ -1,20 +1,8 @@
 import { motion } from 'framer-motion'
 import { FiArrowRight } from 'react-icons/fi'
 
-const ICONS = {
-  speed:    '⚡',
-  lift:     '🛗',
-  garage:   '🔧',
-  elevator: '🏗️',
-  washer:   '🧺',
-  truck:    '🚚',
-  spray:    '🎨',
-  gauge:    '📊',
-  ac:       '❄️',
-}
-
+// All emoji icons removed — UI is now text-driven, no emoji per category.
 export default function ServiceCard({ service, index = 0 }) {
-  const icon = ICONS[service.icon] || '⚙️'
   return (
     <motion.article
       className="group relative overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white p-6 shadow-gigar-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-gigar-glow hover:border-gigar-red/30"
@@ -30,15 +18,14 @@ export default function ServiceCard({ service, index = 0 }) {
 
       <div className="relative z-10">
         <div className="flex items-start justify-between">
-          <motion.div
-            className="flex h-14 w-14 items-center justify-center rounded-xl bg-gigar-red/10 text-3xl"
-            whileHover={{ rotate: -8, scale: 1.1 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-          >
-            <span aria-hidden>{icon}</span>
-          </motion.div>
+          {/* Index badge in place of emoji */}
+          <div className="flex h-14 min-w-14 items-center justify-center rounded-xl bg-gigar-red/10 px-4">
+            <span className="font-display text-lg font-extrabold text-gigar-red">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+          </div>
           <span className="rounded-full bg-gigar-navy/5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gigar-navy/60">
-            #{String(index + 1).padStart(2, '0')}
+            Service
           </span>
         </div>
 
