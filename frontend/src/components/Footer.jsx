@@ -25,10 +25,10 @@ export default function Footer() {
   const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
   return (
-    <footer className="relative overflow-hidden bg-gigar-navy text-white">
+    <footer className="relative overflow-hidden bg-gigar-red text-white">
       {/* Decorative gradient blob */}
-      <div className="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full bg-gigar-red/30 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 left-0 h-72 w-72 rounded-full bg-gigar-red/20 blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full bg-gigar-navy/30 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 left-0 h-72 w-72 rounded-full bg-gigar-gold/20 blur-3xl" />
 
       {/* Top CTA strip */}
       <div className="relative border-b border-white/10">
@@ -43,7 +43,9 @@ export default function Footer() {
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a href="tel:+251115518267" className="btn-primary">Call +251 115 51 82 67</a>
+            <a href="tel:+251115518267" className="inline-flex items-center justify-center gap-2 rounded-full bg-gigar-navy px-6 py-3 text-sm font-semibold text-white shadow-gigar-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-gigar-navyDark">
+              Call +251 115 51 82 67
+            </a>
             <Link to="/contact" className="btn-ghost">Get a Quote</Link>
           </div>
         </div>
@@ -52,14 +54,18 @@ export default function Footer() {
       <div className="container-page relative grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
         {/* Brand */}
         <div>
-          <motion.img
-            src="/logo.png" alt="Gigar Trading logo"
-            className="h-16 w-auto rounded-md"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-          />
+            className="flex flex-col leading-none"
+          >
+            <span className="font-display text-2xl font-extrabold tracking-tight text-white">GIGAR</span>
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/80">
+              Trading & Technical Center
+            </span>
+          </motion.div>
           <p className="mt-4 text-sm leading-relaxed text-white/70">
             Gigar Trading & Technical Center has been Ethiopia's trusted supplier of garage
             equipment, lifts and industrial machinery since 1985 E.C. — importing world-class brands
@@ -67,7 +73,7 @@ export default function Footer() {
           </p>
           <div className="mt-5 flex items-center gap-2">
             {[FiFacebook, FiTwitter, FiLinkedin, FiYoutube].map((Icon, i) => (
-              <a key={i} href="#" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-all hover:bg-gigar-red hover:scale-110">
+              <a key={i} href="#" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-all hover:bg-gigar-navy hover:scale-110">
                 <Icon className="h-4 w-4" />
               </a>
             ))}
@@ -81,7 +87,7 @@ export default function Footer() {
             {SERVICE_LINKS.map((s) => (
               <li key={s}>
                 <Link to="/services" className="inline-flex items-center gap-2 hover:text-white hover:translate-x-1 transition-all">
-                  <span className="text-gigar-red">›</span> {s}
+                  <span className="text-gigar-gold">›</span> {s}
                 </Link>
               </li>
             ))}
@@ -102,9 +108,9 @@ export default function Footer() {
           <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
             <input
               type="email" placeholder="Your email"
-              className="flex-1 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white placeholder:text-white/50 focus:border-gigar-red focus:outline-none"
+              className="flex-1 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white placeholder:text-white/50 focus:border-gigar-gold focus:outline-none"
             />
-            <button type="submit" className="rounded-full bg-gigar-red p-2.5 hover:bg-gigar-redDark transition-colors">
+            <button type="submit" className="rounded-full bg-gigar-navy p-2.5 transition-colors hover:bg-gigar-navyDark">
               <FiSend className="h-4 w-4" />
             </button>
           </form>
@@ -115,19 +121,19 @@ export default function Footer() {
           <h4 className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-gigar-gold">Get in Touch</h4>
           <ul className="space-y-3 text-sm text-white/70">
             <li className="flex items-start gap-3">
-              <FiMapPin className="mt-0.5 h-4 w-4 text-gigar-red" />
+              <FiMapPin className="mt-0.5 h-4 w-4 text-gigar-gold" />
               <span>Ledeta St, Addis Ababa, Ethiopia</span>
             </li>
             <li className="flex items-start gap-3">
-              <FiPhone className="mt-0.5 h-4 w-4 text-gigar-red" />
+              <FiPhone className="mt-0.5 h-4 w-4 text-gigar-gold" />
               <a href="tel:+251115518267" className="hover:text-white">+251 115 51 82 67</a>
             </li>
             <li className="flex items-start gap-3">
-              <FiMail className="mt-0.5 h-4 w-4 text-gigar-red" />
+              <FiMail className="mt-0.5 h-4 w-4 text-gigar-gold" />
               <a href="mailto:info@gigartrading.com" className="hover:text-white">info@gigartrading.com</a>
             </li>
             <li className="flex items-start gap-3">
-              <FiClock className="mt-0.5 h-4 w-4 text-gigar-red" />
+              <FiClock className="mt-0.5 h-4 w-4 text-gigar-gold" />
               <span>Mon – Fri: 8:00 AM – 6:00 PM<br />Saturday: 8:00 AM – 12:00 PM · Sunday: Closed</span>
             </li>
           </ul>
@@ -140,7 +146,7 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} Gigar Trading & Technical Center. All rights reserved.</p>
           <button
             onClick={scrollTop}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-gigar-red hover:scale-110"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-gigar-redHover hover:scale-110"
             aria-label="Back to top"
           >
             <FiArrowUp className="h-4 w-4" />

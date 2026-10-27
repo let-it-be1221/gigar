@@ -454,10 +454,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WHY CHOOSE US */}
-      <section className="relative overflow-hidden bg-gigar-navy py-20 text-white lg:py-28">
-        <div className="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-gigar-red/20 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-96 w-96 rounded-full bg-gigar-gold/10 blur-3xl" />
+      {/* WHY CHOOSE US — beige-grey background per user request */}
+      <section className="relative overflow-hidden bg-gigar-red py-20 text-white lg:py-28">
+        <div className="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-gigar-navy/15 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-96 w-96 rounded-full bg-gigar-gold/15 blur-3xl" />
 
         <div className="container-page relative">
           <AnimatedSection className="mx-auto mb-16 max-w-3xl text-center">
@@ -482,9 +482,9 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ y: -6 }}
-                className="group rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-gigar-red/40 hover:bg-white/10"
+                className="group rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-gigar-navy/40 hover:bg-white/10"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gigar-red/20 text-gigar-red transition-all group-hover:bg-gigar-red group-hover:text-white">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gigar-navy text-white transition-all group-hover:bg-gigar-gold group-hover:text-gigar-navy">
                   <item.icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-5 font-display text-lg font-bold">{item.title}</h3>
