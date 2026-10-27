@@ -2,260 +2,31 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  FiMenu, FiX, FiLogOut, FiShield, FiChevronDown, FiChevronRight,
-  FiUsers, FiCheckCircle,
+  FiMenu, FiX, FiLogOut, FiShield, FiChevronDown,
 } from 'react-icons/fi'
 import { useAuth } from '../context/AuthContext'
-import { publicApi } from '../api/client'
-import SmartImage from './SmartImage'
+
+// The 3 service lines shown in the click-toggled horizontal bar.
+const SERVICE_LINES = [
+  { id: 'supplying-and-installing', label: 'Supplying & Installing Equipments', short: 'Supplying & Installing' },
+  { id: 'maintenance-service',     label: 'Maintenance Service',                short: 'Maintenance Service' },
+  { id: 'technical-consultancy',    label: 'Technical Consultancy',              short: 'Technical Consultancy' },
+]
 
 const NAV = [
   { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
-  { label: 'Services', to: '/services', isMega: true },
+  { label: 'Services', isServices: true },  // special — toggles the bar
   { label: 'Products', to: '/products' },
   { label: 'Customers', to: '/customers' },
   { label: 'Blog', to: '/blog' },
   { label: 'Contact', to: '/contact' },
 ]
 
-// The 5 product categories shown inside the Supplying & Installing mega-menu.
-const MEGA_CATEGORIES = [
-  {
-    id: 'building-elevators',
-    label: 'Building Elevators',
-    image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80&auto=format&fit=crop',
-    blurb: 'Traction, hydraulic & MRL elevator systems for buildings of any height.',
-  },
-  {
-    id: 'building-lifts',
-    label: 'Building Lifts & Stair Lifts',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&q=80&auto=format&fit=crop',
-    blurb: 'Stair lifts and accessibility lifts for any staircase geometry.',
-  },
-  {
-    id: 'paint-booths',
-    label: 'Paint Booths',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80&auto=format&fit=crop',
-    blurb: 'OMIA downdraft booths with temperature and humidity control.',
-  },
-  {
-    id: 'facility-equipment',
-    label: 'Facility Equipments',
-    image: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=400&q=80&auto=format&fit=crop',
-    blurb: 'VRF air-conditioning, industrial washing machines, generators.',
-  },
-  {
-    id: 'vehicle-test-equipment',
-    label: 'Vehicle Test Equipments',
-    image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=400&q=80&auto=format&fit=crop',
-    blurb: 'VTEQ brake, suspension, side-slip and headlight test lanes.',
-  },
-]
-
-// The 3 service lines. (No emoji icons — UI is text-driven.)
-const SERVICE_LINES = [
-  { id: 'supplying-and-installing', label: 'Supplying & Installing Equipments', desc: 'Import, supply & professional installation' },
-  { id: 'maintenance-service',     label: 'Maintenance Service',                desc: 'AMC contracts & 24/7 emergency support' },
-  { id: 'technical-consultancy',    label: 'Technical Consultancy',            desc: 'Workshop design & equipment sizing' },
-]
-
-function ServicesMegaMenu({ onClose }) {
-  const [activeLine, setActiveLine] = useState('supplying-and-installing')
-  const [activeCat, setActiveCat]   = useState(MEGA_CATEGORIES[0])
-  const [stats, setStats]           = useState({})
-
-  useEffect(() => {
-    publicApi.customerStats()
-      .then(({ data }) => setStats(data.stats || {}))
-      .catch(() => setStats({}))
-  }, [])
-
-  // Total clients + total units across all 5 categories (for header strip)
-  const totals = MEGA_CATEGORIES.reduce(
-    (acc, c) => {
-      const s = stats[c.id] || { clients: 0, units: 0 }
-      return { clients: acc.clients + s.clients, units: acc.units + s.units }
-    },
-    { clients: 0, units: 0 },
-  )
-
-  const isSupply = activeLine === 'supplying-and-installing'
-  const catStats = stats[activeCat.id] || { clients: 0, units: 0 }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 8 }}
-      transition={{ duration: 0.18 }}
-      onClick={onClose}
-      className="absolute left-1/2 top-full z-50 mt-2 w-[min(1100px,calc(100vw-32px))] -translate-x-1/2 overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-2xl"
-    >
-      {/* Header strip — horizontal list of the 3 service lines */}
-      <div className="border-b border-gigar-navy/10 bg-gigar-mist px-4 py-3">
-        <div className="grid grid-cols-3 gap-2">
-          {SERVICE_LINES.map((s) => (
-            <button
-              key={s.id}
-              onMouseEnter={() => setActiveLine(s.id)}
-              onClick={() => setActiveLine(s.id)}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${
-                activeLine === s.id ? 'bg-gigar-red text-white shadow-gigar-glow' : 'bg-white text-gigar-navy hover:bg-gigar-navy/5'
-              }`}
-            >
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-xs font-bold uppercase tracking-wider">{s.label}</div>
-                <div className={`truncate text-[10px] ${activeLine === s.id ? 'text-white/80' : 'text-gigar-navy/60'}`}>{s.desc}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Body — only show the categories sidebar when Supplying & Installing is selected */}
-      {isSupply ? (
-        <div className="grid grid-cols-12 gap-0">
-          {/* Left sidebar — vertical list of categories */}
-          <div className="col-span-5 border-r border-gigar-navy/10 p-3 lg:col-span-4">
-            <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[0.2em] text-gigar-navy/50">
-              Equipment we supply &amp; install
-            </div>
-            <ul className="space-y-1">
-              {MEGA_CATEGORIES.map((c) => {
-                const s = stats[c.id] || { clients: 0, units: 0 }
-                return (
-                  <li key={c.id}>
-                    <button
-                      onMouseEnter={() => setActiveCat(c)}
-                      onClick={() => setActiveCat(c)}
-                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${
-                        activeCat.id === c.id ? 'bg-gigar-red/10 ring-1 ring-gigar-red/20' : 'hover:bg-gigar-navy/5'
-                      }`}
-                    >
-                      <SmartImage
-                        src={c.image}
-                        alt={c.label}
-                        fallbackSeed={c.id}
-                        className="h-12 w-12 flex-shrink-0 rounded-lg object-cover"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <div className={`truncate text-sm font-bold ${activeCat.id === c.id ? 'text-gigar-red' : 'text-gigar-navy'}`}>
-                          {c.label}
-                        </div>
-                        <div className="mt-0.5 flex items-center gap-2 text-[11px] text-gigar-navy/70">
-                          <span className="inline-flex items-center gap-1">
-                            <FiUsers className="h-3 w-3 text-gigar-red" />
-                            <strong>{s.clients}+</strong> clients
-                          </span>
-                          <span className="inline-flex items-center gap-1">
-                            <FiCheckCircle className="h-3 w-3 text-gigar-gold" />
-                            <strong>{(s.units || 0).toLocaleString()}</strong> installed
-                          </span>
-                        </div>
-                      </div>
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-
-          {/* Right — preview card of the active category */}
-          <div className="col-span-7 p-5 lg:col-span-8">
-            <div className="relative h-40 overflow-hidden rounded-xl">
-              <SmartImage
-                src={activeCat.image}
-                alt={activeCat.label}
-                fallbackSeed={activeCat.id}
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 to-transparent" />
-              <div className="absolute bottom-3 left-4 right-4">
-                <h3 className="font-display text-lg font-bold text-white">{activeCat.label}</h3>
-                <p className="text-xs text-white/85">{activeCat.blurb}</p>
-              </div>
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              <div className="rounded-xl bg-gigar-red/10 p-3">
-                <div className="text-xs font-semibold uppercase tracking-wider text-gigar-red">Clients</div>
-                <div className="font-display text-2xl font-extrabold text-gigar-red">{catStats.clients}+</div>
-                <div className="text-[11px] text-gigar-navy/70">organizations trust Gigar</div>
-              </div>
-              <div className="rounded-xl bg-gigar-gold/15 p-3">
-                <div className="text-xs font-semibold uppercase tracking-wider text-gigar-navy">Units installed</div>
-                <div className="font-display text-2xl font-extrabold text-gigar-navy">{(catStats.units || 0).toLocaleString()}</div>
-                <div className="text-[11px] text-gigar-navy/70">across all projects</div>
-              </div>
-            </div>
-
-            <p className="mt-3 text-sm leading-relaxed text-gigar-navy/75">
-              We import world-class {activeCat.label.toLowerCase()} from authorized distributors like BendPak, OMIA, VTEQ, Fujitsu and Schindler — and our certified technicians handle site survey, installation, commissioning and operator training.
-            </p>
-
-            <div className="mt-4 flex items-center justify-between">
-              <Link to={`/products`} className="text-sm font-semibold text-gigar-red hover:underline">
-                View all {activeCat.label.toLowerCase()} →
-              </Link>
-              <Link to="/customers" className="text-xs font-semibold text-gigar-navy/60 hover:text-gigar-red">
-                See customer stories →
-              </Link>
-            </div>
-          </div>
-        </div>
-      ) : (
-        // Maintenance or Consultancy selected — show a single informative panel
-        <div className="p-5">
-          {(() => {
-            const line = SERVICE_LINES.find((l) => l.id === activeLine)
-            return (
-              <div>
-                <h3 className="font-display text-lg font-bold text-gigar-navy">{line.label}</h3>
-                <p className="mt-1 text-sm text-gigar-navy/70">{line.desc}</p>
-                <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {activeLine === 'maintenance-service' && [
-                    'Annual Maintenance Contracts (AMC) with fixed response times',
-                    '24/7 emergency breakdown call-out across Addis Ababa',
-                    'Genuine OEM spare parts inventory',
-                    'Safety inspection & certification reports',
-                    'On-site preventive maintenance scheduling',
-                    'Quarterly service reports + performance metrics',
-                  ].map((h) => (
-                    <li key={h} className="flex items-start gap-2 text-sm text-gigar-navy/80">
-                      <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-red" /> {h}
-                    </li>
-                  ))}
-                  {activeLine === 'technical-consultancy' && [
-                    'Workshop layout & equipment sizing consultancy',
-                    'Elevator load & traffic analysis for buildings',
-                    'Project cost estimation & ROI analysis',
-                    'Compliance review with Ethiopian regulations',
-                    'Tender specifications & RFP support',
-                    'On-site engineering supervision',
-                  ].map((h) => (
-                    <li key={h} className="flex items-start gap-2 text-sm text-gigar-navy/80">
-                      <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-red" /> {h}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-4">
-                  <Link to={`/services#${activeLine}`} className="text-sm font-semibold text-gigar-red hover:underline">
-                    Learn more about {line.label} →
-                  </Link>
-                </div>
-              </div>
-            )
-          })()}
-        </div>
-      )}
-    </motion.div>
-  )
-}
-
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [open, setOpen]         = useState(false)  // mobile drawer
+  const [servicesOpen, setServicesOpen] = useState(false) // Services bar
   const { user, isAdmin, logout } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
@@ -266,7 +37,17 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => { setOpen(false) }, [location.pathname])
+  // Close the Services bar + mobile drawer whenever the route changes
+  useEffect(() => {
+    setServicesOpen(false)
+    setOpen(false)
+  }, [location.pathname])
+
+  // Click a service line → navigate to /services with hash for that line
+  const goService = (line) => {
+    setServicesOpen(false)
+    navigate(`/services#${line.id}`)
+  }
 
   return (
     <>
@@ -315,26 +96,21 @@ export default function Navbar() {
           {/* Desktop nav */}
           <ul className="hidden items-center gap-1 lg:flex">
             {NAV.map((item) =>
-              item.isMega ? (
-                <li
-                  key={item.to}
-                  className="static group relative"
-                >
-                  <NavLink
-                    to={item.to}
-                    className={({ isActive }) =>
-                      `flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                        isActive ? 'text-gigar-red' : 'text-gigar-navy hover:text-gigar-red'
-                      }`
-                    }
+              item.isServices ? (
+                // Special Services item — toggles the horizontal bar (no hover menu)
+                <li key="services">
+                  <button
+                    type="button"
+                    onClick={() => setServicesOpen((v) => !v)}
+                    className={`flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                      servicesOpen || location.pathname.startsWith('/services')
+                        ? 'text-gigar-red'
+                        : 'text-gigar-navy hover:text-gigar-red'
+                    }`}
                   >
-                    {item.label}
-                    <FiChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
-                  </NavLink>
-                  {/* Mega-menu shown on hover */}
-                  <div className="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-                    <ServicesMegaMenu onClose={() => setOpen(false)} />
-                  </div>
+                    Services
+                    <FiChevronDown className={`h-3.5 w-3.5 transition-transform ${servicesOpen ? 'rotate-180' : ''}`} />
+                  </button>
                 </li>
               ) : (
                 <li key={item.to}>
@@ -393,6 +169,46 @@ export default function Navbar() {
           </button>
         </nav>
 
+        {/* Click-toggled Services bar — horizontal, right below the navbar */}
+        <AnimatePresence>
+          {servicesOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="overflow-hidden border-t border-gigar-navy/10 bg-white"
+            >
+              <div className="container-page py-4">
+                <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gigar-navy/50">
+                  Our service lines
+                </p>
+                <div className="flex flex-wrap items-stretch gap-3">
+                  {SERVICE_LINES.map((line, i) => (
+                    <button
+                      key={line.id}
+                      onClick={() => goService(line)}
+                      className="group flex min-w-0 flex-1 items-center gap-3 rounded-2xl border border-gigar-navy/10 bg-gigar-mist px-5 py-4 text-left transition hover:border-gigar-red/40 hover:bg-white hover:shadow-gigar-soft sm:flex-1"
+                    >
+                      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-gigar-red text-sm font-extrabold text-white">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-sm font-bold text-gigar-navy group-hover:text-gigar-red">
+                          {line.label}
+                        </div>
+                        <div className="truncate text-[11px] text-gigar-navy/60">
+                          View details →
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Mobile drawer */}
         <AnimatePresence>
           {open && (
@@ -404,42 +220,46 @@ export default function Navbar() {
               className="overflow-hidden border-t border-gigar-navy/10 bg-white lg:hidden"
             >
               <ul className="container-page py-4">
-                {NAV.map((item, i) => (
-                  <motion.li key={item.to} initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}>
-                    <NavLink
-                      to={item.to}
-                      className={({ isActive }) =>
-                        `block rounded-lg px-3 py-3 text-base font-semibold ${
-                          isActive ? 'bg-gigar-red/10 text-gigar-red' : 'text-gigar-navy hover:bg-gigar-navy/5'
-                        }`
-                      }
-                    >
-                      {item.label}
-                    </NavLink>
-                    {item.isMega && (
-                      <ul className="ml-3 border-l border-gigar-navy/10 pl-3">
-                        {SERVICE_LINES.map((line) => (
-                          <li key={line.id}>
-                            <Link to={`/services#${line.id}`} className="block rounded-lg px-3 py-2 text-sm text-gigar-navy/70 hover:text-gigar-red">
-                              {line.label}
-                            </Link>
-                            {line.id === 'supplying-and-installing' && (
-                              <ul className="ml-3 border-l border-gigar-navy/5 pl-3">
-                                {MEGA_CATEGORIES.map((c) => (
-                                  <li key={c.id}>
-                                    <Link to="/products" className="block rounded-lg px-3 py-1.5 text-xs text-gigar-navy/60 hover:text-gigar-red">
-                                      {c.label}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </motion.li>
-                ))}
+                {NAV.map((item, i) =>
+                  item.isServices ? (
+                    <motion.li key="services" initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}>
+                      <button
+                        onClick={() => setServicesOpen((v) => !v)}
+                        className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-base font-semibold text-gigar-navy hover:bg-gigar-navy/5"
+                      >
+                        Services
+                        <FiChevronDown className={`h-4 w-4 transition-transform ${servicesOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      {servicesOpen && (
+                        <ul className="ml-3 border-l border-gigar-navy/10 pl-3">
+                          {SERVICE_LINES.map((line) => (
+                            <li key={line.id}>
+                              <button
+                                onClick={() => goService(line)}
+                                className="block rounded-lg px-3 py-2 text-sm text-gigar-navy/70 hover:text-gigar-red"
+                              >
+                                {line.label}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </motion.li>
+                  ) : (
+                    <motion.li key={item.to} initial={{ x: -16, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.05 }}>
+                      <NavLink
+                        to={item.to}
+                        className={({ isActive }) =>
+                          `block rounded-lg px-3 py-3 text-base font-semibold ${
+                            isActive ? 'bg-gigar-red/10 text-gigar-red' : 'text-gigar-navy hover:bg-gigar-navy/5'
+                          }`
+                        }
+                      >
+                        {item.label}
+                      </NavLink>
+                    </motion.li>
+                  ),
+                )}
                 <li className="mt-4 flex flex-col gap-2">
                   {isAdmin ? (
                     <>
