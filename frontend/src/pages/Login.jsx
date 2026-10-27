@@ -62,7 +62,7 @@ export default function Login() {
           <motion.img
             src="/logo.png"
             alt="Gigar Trading"
-            className="h-20 w-auto rounded-lg bg-white/95 p-2 shadow-2xl"
+            className="h-20 w-auto"
             initial={{ rotate: -8, opacity: 0 }}
             animate={{ rotate: 0, opacity: 1 }}
             transition={{ duration: 0.6 }}

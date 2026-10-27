@@ -56,7 +56,7 @@ export default function Footer() {
         <div>
           <motion.img
             src="/logo.png" alt="Gigar Trading logo"
-            className="h-16 w-auto rounded-md bg-white/95 p-1.5 shadow-gigar-soft"
+            className="h-16 w-auto"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}

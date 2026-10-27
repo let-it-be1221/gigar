@@ -63,7 +63,7 @@ export default function Navbar() {
             <motion.img
               src="/logo.png"
               alt="Gigar Trading logo"
-              className="h-10 w-auto rounded-md bg-white/95 p-1 shadow-gigar-soft lg:h-12"
+              className="h-10 w-auto lg:h-12"
               initial={{ rotate: -8, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
