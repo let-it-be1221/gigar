@@ -119,14 +119,15 @@ export default function HeroCarousel() {
               className="h-full w-full object-cover"
               loading="eager"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-gigar-navy/95 via-gigar-navy/80 to-gigar-red/60" />
-            <div className="absolute inset-0 bg-section-grid bg-grid-md opacity-20" />
+            {/* Lighter overlay: only a left-to-right gradient for text legibility on the
+                left side; the right side of the carousel image shows through clearly. */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
           </motion.div>
         </AnimatePresence>
 
-        {/* Floating accent shapes */}
+        {/* Floating accent shapes — kept subtle */}
         <motion.div
-          className="pointer-events-none absolute right-10 top-24 h-64 w-64 rounded-full bg-gigar-red/30 blur-3xl"
+          className="pointer-events-none absolute right-10 top-24 h-64 w-64 rounded-full bg-gigar-red/20 blur-3xl"
           animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
           transition={{ repeat: Infinity, duration: 6 }}
         />
