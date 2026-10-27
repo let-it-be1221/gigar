@@ -54,7 +54,7 @@ export default function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
         className={`sticky top-0 z-40 transition-all duration-300 ${
-          scrolled ? 'bg-white/95 shadow-gigar-soft backdrop-blur-md' : 'bg-white/95'
+          scrolled ? 'bg-gigar-red/95 shadow-gigar-soft backdrop-blur-md' : 'bg-gigar-red/95'
         }`}
       >
         <nav className="container-page flex h-16 items-center justify-between lg:h-20">
@@ -67,10 +67,10 @@ export default function Navbar() {
               whileHover={{ scale: 1.02 }}
               className="flex flex-col leading-none"
             >
-              <span className="font-display text-xl font-extrabold tracking-tight text-gigar-navy lg:text-2xl">
+              <span className="font-display text-xl font-extrabold tracking-tight text-white lg:text-2xl">
                 GIGAR
               </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-gigar-red sm:text-xs">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/90 sm:text-xs">
                 Trading & Technical Center
               </span>
             </motion.div>
@@ -85,7 +85,7 @@ export default function Navbar() {
                   to={item.to}
                   className={({ isActive }) =>
                     `relative rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                      isActive ? 'text-gigar-redHover' : 'text-gigar-navy hover:text-gigar-redHover'
+                      isActive ? 'text-gigar-redHover' : 'text-white hover:text-gigar-redHover'
                     }`
                   }
                 >
@@ -106,23 +106,25 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* CTA + Admin login */}
+          {/* CTA + Admin login — buttons adapted for the beige-grey navbar background */}
           <div className="hidden items-center gap-3 lg:flex">
             {isAdmin ? (
               <div className="flex items-center gap-2">
-                <Link to="/admin" className="btn-primary !px-4 !py-2">
+                <Link to="/admin" className="inline-flex items-center justify-center gap-2 rounded-full bg-gigar-navy px-4 py-2 text-sm font-semibold text-white shadow-gigar-soft transition hover:-translate-y-0.5 hover:bg-gigar-navyDark">
                   <FiShield className="h-4 w-4" /> Admin
                 </Link>
-                <button onClick={logout} className="btn-ghost !px-4 !py-2 !text-gigar-navy !border-gigar-navy/20">
+                <button onClick={logout} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/5 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white hover:bg-white/15">
                   <FiLogOut className="h-4 w-4" /> Logout
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="btn-outline !px-4 !py-2">
+              <Link to="/login" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/5 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white hover:bg-white/15">
                 <FiShield className="h-4 w-4" /> Login
               </Link>
             )}
-            <a href="tel:+251115518267" className="btn-primary !px-5 !py-2">Get a Quote</a>
+            <a href="tel:+251115518267" className="inline-flex items-center justify-center gap-2 rounded-full bg-gigar-navy px-5 py-2 text-sm font-semibold text-white shadow-gigar-soft transition hover:-translate-y-0.5 hover:bg-gigar-navyDark">
+              Get a Quote
+            </a>
           </div>
 
           {/* Mobile toggle */}
