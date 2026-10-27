@@ -74,9 +74,7 @@ export default function BlogPost() {
             {post.excerpt && <p className="mt-4 text-lg leading-relaxed text-gigar-navy/70">{post.excerpt}</p>}
             <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-b border-gigar-navy/10 py-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gigar-red text-white shadow-sm">
-                  <span className="font-display text-sm font-extrabold">GT</span>
-                </div>
+                <img src="/logo.png" alt="Gigar" className="h-10 w-10 rounded-lg bg-white/95 p-1 shadow-sm" />
                 <div>
                   <div className="text-sm font-semibold text-gigar-navy">Gigar Trading Team</div>
                   <div className="flex items-center gap-1 text-xs text-gigar-navy/60">

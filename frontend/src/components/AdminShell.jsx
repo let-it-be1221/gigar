@@ -23,7 +23,8 @@ export default function AdminShell({ title = 'Admin', subtitle, action, children
       {/* Top strip */}
       <div className="bg-gigar-navy text-white">
         <div className="container-page flex h-14 items-center justify-between">
-          <Link to="/admin" className="flex items-center font-display font-extrabold">
+          <Link to="/admin" className="flex items-center gap-2 font-display font-extrabold">
+            <img src="/logo.png" alt="" className="h-8 w-8 rounded bg-white/95 p-1" />
             <span>Gigar <span className="text-gigar-gold">Admin</span></span>
           </Link>
           <div className="flex items-center gap-3 text-sm">

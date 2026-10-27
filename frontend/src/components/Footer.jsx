@@ -54,18 +54,14 @@ export default function Footer() {
       <div className="container-page relative grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
         {/* Brand */}
         <div>
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          <motion.img
+            src="/logo.png" alt="Gigar Trading logo"
+            className="h-16 w-auto rounded-md bg-white/95 p-1.5 shadow-gigar-soft"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col leading-none"
-          >
-            <span className="font-display text-2xl font-extrabold tracking-tight text-white">GIGAR</span>
-            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/80">
-              Trading & Technical Center
-            </span>
-          </motion.div>
+          />
           <p className="mt-4 text-sm leading-relaxed text-white/70">
             Gigar Trading & Technical Center has been Ethiopia's trusted supplier of garage
             equipment, lifts and industrial machinery since 1985 E.C. — importing world-class brands
