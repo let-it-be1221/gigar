@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -9,18 +10,22 @@ import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
-import AdminDashboard from './pages/admin/Dashboard'
-import AdminPostList from './pages/admin/PostList'
-import AdminPostEditor from './pages/admin/PostEditor'
-import AdminCarouselManager from './pages/admin/CarouselManager'
-import AdminCustomerManager from './pages/admin/CustomerManager'
 import ProtectedRoute from './components/ProtectedRoute'
+import PageFallback from './components/PageFallback'
+
+// Admin pages are lazy-loaded — visitors who never log in never download
+// the ~150KB of admin JS. Each admin route becomes its own chunk.
+const AdminDashboard      = lazy(() => import('./pages/admin/Dashboard'))
+const AdminPostList       = lazy(() => import('./pages/admin/PostList'))
+const AdminPostEditor     = lazy(() => import('./pages/admin/PostEditor'))
+const AdminCarouselManager = lazy(() => import('./pages/admin/CarouselManager'))
+const AdminCustomerManager = lazy(() => import('./pages/admin/CustomerManager'))
 
 export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        {/* Public */}
+        {/* Public — loaded eagerly (the landing experience) */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
@@ -31,13 +36,13 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
 
-        {/* Admin (protected) */}
-        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/admin/posts" element={<ProtectedRoute><AdminPostList /></ProtectedRoute>} />
-        <Route path="/admin/posts/new" element={<ProtectedRoute><AdminPostEditor /></ProtectedRoute>} />
-        <Route path="/admin/posts/:id/edit" element={<ProtectedRoute><AdminPostEditor /></ProtectedRoute>} />
-        <Route path="/admin/carousel" element={<ProtectedRoute><AdminCarouselManager /></ProtectedRoute>} />
-        <Route path="/admin/customers" element={<ProtectedRoute><AdminCustomerManager /></ProtectedRoute>} />
+        {/* Admin (protected + lazy) */}
+        <Route path="/admin" element={<ProtectedRoute><Suspense fallback={<PageFallback />}><AdminDashboard /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/posts" element={<ProtectedRoute><Suspense fallback={<PageFallback />}><AdminPostList /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/posts/new" element={<ProtectedRoute><Suspense fallback={<PageFallback />}><AdminPostEditor /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/posts/:id/edit" element={<ProtectedRoute><Suspense fallback={<PageFallback />}><AdminPostEditor /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/carousel" element={<ProtectedRoute><Suspense fallback={<PageFallback />}><AdminCarouselManager /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/customers" element={<ProtectedRoute><Suspense fallback={<PageFallback />}><AdminCustomerManager /></Suspense></ProtectedRoute>} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

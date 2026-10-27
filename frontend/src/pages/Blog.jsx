@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiSearch, FiFilter, FiX, FiTag, FiInbox } from 'react-icons/fi'
@@ -14,20 +14,31 @@ export default function Blog() {
   const [search, setSearch]     = useState(params.get('q') || '')
   const [category, setCategory] = useState(params.get('category') || '')
   const [categories, setCategories] = useState([])
+  const abortRef = useRef(null)
 
   const fetchPosts = async () => {
+    // Abort any in-flight request so we don't show stale results when
+    // a newer request overtakes it.
+    if (abortRef.current) abortRef.current.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
+
     setLoading(true)
     try {
       const payload = { page: params.get('page') || 1, per_page: 9 }
       if (params.get('q')) payload.q = params.get('q')
       if (params.get('category')) payload.category = params.get('category')
-      const { data } = await publicApi.posts(payload)
+      const { data } = await publicApi.posts(payload, { signal: controller.signal })
       setPosts(data.data || [])
       setMeta({ current_page: data.current_page, last_page: data.last_page, total: data.total, per_page: data.per_page })
     } catch (err) {
-      setPosts([])
+      // AbortError is expected when a newer request supersedes this one —
+      // don't clear posts or show error in that case.
+      if (err?.name !== 'CanceledError' && err?.code !== 'ERR_CANCELED') {
+        setPosts([])
+      }
     } finally {
-      setLoading(false)
+      if (!controller.signal.aborted) setLoading(false)
     }
   }
 
@@ -37,7 +48,13 @@ export default function Blog() {
       .catch(() => setCategories([]))
   }, [])
 
-  useEffect(() => { fetchPosts() }, [params])
+  // Debounce: when `params` changes (e.g., user types in the search box),
+  // wait 300ms before firing the request. This collapses rapid keystrokes
+  // into a single API call.
+  useEffect(() => {
+    const t = setTimeout(fetchPosts, 300)
+    return () => clearTimeout(t)
+  }, [params])
 
   const submitSearch = (e) => {
     e.preventDefault()

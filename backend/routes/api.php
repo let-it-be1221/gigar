@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/health', fn () => response()->json(['status' => 'ok', 'service' => 'Gigar API']));
 
 Route::prefix('public')->group(function () {
+    Route::get('/home', [PublicController::class, 'home']);              // combined home payload (1 call instead of 4)
     Route::get('/carousel', [CarouselController::class, 'publicIndex']); // homepage carousel slides
     Route::get('/posts', [PublicController::class, 'index']);          // list published posts (paginated)
     Route::get('/posts/slug/{slug}', [PublicController::class, 'show']);   // single post by slug

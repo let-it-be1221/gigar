@@ -1,9 +1,10 @@
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiArrowRight, FiClock, FiTag } from 'react-icons/fi'
 import { formatDate, truncate, getMediaPath } from '../utils/format'
 
-export default function BlogCard({ post, index = 0, compact = false }) {
+function BlogCard({ post, index = 0, compact = false }) {
   const cover = getMediaPath(post.media_url)
   const poster = getMediaPath(post.media_poster)
   const isVideo = post.media_type === 'video' || post.media_type === 'youtube'
@@ -98,3 +99,8 @@ export default function BlogCard({ post, index = 0, compact = false }) {
     </motion.article>
   )
 }
+
+// Memoize so the card doesn't re-render when its parent re-renders with
+// the same posts list (e.g., on filter state changes that don't affect
+// the cards themselves).
+export default memo(BlogCard)

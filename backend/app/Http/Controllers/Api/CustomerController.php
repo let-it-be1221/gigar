@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class CustomerController extends Controller
@@ -45,23 +46,28 @@ class CustomerController extends Controller
         ]);
     }
 
-    /** Public: customer counts grouped by equipment_category + total units installed. */
+    /** Public: customer counts grouped by equipment_category + total units
+     *  installed. Cached 5 min via the public.customer_stats key (same cache
+     *  the home endpoint uses).
+     */
     public function stats()
     {
-        $rows = Customer::active()
-            ->whereNotNull('equipment_category')
-            ->selectRaw('equipment_category, COUNT(*) as clients, SUM(units_installed) as units')
-            ->groupBy('equipment_category')
-            ->get();
+        $stats = Cache::remember('public.customer_stats', 300, function () {
+            $rows = Customer::active()
+                ->whereNotNull('equipment_category')
+                ->selectRaw('equipment_category, COUNT(*) as clients, SUM(units_installed) as units')
+                ->groupBy('equipment_category')
+                ->get();
 
-        return response()->json([
-            'stats' => $rows->mapWithKeys(fn ($r) => [
+            return $rows->mapWithKeys(fn ($r) => [
                 $r->equipment_category => [
                     'clients' => (int) $r->clients,
                     'units'   => (int) $r->units,
                 ],
-            ]),
-        ]);
+            ])->toArray();
+        });
+
+        return response()->json(['stats' => $stats]);
     }
 
     /** Public: single customer by slug. */
@@ -102,6 +108,7 @@ class CustomerController extends Controller
             $data['slug'] = Str::slug($data['name']) . '-' . Str::random(6);
         }
         $c = Customer::create($data);
+        $this->flushPublicCache();
         return response()->json(['message' => 'Customer created.', 'customer' => $c], 201);
     }
 
@@ -126,18 +133,31 @@ class CustomerController extends Controller
             'sort_order'         => ['integer'],
         ]);
         $customer->update($data);
+        $this->flushPublicCache();
         return response()->json(['message' => 'Customer updated.', 'customer' => $customer->fresh()]);
     }
 
     public function destroy(Customer $customer)
     {
         $customer->delete();
+        $this->flushPublicCache();
         return response()->json(['message' => 'Customer deleted.']);
     }
 
     public function toggleFeatured(Customer $customer)
     {
         $customer->update(['is_featured' => ! $customer->is_featured]);
+        $this->flushPublicCache();
         return response()->json(['message' => 'Toggled.', 'is_featured' => $customer->is_featured]);
+    }
+
+    /**
+     * Flush the public caches that depend on customers (home page
+     * featured_customers + customer_stats + the customer sectors list).
+     */
+    protected function flushPublicCache(): void
+    {
+        Cache::forget('public.home');
+        Cache::forget('public.customer_stats');
     }
 }

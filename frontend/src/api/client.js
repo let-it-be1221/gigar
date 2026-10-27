@@ -39,6 +39,9 @@ export default api
 
 /* ----- Public endpoints (guest) ----- */
 export const publicApi = {
+  // Single combined home-page payload — replaces 4 parallel calls.
+  home: () => api.get('/public/home'),
+
   posts: (params = {}) => api.get('/public/posts', { params }),
   featuredPosts: () => api.get('/public/posts/featured'),
   postBySlug: (slug) => api.get(`/public/posts/slug/${slug}`),

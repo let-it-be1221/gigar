@@ -3,12 +3,39 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
 class PublicController extends Controller
 {
+    /**
+     * Combined home-page payload — replaces the 4 parallel calls the home
+     * page used to make (services, products, featuredPosts, customerStats).
+     * One HTTP round-trip instead of four. Cached for 5 minutes.
+     */
+    public function home()
+    {
+        $data = Cache::remember('public.home', 300, function () {
+            return [
+                'services'           => $this->servicesArray(),
+                'products'           => $this->productsArray(),
+                'featured_posts'     => Post::published()
+                    ->where('is_featured', true)
+                    ->latest('published_at')
+                    ->limit(6)
+                    ->get(['id','title','slug','excerpt','media_type','media_url','media_poster','category','tags','is_featured','published_at','created_at']),
+                'carousel'           => \App\Models\CarouselSlide::active()->get(),
+                'customer_stats'     => $this->customerStatsArray(),
+                'featured_customers' => Customer::active()->where('is_featured', true)->limit(8)->get(),
+            ];
+        });
+
+        return response()->json($data);
+    }
+
     /**
      * Paginated list of published blog posts (guest view).
      */
@@ -93,52 +120,60 @@ class PublicController extends Controller
      */
     public function services()
     {
-        $services = [
-            [
-                'id'      => 'supplying-and-installing',
-                'icon'    => 'toolbox',
-                'line'    => 'Supplying & Installing Equipments',
-                'title'   => 'Equipment Supply & Installation',
-                'tagline' => 'Importing & commissioning world-class equipment',
-                'description' => 'Gigar Trading imports and professionally installs a complete portfolio of industrial equipment — BendPak car lifts, building elevators & escalators, OMIA paint booths, VTEQ vehicle test lanes, Fujitsu air conditioners and LGS duty washing machines. Every project includes site survey, supply, installation, commissioning and operator training.',
-                'highlights' => [
-                    'Authorized distributor of BendPak, Fujitsu, OMIA, VTEQ and Electrolux',
-                    'Full turnkey installation by certified technicians',
-                    '5-year structural warranty on major equipment',
-                    'Operator training included with every install',
-                ],
-            ],
-            [
-                'id'      => 'maintenance-service',
-                'icon'    => 'wrench',
-                'line'    => 'Maintenance Service',
-                'title'   => 'Preventive & Emergency Maintenance',
-                'tagline' => 'Keeping your equipment productive for decades',
-                'description' => 'Annual maintenance contracts (AMC) and 24/7 emergency call-out support for every installation. Our certified technicians perform scheduled preventive maintenance, safety inspections, parts replacement and breakdown repairs — minimizing downtime and extending equipment lifespan.',
-                'highlights' => [
-                    'Annual Maintenance Contracts (AMC) with fixed response times',
-                    '24/7 emergency breakdown call-out across Addis Ababa',
-                    'Genuine OEM spare parts inventory',
-                    'Safety inspection & certification reports',
-                ],
-            ],
-            [
-                'id'      => 'technical-consultancy',
-                'icon'    => 'compass',
-                'line'    => 'Technical Consultancy',
-                'title'   => 'Workshop & Facility Design Consultancy',
-                'tagline' => 'Engineering the right solution from day one',
-                'description' => 'Our engineers help you plan, design and optimize your workshop or facility before you buy. We provide load calculations, equipment sizing, layout design, capacity planning and project cost analysis — ensuring you invest in the right equipment the first time.',
-                'highlights' => [
-                    'Workshop layout & equipment sizing consultancy',
-                    'Elevator load & traffic analysis for buildings',
-                    'Project cost estimation & ROI analysis',
-                    'Compliance review with Ethiopian regulations',
-                ],
-            ],
-        ];
+        return response()->json(['services' => $this->servicesArray()]);
+    }
 
-        return response()->json(['services' => $services]);
+    /**
+     * Static list of service lines — also used by /home. Cached 5 min.
+     */
+    protected function servicesArray()
+    {
+        return Cache::remember('public.services', 300, function () {
+            return [
+                [
+                    'id'          => 'supplying-and-installing',
+                    'icon'        => 'toolbox',
+                    'line'        => 'Supplying & Installing Equipments',
+                    'title'       => 'Equipment Supply & Installation',
+                    'tagline'     => 'Importing & commissioning world-class equipment',
+                    'description' => 'Gigar Trading imports and professionally installs a complete portfolio of industrial equipment — BendPak car lifts, building elevators & escalators, OMIA paint booths, VTEQ vehicle test lanes, Fujitsu air conditioners and LGS duty washing machines. Every project includes site survey, supply, installation, commissioning and operator training.',
+                    'highlights'  => [
+                        'Authorized distributor of BendPak, Fujitsu, OMIA, VTEQ and Electrolux',
+                        'Full turnkey installation by certified technicians',
+                        '5-year structural warranty on major equipment',
+                        'Operator training included with every install',
+                    ],
+                ],
+                [
+                    'id'          => 'maintenance-service',
+                    'icon'        => 'wrench',
+                    'line'        => 'Maintenance Service',
+                    'title'       => 'Preventive & Emergency Maintenance',
+                    'tagline'     => 'Keeping your equipment productive for decades',
+                    'description' => 'Annual maintenance contracts (AMC) and 24/7 emergency call-out support for every installation. Our certified technicians perform scheduled preventive maintenance, safety inspections, parts replacement and breakdown repairs — minimizing downtime and extending equipment lifespan.',
+                    'highlights'  => [
+                        'Annual Maintenance Contracts (AMC) with fixed response times',
+                        '24/7 emergency breakdown call-out across Addis Ababa',
+                        'Genuine OEM spare parts inventory',
+                        'Safety inspection & certification reports',
+                    ],
+                ],
+                [
+                    'id'          => 'technical-consultancy',
+                    'icon'        => 'compass',
+                    'line'        => 'Technical Consultancy',
+                    'title'       => 'Workshop & Facility Design Consultancy',
+                    'tagline'     => 'Engineering the right solution from day one',
+                    'description' => 'Our engineers help you plan, design and optimize your workshop or facility before you buy. We provide load calculations, equipment sizing, layout design, capacity planning and project cost analysis — ensuring you invest in the right equipment the first time.',
+                    'highlights'  => [
+                        'Workshop layout & equipment sizing consultancy',
+                        'Elevator load & traffic analysis for buildings',
+                        'Project cost estimation & ROI analysis',
+                        'Compliance review with Ethiopian regulations',
+                    ],
+                ],
+            ];
+        });
     }
 
     /**
@@ -154,84 +189,114 @@ class PublicController extends Controller
      */
     public function products()
     {
-        $products = [
-            [
-                'id'               => 'building-elevators',
-                'icon'             => 'elevator',
-                'title'            => 'Building Elevators',
-                'tagline'          => 'Traction, hydraulic & MRL elevator systems',
-                'description'      => 'Traction elevators for mid/high-rise buildings, hydraulic elevators for low-rise installations, and machine-room-less (MRL) elevators for modern commercial buildings. All systems include steel ropes, counterweights, regenerative drives and emergency backup.',
-                'long_description' => 'Gigar Trading is renowned for importing high-quality building elevators and equipping them with professional installation teams. We have successfully installed elevators for government agencies and private commercial buildings across Ethiopia, with full traffic analysis, load calculations and 24/7 emergency call-out support. Every installation is backed by a multi-year Annual Maintenance Contract and genuine OEM spare parts inventory.',
-                'cover_image'      => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200&q=80&auto=format&fit=crop',
-                'features'         => ['Traction (6+ floors)', 'Hydraulic (2-5 floors)', 'MRL systems', '24/7 emergency support'],
-            ],
-            [
-                'id'               => 'building-lifts',
-                'icon'             => 'lift',
-                'title'            => 'Building Lifts',
-                'tagline'          => 'Vertical mobility for any staircase',
-                'description'      => 'Stair lifts for elderly and mobility-impaired residents, curved and straight rail systems with custom 3D-measured rails. Includes seatbelts, obstruction sensors, swivel seats, battery backup and remote control call-and-send operation.',
-                'long_description' => 'Gigar Trading supplies and installs stair lifts for residential and commercial buildings, restoring independent mobility for elderly and mobility-impaired residents. Every rail is custom 3D-measured to follow the exact geometry of your staircase — straight or curved, single-flight or multi-landing. Our team handles installation in a single day with no structural modifications, and every unit includes battery backup for power cuts, obstruction sensors, swivel seats and remote call-and-send operation.',
-                'cover_image'      => 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80&auto=format&fit=crop',
-                'features'         => ['Straight-rail stair lifts', 'Curved-rail stair lifts', 'Battery backup', 'Same-day installation'],
-            ],
-            [
-                'id'               => 'paint-booths',
-                'icon'             => 'spray',
-                'title'            => 'Paint Booths',
-                'tagline'          => 'Dust-free, temperature-controlled spray booths',
-                'description'      => 'OMIA vehicle paint booths with advanced downdraft ventilation, precise temperature control (20-25°C) and humidity management for professional paint finishes. Full installation includes foundation, electrical, exhaust ducting and air-balance certification.',
-                'long_description' => 'Gigar Trading supplies and installs OMIA paint booths for professional vehicle paint shops. Each booth features advanced downdraft ventilation that removes overspray and dust, precise temperature control (20-25°C) for optimal paint flow, and humidity management to eliminate defects. We handle the full installation — foundation preparation, electrical connections, exhaust ducting and final air-balance certification — so your booth is ready for production on day one. Every installation includes operator training and a preventive maintenance contract.',
-                'cover_image'      => 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80&auto=format&fit=crop',
-                'features'         => ['Downdraft ventilation', 'Temperature control 20-25°C', 'Humidity management', 'Air-balance certification'],
-            ],
-            [
-                'id'               => 'facility-equipment',
-                'icon'             => 'ac',
-                'title'            => 'Facility Equipments',
-                'tagline'          => 'Air conditioning, washing machines & power systems',
-                'description'      => 'Fujitsu split, cassette and VRF air-conditioning systems, LGS duty washing machines for hotels/hospitals/laundromats, and complete facility equipment supply. Low water and energy consumption, with full preventive-maintenance contracts.',
-                'long_description' => 'Gigar Trading equips hotels, hospitals, laundromats and office towers with the full spectrum of facility equipment — Fujitsu VRF and split air-conditioning systems, LGS heavy-duty industrial washing machines, backup generators and material-handling equipment. We design each installation around the customer\'s daily volume and energy budget, and back it with one annual maintenance contract that covers all equipment — simplified operations, lower total cost of ownership, and a single call-out number for everything.',
-                'cover_image'      => 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1200&q=80&auto=format&fit=crop',
-                'features'         => ['Fujitsu VRF systems', 'Industrial washing machines', 'Energy efficient', 'Full AMC available'],
-            ],
-            [
-                'id'               => 'vehicle-test-equipment',
-                'icon'             => 'gauge',
-                'title'            => 'Vehicle Test Equipments',
-                'tagline'          => 'Brake, suspension, side-slip & headlight testing',
-                'description'      => 'VTEQ vehicle test lanes for inspection centers — brake testers (per-wheel force + imbalance), suspension testers, side-slip plates and headlight aligners. Complete installation includes mechanical, electrical, software commissioning and operator training.',
-                'long_description' => 'Gigar Trading supplies and installs complete VTEQ vehicle test lanes for government and private inspection centers. Each lane includes four core measurement stations — brake testers (per-wheel force and imbalance), suspension testers, side-slip plates and headlight aligners — integrated through a unified software platform. Our engineers handle the full installation: mechanical foundations, electrical connections, software commissioning and operator training. The result is a test lane that delivers international-standard measurement accuracy under continuous daily use, with annual recertification support.',
-                'cover_image'      => 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&q=80&auto=format&fit=crop',
-                'features'         => ['Brake tester', 'Suspension tester', 'Side-slip plate', 'Headlight aligner'],
-            ],
-            [
-                'id'          => 'car-lifts',
-                'icon'        => 'lift',
-                'title'       => 'BendPak Car Lifts',
-                'tagline'     => 'Premium two-post & four-post vehicle lifts',
-                'description' => 'Authorized distributor of BendPak vehicle lifts — heavy-duty steel construction rated up to 7,000 kg, dual-direct drive technology, automatic arm restraints and slack-cable safety systems. ASE-certified lift columns engineered for decades of daily use.',
-                'features'    => ['Two-post lifts', 'Four-post lifts', '7,000 kg capacity', '5-year structural warranty'],
-            ],
-            [
-                'id'          => 'gps-speed-limit',
-                'icon'        => 'speed',
-                'title'       => 'GPS & Speed Limit Devices',
-                'tagline'     => 'Fleet speed-limiting & GPS tracking',
-                'description' => 'GPS-based speed-limiting devices certified by the Ethiopian Ministry of Transport. Real-time satellite positioning, context-aware speed control, live GPS tracking with route replay and driver-behavior scoring.',
-                'features'    => ['GPS speed-limiting', 'Live tracking', 'Driver scoring', 'Compliance certified'],
-            ],
-            [
-                'id'          => 'heavy-equipment',
-                'icon'        => 'truck',
-                'title'       => 'Heavy Equipment',
-                'tagline'     => 'Construction & industrial machinery',
-                'description' => 'Import and distribution of heavy machinery — excavators, loaders, generators and material-handling equipment with full after-sales support. Includes operator training and genuine spare parts inventory.',
-                'features'    => ['Excavators', 'Loaders', 'Generators', 'Material handling'],
-            ],
-        ];
+        return response()->json(['products' => $this->productsArray()]);
+    }
 
-        return response()->json(['products' => $products]);
+    /**
+     * Product catalog array — also used by /home. Cached 5 min.
+     */
+    protected function productsArray()
+    {
+        return Cache::remember('public.products', 300, function () {
+            return [
+                [
+                    'id'               => 'building-elevators',
+                    'icon'             => 'elevator',
+                    'title'            => 'Building Elevators',
+                    'tagline'          => 'Traction, hydraulic & MRL elevator systems',
+                    'description'      => 'Traction elevators for mid/high-rise buildings, hydraulic elevators for low-rise installations, and machine-room-less (MRL) elevators for modern commercial buildings. All systems include steel ropes, counterweights, regenerative drives and emergency backup.',
+                    'long_description' => 'Gigar Trading is renowned for importing high-quality building elevators and equipping them with professional installation teams. We have successfully installed elevators for government agencies and private commercial buildings across Ethiopia, with full traffic analysis, load calculations and 24/7 emergency call-out support. Every installation is backed by a multi-year Annual Maintenance Contract and genuine OEM spare parts inventory.',
+                    'cover_image'      => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200&q=80&auto=format&fit=crop',
+                    'features'         => ['Traction (6+ floors)', 'Hydraulic (2-5 floors)', 'MRL systems', '24/7 emergency support'],
+                ],
+                [
+                    'id'               => 'building-lifts',
+                    'icon'             => 'lift',
+                    'title'            => 'Building Lifts',
+                    'tagline'          => 'Vertical mobility for any staircase',
+                    'description'      => 'Stair lifts for elderly and mobility-impaired residents, curved and straight rail systems with custom 3D-measured rails. Includes seatbelts, obstruction sensors, swivel seats, battery backup and remote control call-and-send operation.',
+                    'long_description' => 'Gigar Trading supplies and installs stair lifts for residential and commercial buildings, restoring independent mobility for elderly and mobility-impaired residents. Every rail is custom 3D-measured to follow the exact geometry of your staircase — straight or curved, single-flight or multi-landing. Our team handles installation in a single day with no structural modifications, and every unit includes battery backup for power cuts, obstruction sensors, swivel seats and remote call-and-send operation.',
+                    'cover_image'      => 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80&auto=format&fit=crop',
+                    'features'         => ['Straight-rail stair lifts', 'Curved-rail stair lifts', 'Battery backup', 'Same-day installation'],
+                ],
+                [
+                    'id'               => 'paint-booths',
+                    'icon'             => 'spray',
+                    'title'            => 'Paint Booths',
+                    'tagline'          => 'Dust-free, temperature-controlled spray booths',
+                    'description'      => 'OMIA vehicle paint booths with advanced downdraft ventilation, precise temperature control (20-25°C) and humidity management for professional paint finishes. Full installation includes foundation, electrical, exhaust ducting and air-balance certification.',
+                    'long_description' => 'Gigar Trading supplies and installs OMIA paint booths for professional vehicle paint shops. Each booth features advanced downdraft ventilation that removes overspray and dust, precise temperature control (20-25°C) for optimal paint flow, and humidity management to eliminate defects. We handle the full installation — foundation preparation, electrical connections, exhaust ducting and final air-balance certification — so your booth is ready for production on day one. Every installation includes operator training and a preventive maintenance contract.',
+                    'cover_image'      => 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80&auto=format&fit=crop',
+                    'features'         => ['Downdraft ventilation', 'Temperature control 20-25°C', 'Humidity management', 'Air-balance certification'],
+                ],
+                [
+                    'id'               => 'facility-equipment',
+                    'icon'             => 'ac',
+                    'title'            => 'Facility Equipments',
+                    'tagline'          => 'Air conditioning, washing machines & power systems',
+                    'description'      => 'Fujitsu split, cassette and VRF air-conditioning systems, LGS duty washing machines for hotels/hospitals/laundromats, and complete facility equipment supply. Low water and energy consumption, with full preventive-maintenance contracts.',
+                    'long_description' => 'Gigar Trading equips hotels, hospitals, laundromats and office towers with the full spectrum of facility equipment — Fujitsu VRF and split air-conditioning systems, LGS heavy-duty industrial washing machines, backup generators and material-handling equipment. We design each installation around the customer\'s daily volume and energy budget, and back it with one annual maintenance contract that covers all equipment — simplified operations, lower total cost of ownership, and a single call-out number for everything.',
+                    'cover_image'      => 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1200&q=80&auto=format&fit=crop',
+                    'features'         => ['Fujitsu VRF systems', 'Industrial washing machines', 'Energy efficient', 'Full AMC available'],
+                ],
+                [
+                    'id'               => 'vehicle-test-equipment',
+                    'icon'             => 'gauge',
+                    'title'            => 'Vehicle Test Equipments',
+                    'tagline'          => 'Brake, suspension, side-slip & headlight testing',
+                    'description'      => 'VTEQ vehicle test lanes for inspection centers — brake testers (per-wheel force + imbalance), suspension testers, side-slip plates and headlight aligners. Complete installation includes mechanical, electrical, software commissioning and operator training.',
+                    'long_description' => 'Gigar Trading supplies and installs complete VTEQ vehicle test lanes for government and private inspection centers. Each lane includes four core measurement stations — brake testers (per-wheel force and imbalance), suspension testers, side-slip plates and headlight aligners — integrated through a unified software platform. Our engineers handle the full installation: mechanical foundations, electrical connections, software commissioning and operator training. The result is a test lane that delivers international-standard measurement accuracy under continuous daily use, with annual recertification support.',
+                    'cover_image'      => 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&q=80&auto=format&fit=crop',
+                    'features'         => ['Brake tester', 'Suspension tester', 'Side-slip plate', 'Headlight aligner'],
+                ],
+                [
+                    'id'          => 'car-lifts',
+                    'icon'        => 'lift',
+                    'title'       => 'BendPak Car Lifts',
+                    'tagline'     => 'Premium two-post & four-post vehicle lifts',
+                    'description' => 'Authorized distributor of BendPak vehicle lifts — heavy-duty steel construction rated up to 7,000 kg, dual-direct drive technology, automatic arm restraints and slack-cable safety systems. ASE-certified lift columns engineered for decades of daily use.',
+                    'features'    => ['Two-post lifts', 'Four-post lifts', '7,000 kg capacity', '5-year structural warranty'],
+                ],
+                [
+                    'id'          => 'gps-speed-limit',
+                    'icon'        => 'speed',
+                    'title'       => 'GPS & Speed Limit Devices',
+                    'tagline'     => 'Fleet speed-limiting & GPS tracking',
+                    'description' => 'GPS-based speed-limiting devices certified by the Ethiopian Ministry of Transport. Real-time satellite positioning, context-aware speed control, live GPS tracking with route replay and driver-behavior scoring.',
+                    'features'    => ['GPS speed-limiting', 'Live tracking', 'Driver scoring', 'Compliance certified'],
+                ],
+                [
+                    'id'          => 'heavy-equipment',
+                    'icon'        => 'truck',
+                    'title'       => 'Heavy Equipment',
+                    'tagline'     => 'Construction & industrial machinery',
+                    'description' => 'Import and distribution of heavy machinery — excavators, loaders, generators and material-handling equipment with full after-sales support. Includes operator training and genuine spare parts inventory.',
+                    'features'    => ['Excavators', 'Loaders', 'Generators', 'Material handling'],
+                ],
+            ];
+        });
+    }
+
+    /**
+     * Per-category customer stats (clients count + units installed).
+     * Used by /home + the /public/customers/stats endpoint.
+     */
+    protected function customerStatsArray()
+    {
+        return Cache::remember('public.customer_stats', 300, function () {
+            $rows = Customer::active()
+                ->whereNotNull('equipment_category')
+                ->selectRaw('equipment_category, COUNT(*) as clients, SUM(units_installed) as units')
+                ->groupBy('equipment_category')
+                ->get();
+
+            return $rows->mapWithKeys(fn ($r) => [
+                $r->equipment_category => [
+                    'clients' => (int) $r->clients,
+                    'units'   => (int) $r->units,
+                ],
+            ])->toArray();
+        });
     }
 
     /**

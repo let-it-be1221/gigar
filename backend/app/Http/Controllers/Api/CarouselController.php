@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CarouselSlide;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class CarouselController extends Controller
@@ -39,6 +40,7 @@ class CarouselController extends Controller
             'sort_order'  => ['integer'],
         ]);
         $slide = CarouselSlide::create($data);
+        Cache::forget('public.home');
         return response()->json(['message' => 'Slide created.', 'slide' => $slide], 201);
     }
 
@@ -56,18 +58,21 @@ class CarouselController extends Controller
             'sort_order'  => ['integer'],
         ]);
         $slide->update($data);
+        Cache::forget('public.home');
         return response()->json(['message' => 'Slide updated.', 'slide' => $slide->fresh()]);
     }
 
     public function destroy(CarouselSlide $slide)
     {
         $slide->delete();
+        Cache::forget('public.home');
         return response()->json(['message' => 'Slide deleted.']);
     }
 
     public function toggleActive(CarouselSlide $slide)
     {
         $slide->update(['is_active' => ! $slide->is_active]);
+        Cache::forget('public.home');
         return response()->json(['message' => 'Toggled.', 'is_active' => $slide->is_active]);
     }
 }

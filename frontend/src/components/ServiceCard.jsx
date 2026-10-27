@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { FiArrowRight } from 'react-icons/fi'
 
 // All emoji icons removed — UI is now text-driven, no emoji per category.
-export default function ServiceCard({ service, index = 0 }) {
+function ServiceCard({ service, index = 0 }) {
   return (
     <motion.article
       className="group relative overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white p-6 shadow-gigar-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-gigar-glow hover:border-gigar-red/30"
@@ -50,3 +51,5 @@ export default function ServiceCard({ service, index = 0 }) {
     </motion.article>
   )
 }
+
+export default memo(ServiceCard)

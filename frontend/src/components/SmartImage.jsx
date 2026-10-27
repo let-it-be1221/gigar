@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 /**
  * Image component that auto-falls-back to a working placeholder image
@@ -6,9 +6,12 @@ import { useState } from 'react'
  * for the carousel and product cards — if any external Unsplash URL goes
  * 404, the page still looks great.
  *
+ * Memoized so the parent re-rendering with the same props doesn't cause
+ * this <img> to reload.
+ *
  * Usage: <SmartImage src={url} alt="..." className="..." />
  */
-export default function SmartImage({ src, alt = '', className = '', fallbackSeed = 'gigar', ...rest }) {
+function SmartImage({ src, alt = '', className = '', fallbackSeed = 'gigar', ...rest }) {
   const [failed, setFailed] = useState(false)
 
   const finalSrc = failed
@@ -26,3 +29,5 @@ export default function SmartImage({ src, alt = '', className = '', fallbackSeed
     />
   )
 }
+
+export default memo(SmartImage)

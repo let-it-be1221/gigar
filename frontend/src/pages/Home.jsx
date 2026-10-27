@@ -100,17 +100,15 @@ export default function Home() {
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
 
   useEffect(() => {
-    Promise.all([
-      publicApi.services(),
-      publicApi.products(),
-      publicApi.featuredPosts(),
-      publicApi.customerStats(),
-    ])
-      .then(([s, p, f, cs]) => {
-        setServices(s.data.services || [])
-        setProducts(p.data.products || [])
-        setFeatured(f.data || [])
-        setCustStats(cs.data.stats || {})
+    // Single combined call to /public/home — replaces the 4 parallel calls
+    // we used to make (services, products, featuredPosts, customerStats).
+    // Backend caches the response for 5 minutes.
+    publicApi.home()
+      .then(({ data }) => {
+        setServices(data.services || [])
+        setProducts(data.products || [])
+        setFeatured(data.featured_posts || [])
+        setCustStats(data.customer_stats || {})
       })
       .catch(() => {
         setServices([])

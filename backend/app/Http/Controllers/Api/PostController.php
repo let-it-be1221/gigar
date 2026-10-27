@@ -7,6 +7,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\File;
 
@@ -39,6 +40,7 @@ class PostController extends Controller
         }
 
         $post = Post::create($data);
+        $this->flushPublicCache();
 
         return response()->json([
             'message' => 'Post created successfully.',
@@ -49,6 +51,7 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post)
     {
         $post->update($request->validated());
+        $this->flushPublicCache();
 
         return response()->json([
             'message' => 'Post updated successfully.',
@@ -59,13 +62,25 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+        $this->flushPublicCache();
 
         return response()->json(['message' => 'Post deleted successfully.']);
+    }
+
+    /**
+     * Flush the cached public responses that depend on posts — called
+     * after any create/update/delete so the next visitor gets fresh data.
+     */
+    protected function flushPublicCache(): void
+    {
+        Cache::forget('public.home');
+        Cache::forget('public.stats');
     }
 
     public function toggleFeature(Post $post)
     {
         $post->update(['is_featured' => ! $post->is_featured]);
+        $this->flushPublicCache();
 
         return response()->json([
             'message'      => 'Feature toggled.',
