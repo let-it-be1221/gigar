@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import {
   FiArrowRight, FiCheckCircle, FiAward, FiTruck,
   FiShield, FiHeadphones, FiZap,
+  FiGlobe, FiUsers, FiTrendingUp,
 } from 'react-icons/fi'
 import HeroCarousel from '../components/HeroCarousel'
 import BlogCard from '../components/BlogCard'
@@ -12,6 +13,30 @@ import AnimatedSection from '../components/AnimatedSection'
 import Loader from '../components/Loader'
 import SmartImage from '../components/SmartImage'
 import { publicApi } from '../api/client'
+
+// ----- About content (also lives on /about — mirrored on home so visitors
+//       see the company story without leaving the home page) -----
+
+const ABOUT_STORY = [
+  'Gigar Trading was founded in 1985 E.C. in Addis Ababa with a simple mission: bring high-quality, reliable industrial equipment to Ethiopian businesses. What started as a small spare-parts shop on Ledeta Street has grown into one of the country\'s most respected suppliers of garage equipment, lifts, escalators, paint booths and heavy machinery.',
+  'Our team has installed equipment for hundreds of workshops, vehicle inspection centers, commercial buildings and industrial facilities across the country. Every project — large or small — is backed by the same commitment to quality, professionalism and after-sales support that has defined us since day one.',
+  'Today, we are the authorized distributor for world-renowned brands including BendPak, Fujitsu, OMIA, VTEQ and Electrolux. Our technical center in Addis Ababa houses our engineering team, training facilities and after-sales workshop — keeping our customers productive for decades to come.',
+]
+
+const VISION_MISSION = [
+  { icon: FiGlobe,      title: 'Our Vision',  text: "To be Ethiopia's most trusted industrial equipment partner — setting the national benchmark for quality, safety and after-sales service." },
+  { icon: FiTrendingUp, title: 'Our Mission', text: 'To import, supply and install world-class equipment with full local support — empowering workshops, facilities and businesses to operate at their best.' },
+  { icon: FiUsers,      title: 'Our People',  text: "A multidisciplinary team of certified engineers, technicians and customer-care specialists committed to your project's success." },
+]
+
+const TIMELINE = [
+  { year: '1985', title: 'Founded in Addis Ababa', text: 'Gigar Trading opens its doors, supplying spare parts and basic workshop equipment.' },
+  { year: '1996', title: 'Brand Partnerships',    text: 'Becomes authorized distributor for leading international brands.' },
+  { year: '2008', title: 'Technical Center Opens', text: 'Launched our dedicated Technical Center on Ledeta Street for installations and service.' },
+  { year: '2018', title: 'Elevator Division',      text: 'Expanded into building elevators, escalators and stair lifts.' },
+  { year: '2024', title: 'GPS & Heavy Equipment', text: 'Launched GPS speed-limit device certification and heavy-equipment distribution.' },
+]
+
 
 const WHY_US = [
   { icon: FiAward, title: '39+ Years of Trust', text: 'Serving Ethiopian industry since 1985 E.C. with consistent, certified quality.' },
@@ -311,6 +336,121 @@ export default function Home() {
               View all products <FiArrowRight />
             </Link>
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ----- ABOUT: Our Story (mirrored from /about) ----- */}
+      <section id="about" className="py-20 lg:py-28">
+        <div className="container-page grid items-center gap-12 lg:grid-cols-2">
+          <AnimatedSection>
+            <span className="section-eyebrow">About Us</span>
+            <h2 className="mt-4 font-display text-3xl font-extrabold text-gigar-navy sm:text-4xl">
+              From a small spare-parts shop to a national technical center
+            </h2>
+            <div className="mt-6 space-y-4 text-base leading-relaxed text-gigar-navy/80">
+              {ABOUT_STORY.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+            <Link to="/about" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gigar-red hover:gap-2.5 transition-all">
+              Read the full story <FiArrowRight className="h-4 w-4" />
+            </Link>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.2}>
+            <div className="grid grid-cols-2 gap-4">
+              <SmartImage
+                src="https://images.unsplash.com/photo-1635491328918-2c2d2d9d2d4e?w=600&q=80&auto=format&fit=crop"
+                alt="Workshop"
+                fallbackSeed="about-workshop"
+                className="col-span-2 h-64 w-full rounded-2xl object-cover shadow-gigar-soft transition-transform duration-500 hover:scale-[1.02]"
+              />
+              <SmartImage
+                src="https://images.unsplash.com/photo-1486006920555-c77dcf2a718e?w=400&q=80&auto=format&fit=crop"
+                alt="Equipment"
+                fallbackSeed="about-equipment"
+                className="h-40 w-full rounded-xl object-cover shadow-gigar-soft transition-transform duration-500 hover:scale-[1.02]"
+              />
+              <SmartImage
+                src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=400&q=80&auto=format&fit=crop"
+                alt="Vehicle test"
+                fallbackSeed="about-test"
+                className="h-40 w-full rounded-xl object-cover shadow-gigar-soft transition-transform duration-500 hover:scale-[1.02]"
+              />
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ----- ABOUT: Vision / Mission / People ----- */}
+      <section className="bg-gigar-mist py-20 lg:py-28">
+        <div className="container-page">
+          <AnimatedSection className="mx-auto mb-12 max-w-3xl text-center">
+            <span className="section-eyebrow">Vision · Mission · People</span>
+            <h2 className="mt-4 font-display text-3xl font-extrabold text-gigar-navy sm:text-4xl">
+              Why Ethiopian businesses trust Gigar Trading
+            </h2>
+          </AnimatedSection>
+          <div className="grid gap-8 lg:grid-cols-3">
+            {VISION_MISSION.map((card, i) => (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -6 }}
+                className="card-soft p-8"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gigar-red/10 text-gigar-red">
+                  <card.icon className="h-7 w-7" />
+                </div>
+                <h3 className="mt-5 font-display text-xl font-bold text-gigar-navy">{card.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-gigar-navy/70">{card.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ----- ABOUT: Timeline (light section — breaks up the dark Why-Choose-Us block) ----- */}
+      <section className="py-20 lg:py-28">
+        <div className="container-page">
+          <AnimatedSection className="mx-auto mb-16 max-w-3xl text-center">
+            <span className="section-eyebrow">
+              <FiAward className="h-3.5 w-3.5" /> Our Journey
+            </span>
+            <h2 className="mt-4 font-display text-3xl font-extrabold text-gigar-navy sm:text-4xl">
+              Four decades of growth
+            </h2>
+            <p className="mt-3 text-gigar-navy/70">
+              From a small spare-parts shop on Ledeta Street in 1985 to one of Ethiopia's most trusted industrial equipment suppliers.
+            </p>
+          </AnimatedSection>
+          <div className="relative mx-auto max-w-4xl">
+            <div className="absolute left-4 top-0 h-full w-px bg-gigar-navy/15 sm:left-1/2 sm:-translate-x-1/2" />
+            {TIMELINE.map((t, i) => (
+              <motion.div
+                key={t.year}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                className={`relative mb-10 flex gap-6 sm:w-1/2 ${
+                  i % 2 === 0 ? 'sm:pr-12 sm:text-right' : 'sm:ml-auto sm:pl-12'
+                }`}
+              >
+                <div className={`absolute top-2 h-3 w-3 rounded-full bg-gigar-red ring-4 ring-white ${
+                  i % 2 === 0 ? 'right-0 sm:-right-1.5' : 'left-0 sm:-left-1.5'
+                }`} />
+                <div className="card-soft p-5 text-left">
+                  <div className="font-display text-xl font-extrabold text-gigar-gold">{t.year}</div>
+                  <h3 className="mt-1 font-display text-lg font-bold text-gigar-navy">{t.title}</h3>
+                  <p className="mt-2 text-sm text-gigar-navy/70">{t.text}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
