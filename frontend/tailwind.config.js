@@ -1,24 +1,30 @@
 /** @type {import('tailwindcss').Config} */
-// Brand palette switched to slate grey (per user request). The `red` /
-// `redDark` / `navy` / `navyDark` token names are KEPT so existing
-// `bg-gigar-red`, `text-gigar-red`, `border-gigar-navy/10` classes across
-// the codebase keep working — only the underlying hex values change.
-// Gold stays as the accent color (it pairs beautifully with slate grey
-// and preserves the "Trading & Technical Center" premium feel).
+// Brand palette: warm beige-grey (#A8A492) as primary, warm dark as the
+// "navy" body/dark-section color. The token names (`red`, `redDark`, `navy`,
+// `navyDark`) are KEPT so existing bg-gigar-red / text-gigar-red /
+// border-gigar-navy/10 classes across the codebase keep working — only the
+// underlying hex values changed.
+//
+// Navbar hover text color is set to RED (#c8102e) directly in Navbar.jsx
+// (per user request) — that's the only red on the site now; everything
+// else is the beige-grey + warm dark + gold accent.
 export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       colors: {
         gigar: {
-          red:       '#475569',  // was #c8102e — now slate-600 (primary grey)
-          redDark:   '#334155',  // was #8b0a1f — now slate-700 (hover state)
-          navy:      '#1e293b',  // was #1f2d4a — now slate-800 (body text / dark sections)
-          navyDark:  '#0f172a',  // was #141d33 — now slate-900 (hero overlays)
+          red:       '#A8A492',  // was #475569 (slate-600) — now warm beige-grey (primary)
+          redDark:   '#8E8A77',  // was #334155 (slate-700) — darker beige-grey (hover)
+          navy:      '#3D3A33',  // was #1e293b (slate-800) — warm dark (body text, dark sections)
+          navyDark:  '#2A2823',  // was #0f172a (slate-900) — deeper warm dark (hero overlays)
           ink:       '#0b0f1c',
-          gold:      '#f1b524', // accent — kept, gold + grey = premium palette
+          gold:      '#f1b524', // accent — kept (gold + beige-grey = warm industrial palette)
           cream:     '#fff7ed',
           mist:      '#f4f6fb',
+          // The actual red used for navbar hover only (kept as a separate token
+          // so it's easy to find/change later).
+          redHover:  '#c8102e',
         },
       },
       fontFamily: {
@@ -26,15 +32,15 @@ export default {
         body:    ['Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        // updated: red rgba(200,16,46,0.35) → slate rgba(71,85,105,0.35)
-        'gigar-glow': '0 10px 40px -10px rgba(71, 85, 105, 0.35)',
-        // updated: navy rgba(31,45,74,0.18) → slate rgba(30,41,59,0.18)
-        'gigar-soft': '0 8px 30px -8px rgba(30, 41, 59, 0.18)',
+        // slate rgba(71,85,105,0.35) → warm beige-grey rgba(168,164,146,0.35)
+        'gigar-glow': '0 10px 40px -10px rgba(168, 164, 146, 0.35)',
+        // slate rgba(30,41,59,0.18) → warm dark rgba(61,58,51,0.18)
+        'gigar-soft': '0 8px 30px -8px rgba(61, 58, 51, 0.18)',
       },
       backgroundImage: {
-        // hero gradient: navy (slate-900) → red (slate-700)
-        'hero-gradient': 'linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(51,65,85,0.85) 100%)',
-        'section-grid':  'linear-gradient(rgba(30,41,59,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,0.06) 1px, transparent 1px)',
+        // hero gradient: warm dark → beige-grey
+        'hero-gradient': 'linear-gradient(135deg, rgba(42,40,35,0.92) 0%, rgba(142,138,119,0.85) 100%)',
+        'section-grid':  'linear-gradient(rgba(61,58,51,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(61,58,51,0.06) 1px, transparent 1px)',
       },
       backgroundSize: {
         'grid-md': '40px 40px',

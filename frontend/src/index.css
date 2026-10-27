@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --gigar-red: #475569;   /* slate-600 — primary grey (was #c8102e) */
-  --gigar-navy: #1e293b;  /* slate-800 — dark sections (was #1f2d4a) */
+  --gigar-red: #A8A492;   /* warm beige-grey — primary (was slate-600 #475569) */
+  --gigar-navy: #3D3A33; /* warm dark — body text + dark sections (was slate-800 #1e293b) */
 }
 
 * {
@@ -18,7 +18,7 @@ html, body {
 
 body {
   background-color: #ffffff;
-  color: #1e293b; /* slate-800 — was #1f2d4a */
+  color: #3D3A33; /* warm dark — was slate-800 #1e293b */
   font-family: 'Inter', system-ui, sans-serif;
 }
 
@@ -66,17 +66,17 @@ body {
   background: #f4f6fb;
 }
 ::-webkit-scrollbar-thumb {
-  background: #475569; /* slate-600 — was #c8102e */
+  background: #A8A492; /* warm beige-grey — was slate-600 #475569 */
   border-radius: 8px;
   border: 2px solid #f4f6fb;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155; /* slate-700 — was #8b0a1f */
+  background: #8E8A77; /* darker beige-grey — was slate-700 #334155 */
 }
 
 /* ----- Selection ----- */
 ::selection {
-  background: #475569; /* slate-600 — was #c8102e */
+  background: #A8A492; /* warm beige-grey — was slate-600 #475569 */
   color: white;
 }
 

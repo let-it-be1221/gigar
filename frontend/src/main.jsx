@@ -17,12 +17,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             duration: 3500,
             style: {
               borderRadius: '12px',
-              background: '#1e293b', // slate-800 — was #1f2d4a
+              background: '#3D3A33', // warm dark — was slate-800 #1e293b
               color: '#fff',
               padding: '12px 16px',
               fontSize: '14px',
             },
-            success: { iconTheme: { primary: '#475569', secondary: '#fff' } }, // slate-600 — was #c8102e
+            success: { iconTheme: { primary: '#A8A492', secondary: '#fff' } }, // warm beige-grey — was slate-600 #475569
           }}
         />
       </AuthProvider>

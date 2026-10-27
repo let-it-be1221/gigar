@@ -76,7 +76,8 @@ export default function Navbar() {
             </motion.div>
           </Link>
 
-          {/* Desktop nav — all items are plain links, no dropdowns */}
+          {/* Desktop nav — all items are plain links, no dropdowns.
+              Per user request: hover text color = red (#c8102e / gigar-redHover). */}
           <ul className="hidden items-center gap-1 lg:flex">
             {NAV.map((item) => (
               <li key={item.to}>
@@ -84,7 +85,7 @@ export default function Navbar() {
                   to={item.to}
                   className={({ isActive }) =>
                     `relative rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                      isActive ? 'text-gigar-red' : 'text-gigar-navy hover:text-gigar-red'
+                      isActive ? 'text-gigar-redHover' : 'text-gigar-navy hover:text-gigar-redHover'
                     }`
                   }
                 >
@@ -94,7 +95,7 @@ export default function Navbar() {
                       {isActive && (
                         <motion.span
                           layoutId="nav-underline"
-                          className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gigar-red"
+                          className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gigar-redHover"
                           transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                         />
                       )}
@@ -151,7 +152,7 @@ export default function Navbar() {
                       to={item.to}
                       className={({ isActive }) =>
                         `block rounded-lg px-3 py-3 text-base font-semibold ${
-                          isActive ? 'bg-gigar-red/10 text-gigar-red' : 'text-gigar-navy hover:bg-gigar-navy/5'
+                          isActive ? 'bg-gigar-redHover/10 text-gigar-redHover' : 'text-gigar-navy hover:bg-gigar-navy/5 hover:text-gigar-redHover'
                         }`
                       }
                     >
