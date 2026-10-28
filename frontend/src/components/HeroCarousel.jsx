@@ -112,13 +112,30 @@ export default function HeroCarousel() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0"
           >
-            <SmartImage
-              src={current.image_url}
-              alt={current.title}
-              fallbackSeed={`gigar-carousel-${current.id}`}
-              className="h-full w-full object-cover"
-              loading="eager"
-            />
+            {/* Background video — if the admin uploaded a video, play it as the
+                slide background (muted + autoplay + loop + playsinline so it
+                works on mobile Safari). Falls back to the still image as the
+                poster frame + for browsers without video support. */}
+            {current.video_url ? (
+              <video
+                className="h-full w-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster={current.image_url}
+              >
+                <source src={current.video_url} type="video/mp4" />
+              </video>
+            ) : (
+              <SmartImage
+                src={current.image_url}
+                alt={current.title}
+                fallbackSeed={`gigar-carousel-${current.id}`}
+                className="h-full w-full object-cover"
+                loading="eager"
+              />
+            )}
             {/* Lighter overlay: only a left-to-right gradient for text legibility on the
                 left side; the right side of the carousel image shows through clearly. */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />

@@ -9,6 +9,7 @@ import {
 import HeroCarousel from '../components/HeroCarousel'
 import BlogCard from '../components/BlogCard'
 import FeaturedCustomers from '../components/FeaturedCustomers'
+import SpecsCard from '../components/SpecsCard'
 import AnimatedSection from '../components/AnimatedSection'
 import Loader from '../components/Loader'
 import SmartImage from '../components/SmartImage'
@@ -451,6 +452,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* SPECS CARD — Building Elevators technical briefing */}
+      <SpecsCard />
 
       {/* WHY CHOOSE US — beige-grey background per user request */}
       <section className="relative overflow-hidden bg-gigar-red py-20 text-white lg:py-28">

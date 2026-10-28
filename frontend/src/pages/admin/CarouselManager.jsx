@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FiPlus, FiEdit3, FiTrash2, FiEye, FiEyeOff, FiUpload,
-  FiX, FiImage, FiSave, FiLoader,
+  FiX, FiImage, FiVideo, FiSave, FiLoader,
 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import AdminShell from '../../components/AdminShell'
@@ -10,7 +10,7 @@ import Loader from '../../components/Loader'
 import { adminApi } from '../../api/client'
 
 const EMPTY = {
-  title: '', subtitle: '', image_url: '',
+  title: '', subtitle: '', image_url: '', video_url: '',
   cta_text: 'Learn more', cta_link: '/services',
   badge: '', category: '', is_active: true, sort_order: 0,
 }
@@ -24,6 +24,7 @@ export default function AdminCarouselManager() {
   const [uploading, setUploading]     = useState(false)
   const [confirm, setConfirm]         = useState(null)
   const fileInputRef = useRef(null)
+  const videoInputRef = useRef(null)
 
   const fetch = () => {
     setLoading(true)
@@ -45,13 +46,13 @@ export default function AdminCarouselManager() {
   }
   const cancel = () => { setEditing(null); setForm(EMPTY) }
 
-  const uploadFile = async (file) => {
+  const uploadFile = async (file, target = 'image_url') => {
     if (!file) return
     setUploading(true)
     try {
       const { data } = await adminApi.uploadMedia(file)
-      setForm((f) => ({ ...f, image_url: data.url }))
-      toast.success('Image uploaded')
+      setForm((f) => ({ ...f, [target]: data.url }))
+      toast.success(target === 'video_url' ? 'Video uploaded' : 'Image uploaded')
     } catch (err) {
       toast.error('Upload failed')
     } finally {
@@ -233,6 +234,58 @@ export default function AdminCarouselManager() {
                   className="input-field mt-2"
                   value={form.image_url} onChange={set('image_url')}
                   placeholder="Or paste image URL here…"
+                />
+              </div>
+
+              {/* Video upload (optional) — if set, the carousel slide will play
+                  this video as its background instead of the still image.
+                  The image_url above becomes the video's poster frame. */}
+              <div>
+                <label className="mb-1.5 block text-sm font-semibold text-gigar-navy">
+                  Background video <span className="font-normal text-gigar-navy/50">(optional — overrides the image)</span>
+                </label>
+                <div
+                  onClick={() => videoInputRef.current?.click()}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) uploadFile(f, 'video_url') }}
+                  className="relative h-32 cursor-pointer overflow-hidden rounded-xl border-2 border-dashed border-gigar-navy/15 bg-gigar-mist transition hover:border-gigar-red hover:bg-gigar-red/5"
+                >
+                  {form.video_url ? (
+                    <div className="flex h-full items-center justify-center gap-3 px-4">
+                      <FiVideo className="h-8 w-8 text-gigar-red" />
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-sm font-semibold text-gigar-navy">{form.video_url.split('/').pop()}</div>
+                        <div className="text-xs text-gigar-navy/60">Video set — will play as the slide background</div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setForm((f) => ({ ...f, video_url: '' })) }}
+                        className="rounded-full bg-gigar-navy/10 p-1.5 text-gigar-navy hover:bg-red-600 hover:text-white"
+                        title="Remove video"
+                      >
+                        <FiX className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : uploading ? (
+                    <div className="flex h-full items-center justify-center">
+                      <FiLoader className="h-6 w-6 animate-spin text-gigar-red" />
+                    </div>
+                  ) : (
+                    <div className="flex h-full flex-col items-center justify-center">
+                      <FiVideo className="h-8 w-8 text-gigar-red" />
+                      <span className="mt-1 text-sm font-semibold text-gigar-navy">Click to upload or drag a video</span>
+                      <span className="text-xs text-gigar-navy/60">MP4 / WebM · landscape · max 50MB</span>
+                    </div>
+                  )}
+                </div>
+                <input
+                  ref={videoInputRef} type="file" accept="video/*" className="hidden"
+                  onChange={(e) => uploadFile(e.target.files?.[0], 'video_url')}
+                />
+                <input
+                  className="input-field mt-2"
+                  value={form.video_url} onChange={set('video_url')}
+                  placeholder="Or paste video URL here…"
                 />
               </div>
 

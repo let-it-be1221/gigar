@@ -3,17 +3,18 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   FiMenu, FiX, FiLogOut, FiShield,
+  FiHome, FiInfo, FiGrid, FiBox, FiUsers, FiFileText, FiMail,
 } from 'react-icons/fi'
 import { useAuth } from '../context/AuthContext'
 
 const NAV = [
-  { label: 'Home', to: '/' },
-  { label: 'About', to: '/about' },
-  { label: 'Services', to: '/services' },
-  { label: 'Products', to: '/products' },
-  { label: 'Customers', to: '/customers' },
-  { label: 'Blog', to: '/blog' },
-  { label: 'Contact', to: '/contact' },
+  { label: 'Home',      to: '/',          icon: FiHome },
+  { label: 'About',     to: '/about',     icon: FiInfo },
+  { label: 'Services',  to: '/services',  icon: FiGrid },
+  { label: 'Products',  to: '/products',  icon: FiBox },
+  { label: 'Customers', to: '/customers', icon: FiUsers },
+  { label: 'Blog',      to: '/blog',      icon: FiFileText },
+  { label: 'Contact',   to: '/contact',   icon: FiMail },
 ]
 
 export default function Navbar() {
@@ -93,14 +94,15 @@ export default function Navbar() {
                 <NavLink
                   to={item.to}
                   className={({ isActive }) =>
-                    `relative rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                    `relative flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold transition-colors ${
                       isActive ? 'text-gigar-redHover' : 'text-white hover:text-gigar-redHover'
                     }`
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      {item.label}
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.label}</span>
                       {isActive && (
                         <motion.span
                           layoutId="nav-underline"
@@ -162,11 +164,12 @@ export default function Navbar() {
                     <NavLink
                       to={item.to}
                       className={({ isActive }) =>
-                        `block rounded-lg px-3 py-3 text-base font-semibold ${
+                        `flex items-center gap-3 rounded-lg px-3 py-3 text-base font-semibold ${
                           isActive ? 'bg-gigar-redHover/10 text-gigar-redHover' : 'text-gigar-navy hover:bg-gigar-navy/5 hover:text-gigar-redHover'
                         }`
                       }
                     >
+                      <item.icon className="h-5 w-5" />
                       {item.label}
                     </NavLink>
                   </motion.li>
