@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   FiMapPin, FiPhone, FiMail, FiClock, FiArrowUp,
   FiFacebook, FiTwitter, FiLinkedin, FiYoutube, FiSend,
 } from 'react-icons/fi'
+import toast from 'react-hot-toast'
+import { publicApi } from '../api/client'
 
 const SERVICE_LINKS = [
   'GPS & Speed Limit Devices',
@@ -22,7 +25,27 @@ const COMPANY_LINKS = [
 ]
 
 export default function Footer() {
+  const [email, setEmail]         = useState('')
+  const [subscribing, setSubscribing] = useState(false)
   const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  const subscribe = async (e) => {
+    e.preventDefault()
+    if (!email?.trim()) {
+      toast.error('Please enter your email address.')
+      return
+    }
+    setSubscribing(true)
+    try {
+      const { data } = await publicApi.newsletter(email.trim())
+      toast.success(data.message || 'Thanks for subscribing!')
+      setEmail('')
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Could not subscribe. Please try again.')
+    } finally {
+      setSubscribing(false)
+    }
+  }
 
   return (
     <footer className="relative overflow-hidden bg-gigar-red text-white">
@@ -101,12 +124,22 @@ export default function Footer() {
             ))}
           </ul>
           <h4 className="mb-3 mt-6 text-sm font-bold uppercase tracking-[0.18em] text-gigar-gold">Newsletter</h4>
-          <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
+          <form onSubmit={subscribe} className="flex gap-2">
             <input
-              type="email" placeholder="Your email"
-              className="flex-1 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white placeholder:text-white/50 focus:border-gigar-gold focus:outline-none"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your email"
+              disabled={subscribing}
+              className="flex-1 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white placeholder:text-white/50 focus:border-gigar-gold focus:outline-none disabled:opacity-60"
             />
-            <button type="submit" className="rounded-full bg-gigar-navy p-2.5 transition-colors hover:bg-gigar-navyDark">
+            <button
+              type="submit"
+              disabled={subscribing}
+              title="Subscribe"
+              className="rounded-full bg-gigar-navy p-2.5 transition-colors hover:bg-gigar-navyDark disabled:opacity-60"
+            >
               <FiSend className="h-4 w-4" />
             </button>
           </form>

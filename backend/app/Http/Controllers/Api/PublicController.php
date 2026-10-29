@@ -334,4 +334,34 @@ class PublicController extends Controller
 
         return response()->json(['message' => 'Thank you for contacting us. We will reply within 24 hours.']);
     }
+
+    /**
+     * Newsletter signup — logs the email so the admin can manually add it
+     * to their mailing list. (No DB table for now — keeps the schema simple.
+     * The admin can grep storage/logs/laravel.log for 'Newsletter signup'
+     * entries, or wire this up to Mailchimp / a subscribers table later.)
+     */
+    public function newsletter(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'email', 'max:200'],
+        ]);
+
+        logger()->info('Newsletter signup', ['email' => $data['email']]);
+
+        try {
+            Mail::raw(
+                "New newsletter signup: {$data['email']}",
+                function ($m) use ($data) {
+                    $m->to('info@gigartrading.com')
+                        ->subject('New newsletter subscriber')
+                        ->replyTo($data['email']);
+                }
+            );
+        } catch (\Throwable $e) {
+            // ignore mail errors in dev
+        }
+
+        return response()->json(['message' => 'Thanks for subscribing! Watch your inbox for updates.']);
+    }
 }

@@ -6,6 +6,7 @@ import About from './pages/About'
 import Services from './pages/Services'
 import Products from './pages/Products'
 import Customers from './pages/Customers'
+import CustomerDetail from './pages/CustomerDetail'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Contact from './pages/Contact'
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/products" element={<Products />} />
         <Route path="/customers" element={<Customers />} />
+        <Route path="/customers/:slug" element={<CustomerDetail />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/contact" element={<Contact />} />

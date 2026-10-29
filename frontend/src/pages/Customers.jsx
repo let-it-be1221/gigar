@@ -154,6 +154,8 @@ export default function Customers() {
                       whileHover={{ y: -8 }}
                       className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
                     >
+                      {/* Whole card is a link to the customer detail page */}
+                      <Link to={`/customers/${c.slug}`} className="absolute inset-0 z-10" aria-label={`View ${c.name} story`} />
                       {/* Cover image */}
                       <div className="relative h-48 overflow-hidden">
                         <SmartImage
@@ -232,6 +234,11 @@ export default function Customers() {
                             )}
                           </blockquote>
                         )}
+
+                        {/* Read-more hint — visual cue that the card is clickable */}
+                        <div className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-gigar-red opacity-0 transition group-hover:opacity-100">
+                          Read full story <FiChevronRight className="h-3.5 w-3.5" />
+                        </div>
                       </div>
                     </motion.article>
                   ))}

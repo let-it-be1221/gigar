@@ -50,6 +50,7 @@ export const publicApi = {
   products: () => api.get('/public/products'),
   carousel: () => api.get('/public/carousel'),
   contact: (payload) => api.post('/public/contact', payload),
+  newsletter: (email) => api.post('/public/newsletter', { email }),
 
   // Customers
   customers: (params = {}) => api.get('/public/customers', { params }),

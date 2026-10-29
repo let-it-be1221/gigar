@@ -32,6 +32,7 @@ Route::prefix('public')->group(function () {
     Route::get('/customers/{slug}', [CustomerController::class, 'show']);
 
     Route::post('/contact', [PublicController::class, 'contact']);        // contact form submission
+    Route::post('/newsletter', [PublicController::class, 'newsletter']);  // footer newsletter signup
 });
 
 /*

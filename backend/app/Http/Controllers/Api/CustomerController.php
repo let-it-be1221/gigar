@@ -26,24 +26,30 @@ class CustomerController extends Controller
         return response()->json($q->paginate($request->get('per_page', 12)));
     }
 
-    /** Public: featured customers for homepage. */
+    /** Public: featured customers for homepage. Cached 5 min. */
     public function featured()
     {
-        return response()->json(
-            Customer::active()->where('is_featured', true)->limit(8)->get()
-        );
+        $customers = Cache::remember('public.customers_featured', 300, function () {
+            return Customer::active()
+                ->where('is_featured', true)
+                ->limit(8)
+                ->get();
+        });
+        return response()->json($customers);
     }
 
-    /** Public: distinct sectors for filter dropdown. */
+    /** Public: distinct sectors for filter dropdown. Cached 5 min. */
     public function sectors()
     {
-        return response()->json([
-            'sectors' => Customer::active()
+        $sectors = Cache::remember('public.customer_sectors', 300, function () {
+            return Customer::active()
                 ->whereNotNull('sector')
                 ->distinct()
                 ->pluck('sector')
-                ->values(),
-        ]);
+                ->values()
+                ->all();
+        });
+        return response()->json(['sectors' => $sectors]);
     }
 
     /** Public: customer counts grouped by equipment_category + total units
@@ -153,11 +159,14 @@ class CustomerController extends Controller
 
     /**
      * Flush the public caches that depend on customers (home page
-     * featured_customers + customer_stats + the customer sectors list).
+     * featured_customers + customer_stats + the customer sectors list +
+     * the featured-customers cache).
      */
     protected function flushPublicCache(): void
     {
         Cache::forget('public.home');
         Cache::forget('public.customer_stats');
+        Cache::forget('public.customer_sectors');
+        Cache::forget('public.customers_featured');
     }
 }

@@ -69,8 +69,9 @@ export default function FeaturedCustomers() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
               whileHover={{ y: -4 }}
-              className="group flex flex-col items-center justify-center rounded-2xl bg-white p-5 shadow-gigar-soft ring-1 ring-gigar-navy/5 transition hover:shadow-gigar-glow hover:ring-gigar-red/30"
+              className="group relative flex flex-col items-center justify-center rounded-2xl bg-white p-5 shadow-gigar-soft ring-1 ring-gigar-navy/5 transition hover:shadow-gigar-glow hover:ring-gigar-red/30"
             >
+              <Link to={`/customers/${c.slug}`} className="absolute inset-0 z-10 rounded-2xl" aria-label={`View ${c.name} story`} />
               <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
                 <SmartImage
                   src={c.logo_url}
@@ -97,8 +98,9 @@ export default function FeaturedCustomers() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               whileHover={{ y: -6 }}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow md:flex-row"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow md:flex-row"
             >
+              <Link to={`/customers/${c.slug}`} className="absolute inset-0 z-10" aria-label={`View ${c.name} story`} />
               <div className="relative h-44 overflow-hidden md:h-auto md:w-1/3">
                 <SmartImage
                   src={c.cover_image}
