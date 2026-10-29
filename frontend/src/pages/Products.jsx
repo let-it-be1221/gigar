@@ -7,6 +7,7 @@ import {
 import AnimatedSection from '../components/AnimatedSection'
 import Loader from '../components/Loader'
 import SmartImage from '../components/SmartImage'
+import TechnicalSpecs from '../components/TechnicalSpecs'
 import { publicApi } from '../api/client'
 
 // Sample product images (replaceable by the admin via PublicController::products()
@@ -174,6 +175,13 @@ export default function Products() {
               })}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Key Specifications & Technical Briefing — two-column spec card */}
+      <section className="bg-gigar-mist py-20 lg:py-24">
+        <div className="container-page">
+          <TechnicalSpecs />
         </div>
       </section>
 

@@ -11,6 +11,8 @@ class CarouselSlide extends Model
         'subtitle',
         'image_url',
         'video_url',
+        'video_poster',
+        'media_type',
         'cta_text',
         'cta_link',
         'badge',

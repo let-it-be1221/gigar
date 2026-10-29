@@ -1,46 +1,46 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FiArrowRight, FiArrowLeft, FiChevronRight, FiZap } from 'react-icons/fi'
 import { publicApi } from '../api/client'
 import SmartImage from './SmartImage'
 
-const AUTOPLAY_MS = 6000
+const AUTOPLAY_MS = 9000   // longer than image-only so video slides have time to play
 
 // Fallback slides if the API is unreachable.
 // All URLs below have been verified to return HTTP 200 (or use SmartImage
 // which auto-falls back to picsum.photos on any 404).
 const FALLBACK_SLIDES = [
   {
-    id: 1, badge: 'Vertical Transport', category: 'Elevators',
+    id: 1, badge: 'Vertical Transport', category: 'Elevators', media_type: 'image',
     title: 'Building Elevators & Escalators',
     subtitle: 'Traction, hydraulic & MRL elevator systems installed and serviced across Ethiopia.',
     image_url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80&auto=format&fit=crop',
     cta_text: 'Explore elevators', cta_link: '/products',
   },
   {
-    id: 2, badge: 'Authorized Distributor', category: 'Lifts',
+    id: 2, badge: 'Authorized Distributor', category: 'Lifts', media_type: 'image',
     title: 'BendPak Car Lifts',
     subtitle: 'Premium two-post & four-post vehicle lifts for professional workshops.',
     image_url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80&auto=format&fit=crop',
     cta_text: 'Explore lifts', cta_link: '/products',
   },
   {
-    id: 3, badge: 'Workshop Solutions', category: 'Paint Booths',
+    id: 3, badge: 'Workshop Solutions', category: 'Paint Booths', media_type: 'image',
     title: 'OMIA Paint Booths',
     subtitle: 'Dust-free, temperature-controlled spray booths for professional paintwork.',
     image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80&auto=format&fit=crop',
     cta_text: 'Explore paint booths', cta_link: '/products',
   },
   {
-    id: 4, badge: 'Inspection Technology', category: 'Vehicle Test Equipment',
+    id: 4, badge: 'Inspection Technology', category: 'Vehicle Test Equipment', media_type: 'image',
     title: 'VTEQ Vehicle Test Equipment',
     subtitle: 'Brake, suspension, side-slip & headlight alignment test lanes for inspection centers.',
     image_url: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1920&q=80&auto=format&fit=crop',
     cta_text: 'Explore test equipment', cta_link: '/products',
   },
   {
-    id: 5, badge: 'Facility Solutions', category: 'Facility Equipment',
+    id: 5, badge: 'Facility Solutions', category: 'Facility Equipment', media_type: 'image',
     title: 'Facility Equipment & Air Conditioning',
     subtitle: 'Fujitsu VRF systems, washing machines and complete facility cooling solutions.',
     image_url: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=1920&q=80&auto=format&fit=crop',
@@ -60,6 +60,7 @@ export default function HeroCarousel() {
   const [index, setIndex]       = useState(0)
   const [paused, setPaused]     = useState(false)
   const [direction, setDirection] = useState(1)
+  const videoRef = useRef(null)
 
   useEffect(() => {
     publicApi.carousel()
@@ -68,6 +69,16 @@ export default function HeroCarousel() {
       })
       .catch(() => setSlides(FALLBACK_SLIDES))
   }, [])
+
+  // Pause/play the active background video in sync with the carousel pause
+  // state (so hovering the carousel pauses the video too, not just the auto-
+  // advance).
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    if (paused) v.pause()
+    else v.play().catch(() => {/* autoplay may be blocked; ignore */})
+  }, [paused, index])
 
   const total = slides.length
 
@@ -115,15 +126,18 @@ export default function HeroCarousel() {
             {/* Background video — if the admin uploaded a video, play it as the
                 slide background (muted + autoplay + loop + playsinline so it
                 works on mobile Safari). Falls back to the still image as the
-                poster frame + for browsers without video support. */}
+                poster frame + for browsers without video support. The video
+                ref lets us pause/play in sync with the carousel pause state. */}
             {current.video_url ? (
               <video
+                ref={videoRef}
                 className="h-full w-full object-cover"
                 autoPlay
                 muted
                 loop
                 playsInline
-                poster={current.image_url}
+                preload="metadata"
+                poster={current.image_url || current.video_poster}
               >
                 <source src={current.video_url} type="video/mp4" />
               </video>

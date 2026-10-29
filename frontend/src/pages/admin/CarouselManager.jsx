@@ -10,7 +10,11 @@ import Loader from '../../components/Loader'
 import { adminApi } from '../../api/client'
 
 const EMPTY = {
-  title: '', subtitle: '', image_url: '', video_url: '',
+  title: '', subtitle: '',
+  media_type: 'image',   // 'image' | 'video' — admin picks via tab buttons
+  image_url: '',         // image OR video poster (still shown while video loads)
+  video_url: '',         // .mp4 / .webm URL
+  video_poster: '',      // optional explicit poster (overrides image_url when set)
   cta_text: 'Learn more', cta_link: '/services',
   badge: '', category: '', is_active: true, sort_order: 0,
 }
@@ -62,18 +66,31 @@ export default function AdminCarouselManager() {
 
   const submit = async (e) => {
     e?.preventDefault?.()
-    if (!form.title?.trim() || !form.image_url?.trim()) {
-      toast.error('Title and image are required')
+    // For an image slide: image_url is required.
+    // For a video slide: image_url serves as the poster frame (shown while the
+    // video buffers), so it's still required — but we'll accept video_poster
+    // as an alternative if the admin set that explicitly.
+    if (!form.title?.trim()) {
+      toast.error('Title is required')
+      return
+    }
+    if (!form.image_url?.trim() && !form.video_poster?.trim() && !form.video_url?.trim()) {
+      toast.error('Either an image or a video is required')
       return
     }
     setSaving(true)
     try {
+      const payload = { ...form }
+      // Auto-set media_type so the backend/frontend knows which render path to use
+      if (!payload.media_type) {
+        payload.media_type = payload.video_url ? 'video' : 'image'
+      }
       if (editing === 'new') {
-        const { data } = await adminApi.createCarouselSlide(form)
+        const { data } = await adminApi.createCarouselSlide(payload)
         toast.success('Slide created')
         setSlides((s) => [data.slide, ...s])
       } else {
-        const { data } = await adminApi.updateCarouselSlide(editing.id, form)
+        const { data } = await adminApi.updateCarouselSlide(editing.id, payload)
         toast.success('Slide updated')
         setSlides((s) => s.map((x) => x.id === editing.id ? data.slide : x))
       }
