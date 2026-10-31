@@ -25,9 +25,33 @@ return [
             'prefix_indexes' => true,
             'strict'         => true,
             'engine'         => null,
+            // ----- SSL options -----
+            // Aiven (and most cloud MySQL providers) REQUIRE SSL. The
+            // options below are read from .env so you can connect to
+            // Aiven without editing this file — just set the env vars.
+            //
+            // To connect to Aiven, set in .env:
+            //   DB_SSL_MODE=required        (or 'verify_ca' / 'verify_identity')
+            //   MYSQL_ATTR_SSL_CA=/path/to/ca.pem  (downloaded from Aiven console)
+            //
+            // For local dev (XAMPP, no SSL), leave these unset — the
+            // array_filter() strips them out and no SSL is attempted.
             'options'        => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+                // Path to the CA certificate file. Aiven lets you download
+                // this from the service Overview page → "CA Certificate".
+                PDO::MYSQL_ATTR_SSL_CA   => env('MYSQL_ATTR_SSL_CA'),
+
+                // SSL mode: 'preferred' (default), 'required', 'verify_ca',
+                // or 'verify_identity'. Aiven needs at least 'required'.
+                // 'verify_ca' also checks the CA cert; 'verify_identity'
+                // also checks the hostname matches the cert.
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => env('DB_SSL_VERIFY_SERVER_CERT', false),
+
+                // Optional client cert + key (only needed if your Aiven
+                // service requires 2-way SSL — most setups don't).
+                PDO::MYSQL_ATTR_SSL_CERT => env('MYSQL_ATTR_SSL_CERT'),
+                PDO::MYSQL_ATTR_SSL_KEY  => env('MYSQL_ATTR_SSL_KEY'),
+            ], fn ($v) => $v !== null && $v !== '' && $v !== false) : [],
         ],
     ],
     'migrations' => [
