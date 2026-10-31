@@ -59,31 +59,17 @@ export default function Navbar() {
         }`}
       >
         <nav className="container-page flex h-16 items-center justify-between lg:h-24 xl:h-28">
-          {/* Logo — image + text lockup */}
-          <Link to="/" className="flex items-center gap-3">
+          {/* Logo — image only, no text */}
+          <Link to="/" className="flex items-center">
             <motion.img
               src="/logo.png"
               alt="Gigar Trading logo"
-              className="h-10 w-auto lg:h-12"
+              className="h-12 w-auto lg:h-14"
               initial={{ rotate: -8, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
               whileHover={{ rotate: -2, scale: 1.04 }}
             />
-            <motion.div
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              whileHover={{ scale: 1.02 }}
-              className="flex flex-col leading-none"
-            >
-              <span className="font-display text-xl font-extrabold tracking-tight text-white lg:text-2xl">
-                GIGAR
-              </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/90 sm:text-xs">
-                Trading & Technical Center
-              </span>
-            </motion.div>
           </Link>
 
           {/* Desktop nav — icons stacked ABOVE text (column layout).
