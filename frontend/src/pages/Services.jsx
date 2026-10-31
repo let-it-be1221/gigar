@@ -123,7 +123,7 @@ export default function Services() {
       </section>
 
       {/* Horizontal service-line tabs */}
-      <section className="sticky top-16 z-30 border-b border-gigar-navy/10 bg-white/95 backdrop-blur lg:top-20">
+      <section className="sticky top-16 z-30 border-b border-gigar-navy/10 bg-white/95 backdrop-blur lg:top-24 xl:top-28">
         <div className="container-page">
           <div className="flex gap-2 overflow-x-auto py-3 hide-scrollbar">
             {SERVICE_LINES.map((line, i) => {
@@ -159,7 +159,7 @@ export default function Services() {
           <div className="container-page">
             <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
               {/* LEFT — vertical list on the page's left margin */}
-              <aside className="lg:sticky lg:top-40 lg:self-start">
+              <aside className="lg:sticky lg:top-44 xl:top-48 lg:self-start">
                 <div className="rounded-2xl border border-gigar-navy/10 bg-white p-3 shadow-gigar-soft">
                   <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-gigar-navy/50">
                     Equipment categories

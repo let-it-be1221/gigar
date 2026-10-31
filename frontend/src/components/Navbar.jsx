@@ -58,7 +58,7 @@ export default function Navbar() {
           scrolled ? 'bg-gigar-red/95 shadow-gigar-soft backdrop-blur-md' : 'bg-gigar-red/95'
         }`}
       >
-        <nav className="container-page flex h-16 items-center justify-between lg:h-28">
+        <nav className="container-page flex h-16 items-center justify-between lg:h-24 xl:h-28">
           {/* Logo — image + text lockup */}
           <Link to="/" className="flex items-center gap-3">
             <motion.img
@@ -86,9 +86,10 @@ export default function Navbar() {
             </motion.div>
           </Link>
 
-          {/* Desktop nav — all items are plain links, no dropdowns.
-              Icons stacked ABOVE the text (column layout), enlarged + bolded. */}
-          <ul className="hidden items-center gap-1 lg:flex">
+          {/* Desktop nav — icons stacked ABOVE text (column layout).
+              flex-1 + justify-evenly spreads the items across the
+              available width so they don't bunch up on wide screens. */}
+          <ul className="hidden flex-1 items-center justify-center justify-evenly gap-1 lg:flex lg:px-4 xl:px-8">
             {NAV.map((item) => (
               <li key={item.to}>
                 <NavLink
