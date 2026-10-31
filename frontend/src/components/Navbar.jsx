@@ -58,7 +58,7 @@ export default function Navbar() {
           scrolled ? 'bg-gigar-red/95 shadow-gigar-soft backdrop-blur-md' : 'bg-gigar-red/95'
         }`}
       >
-        <nav className="container-page flex h-16 items-center justify-between lg:h-20">
+        <nav className="container-page flex h-16 items-center justify-between lg:h-28">
           {/* Logo — image + text lockup */}
           <Link to="/" className="flex items-center gap-3">
             <motion.img
@@ -87,21 +87,21 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav — all items are plain links, no dropdowns.
-              Per user request: hover text color = red (#c8102e / gigar-redHover). */}
+              Icons stacked ABOVE the text (column layout), enlarged + bolded. */}
           <ul className="hidden items-center gap-1 lg:flex">
             {NAV.map((item) => (
               <li key={item.to}>
                 <NavLink
                   to={item.to}
                   className={({ isActive }) =>
-                    `relative flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold transition-colors ${
+                    `relative flex flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
                       isActive ? 'text-gigar-redHover' : 'text-white hover:text-gigar-redHover'
                     }`
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <item.icon className="h-4 w-4" />
+                      <item.icon className="h-7 w-7" strokeWidth={2.75} />
                       <span>{item.label}</span>
                       {isActive && (
                         <motion.span
