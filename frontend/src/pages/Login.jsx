@@ -41,7 +41,7 @@ export default function Login() {
       {/* Background */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="https://images.unsplash.com/photo-1486006920555-c77dcf2a718e?w=1600&q=80&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1600&q=80&auto=format&fit=crop"
           alt=""
           className="h-full w-full object-cover opacity-25"
         />

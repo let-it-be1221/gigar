@@ -7,7 +7,7 @@ export default function Hero() {
       {/* Background image with overlay */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="https://images.unsplash.com/photo-1486006920555-c77dcf2a718e?w=1920&q=80&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1920&q=80&auto=format&fit=crop"
           alt=""
           className="h-full w-full object-cover opacity-30"
           loading="eager"
@@ -132,7 +132,7 @@ export default function Hero() {
               </div>
               <div className="relative h-48 overflow-hidden rounded-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1486006920555-c77dcf2a718e?w=800&q=80&auto=format&fit=crop"
+                  src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&q=80&auto=format&fit=crop"
                   alt="BendPak car lift"
                   className="h-full w-full object-cover"
                 />
