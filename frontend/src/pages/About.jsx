@@ -23,8 +23,8 @@ export default function About() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-gigar-navy py-20 text-white lg:py-28">
         <div className="absolute inset-0 -z-10">
-          <img src="https://images.unsplash.com/photo-1486006920555-c77dcf2a718e?w=1600&q=80&auto=format&fit=crop" alt="" className="h-full w-full object-cover opacity-25" />
-          <div className="absolute inset-0 bg-gradient-to-r from-gigar-navy via-gigar-navy/90 to-gigar-red/80" />
+          <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1600&q=80&auto=format&fit=crop" alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
         </div>
         <div className="container-page relative">
           <AnimatedSection>
@@ -77,12 +77,12 @@ export default function About() {
           <AnimatedSection delay={0.2}>
             <div className="grid grid-cols-2 gap-4">
               <motion.img
-                src="https://images.unsplash.com/photo-1635491328918-2c2d2d9d2d4e?w=600&q=80&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop"
                 alt="Workshop" className="col-span-2 h-64 w-full rounded-2xl object-cover shadow-gigar-soft"
                 whileHover={{ scale: 1.02 }}
               />
               <motion.img
-                src="https://images.unsplash.com/photo-1486006920555-c77dcf2a718e?w=400&q=80&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=80&auto=format&fit=crop"
                 alt="Equipment" className="h-40 w-full rounded-xl object-cover shadow-gigar-soft"
                 whileHover={{ scale: 1.02 }}
               />

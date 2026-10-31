@@ -74,6 +74,30 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* Mission / Vision / Values strip — added per user request */}
+      <div className="relative border-b border-white/10">
+        <div className="container-page grid gap-6 py-10 sm:grid-cols-3">
+          <div>
+            <h4 className="text-sm font-bold uppercase tracking-[0.18em] text-gigar-gold">Our Vision</h4>
+            <p className="mt-2 text-sm leading-relaxed text-white/70">
+              To be Ethiopia's most trusted industrial equipment partner — setting the national benchmark for quality, safety and after-sales service.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-sm font-bold uppercase tracking-[0.18em] text-gigar-gold">Our Mission</h4>
+            <p className="mt-2 text-sm leading-relaxed text-white/70">
+              To import, supply and install world-class equipment with full local support — empowering workshops, facilities and businesses to operate at their best.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-sm font-bold uppercase tracking-[0.18em] text-gigar-gold">Our Values</h4>
+            <p className="mt-2 text-sm leading-relaxed text-white/70">
+              Quality first · Customer success · Technical excellence · After-sales commitment — every installation backed by warranty, training and responsive support.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="container-page relative grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
         {/* Brand */}
         <div>

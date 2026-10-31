@@ -359,20 +359,20 @@ export default function Home() {
           <AnimatedSection delay={0.2}>
             <div className="grid grid-cols-2 gap-4">
               <SmartImage
-                src="https://images.unsplash.com/photo-1635491328918-2c2d2d9d2d4e?w=600&q=80&auto=format&fit=crop"
-                alt="Workshop"
-                fallbackSeed="about-workshop"
+                src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop"
+                alt="Modern building with elevator shaft"
+                fallbackSeed="about-building"
                 className="col-span-2 h-64 w-full rounded-2xl object-cover shadow-gigar-soft transition-transform duration-500 hover:scale-[1.02]"
               />
               <SmartImage
-                src="https://images.unsplash.com/photo-1486006920555-c77dcf2a718e?w=400&q=80&auto=format&fit=crop"
-                alt="Equipment"
+                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=80&auto=format&fit=crop"
+                alt="BendPak car lifts"
                 fallbackSeed="about-equipment"
                 className="h-40 w-full rounded-xl object-cover shadow-gigar-soft transition-transform duration-500 hover:scale-[1.02]"
               />
               <SmartImage
                 src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=400&q=80&auto=format&fit=crop"
-                alt="Vehicle test"
+                alt="Vehicle test equipment"
                 fallbackSeed="about-test"
                 className="h-40 w-full rounded-xl object-cover shadow-gigar-soft transition-transform duration-500 hover:scale-[1.02]"
               />
