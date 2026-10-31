@@ -21,7 +21,12 @@ return [
         'https://www.gigartrading.com',
     ],
 
-    'allowed_origins_patterns' => [],
+    // Allow all *.vercel.app + *.ngrok origins (for cloud deployment)
+    'allowed_origins_patterns' => [
+        '/^https:\/\/.*\.vercel\.app$/',
+        '/^https:\/\/.*\.ngrok.*\.app$/',
+        '/^https:\/\/.*\.ngrok-free\.app$/',
+    ],
 
     'allowed_headers' => ['*'],
 

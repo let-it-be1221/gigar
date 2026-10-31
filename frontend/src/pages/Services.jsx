@@ -19,14 +19,15 @@ const SIDEBAR_CATEGORIES = [
   'vehicle-test-equipment',
 ]
 
-// The 3 service lines.
+// The 4 service lines — Vehicle Inspection Test is the 4th tab.
 const SERVICE_LINES = [
   { id: 'supplying-and-installing', short: 'Supplying & Installing',  full: 'Supplying & Installing Equipments' },
   { id: 'maintenance-service',      short: 'Maintenance',             full: 'Maintenance Service' },
   { id: 'technical-consultancy',    short: 'Technical Consultancy',   full: 'Technical Consultancy' },
+  { id: 'vehicle-inspection-test',  short: 'Vehicle Inspection Test', full: 'Vehicle Inspection Test' },
 ]
 
-// Static content for Maintenance Service + Technical Consultancy
+// Static content for Maintenance Service + Technical Consultancy + Vehicle Inspection
 const MAINTENANCE_HIGHLIGHTS = [
   'Annual Maintenance Contracts (AMC) with fixed response times',
   '24/7 emergency breakdown call-out across Addis Ababa',
@@ -36,6 +37,7 @@ const MAINTENANCE_HIGHLIGHTS = [
   'Quarterly service reports + performance metrics',
 ]
 const MAINTENANCE_DESC = 'Annual maintenance contracts (AMC) and 24/7 emergency call-out support for every installation. Our certified technicians perform scheduled preventive maintenance, safety inspections, parts replacement and breakdown repairs — minimizing downtime and extending equipment lifespan.'
+const MAINTENANCE_IMAGE = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80&auto=format&fit=crop'
 
 const CONSULTANCY_HIGHLIGHTS = [
   'Workshop layout & equipment sizing consultancy',
@@ -46,6 +48,18 @@ const CONSULTANCY_HIGHLIGHTS = [
   'On-site engineering supervision',
 ]
 const CONSULTANCY_DESC = 'Our engineers help you plan, design and optimize your workshop or facility before you buy. We provide load calculations, equipment sizing, layout design, capacity planning and project cost analysis — ensuring you invest in the right equipment the first time.'
+const CONSULTANCY_IMAGE = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=80&auto=format&fit=crop'
+
+const VEHICLE_INSPECTION_HIGHLIGHTS = [
+  'Complete VTEQ vehicle test lane operation',
+  'Brake, suspension, side-slip & headlight alignment testing',
+  'Government-certified inspection reports',
+  'Fleet inspection contracts with bulk pricing',
+  'Pre-purchase vehicle condition assessments',
+  'Annual recertification for commercial vehicles',
+]
+const VEHICLE_INSPECTION_DESC = 'Gigar Trading operates complete VTEQ vehicle test lanes for government and private inspection centers across Ethiopia. Our certified inspectors run brake, suspension, side-slip and headlight alignment tests for commercial fleets, pre-purchase assessments and annual recertifications — issuing government-compliant inspection reports on every vehicle.'
+const VEHICLE_INSPECTION_IMAGE = 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&q=80&auto=format&fit=crop'
 
 export default function Services() {
   const [products, setProducts]   = useState([])
@@ -99,10 +113,10 @@ export default function Services() {
               Our Services
             </span>
             <h1 className="mt-5 max-w-3xl font-display text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
-              Three service lines, one trusted partner
+              Four service lines, one trusted partner
             </h1>
             <p className="mt-4 max-w-2xl text-base text-white/80 sm:text-lg">
-              From equipment supply and installation to lifetime maintenance and engineering consultancy — Gigar Trading delivers end-to-end industrial solutions across Ethiopia.
+              From equipment supply and installation to lifetime maintenance, engineering consultancy and vehicle inspection — Gigar Trading delivers end-to-end industrial solutions across Ethiopia.
             </p>
           </AnimatedSection>
         </div>
@@ -304,24 +318,56 @@ export default function Services() {
             >
               <div className="mb-6 flex items-center gap-4">
                 <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gigar-red text-xl font-extrabold text-white shadow-gigar-glow">
-                  {activeLine === 'maintenance-service' ? '02' : '03'}
+                  {activeLine === 'maintenance-service' ? '02' : activeLine === 'technical-consultancy' ? '03' : '04'}
                 </span>
                 <div>
                   <span className="text-xs font-bold uppercase tracking-[0.2em] text-gigar-red">
                     Service line
                   </span>
                   <h2 className="font-display text-3xl font-extrabold text-gigar-navy sm:text-4xl">
-                    {activeLine === 'maintenance-service' ? 'Maintenance Service' : 'Technical Consultancy'}
+                    {activeLine === 'maintenance-service' ? 'Maintenance Service' : activeLine === 'technical-consultancy' ? 'Technical Consultancy' : 'Vehicle Inspection Test'}
                   </h2>
                 </div>
               </div>
 
+              {/* Cover image — adds visual interest. Each service line has its own image. */}
+              {activeLine === 'maintenance-service' && (
+                <div className="relative mb-6 h-56 overflow-hidden rounded-2xl shadow-gigar-soft">
+                  <SmartImage src={MAINTENANCE_IMAGE} alt="Maintenance service" fallbackSeed="maintenance-service" className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-5">
+                    <div className="font-display text-xl font-bold text-white drop-shadow">Certified technicians, 24/7 support</div>
+                    <div className="text-xs font-semibold text-gigar-gold drop-shadow">Preventive maintenance + emergency call-out</div>
+                  </div>
+                </div>
+              )}
+              {activeLine === 'technical-consultancy' && (
+                <div className="relative mb-6 h-56 overflow-hidden rounded-2xl shadow-gigar-soft">
+                  <SmartImage src={CONSULTANCY_IMAGE} alt="Technical consultancy" fallbackSeed="technical-consultancy" className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-5">
+                    <div className="font-display text-xl font-bold text-white drop-shadow">Engineered from day one</div>
+                    <div className="text-xs font-semibold text-gigar-gold drop-shadow">Workshop layout + equipment sizing + cost analysis</div>
+                  </div>
+                </div>
+              )}
+              {activeLine === 'vehicle-inspection-test' && (
+                <div className="relative mb-6 h-56 overflow-hidden rounded-2xl shadow-gigar-soft">
+                  <SmartImage src={VEHICLE_INSPECTION_IMAGE} alt="Vehicle inspection test" fallbackSeed="vehicle-inspection" className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-5">
+                    <div className="font-display text-xl font-bold text-white drop-shadow">VTEQ test lanes, certified reports</div>
+                    <div className="text-xs font-semibold text-gigar-gold drop-shadow">Brake · Suspension · Side-slip · Headlight alignment</div>
+                  </div>
+                </div>
+              )}
+
               <p className="text-base leading-relaxed text-gigar-navy/80">
-                {activeLine === 'maintenance-service' ? MAINTENANCE_DESC : CONSULTANCY_DESC}
+                {activeLine === 'maintenance-service' ? MAINTENANCE_DESC : activeLine === 'technical-consultancy' ? CONSULTANCY_DESC : VEHICLE_INSPECTION_DESC}
               </p>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                {(activeLine === 'maintenance-service' ? MAINTENANCE_HIGHLIGHTS : CONSULTANCY_HIGHLIGHTS).map((h) => (
+                {(activeLine === 'maintenance-service' ? MAINTENANCE_HIGHLIGHTS : activeLine === 'technical-consultancy' ? CONSULTANCY_HIGHLIGHTS : VEHICLE_INSPECTION_HIGHLIGHTS).map((h) => (
                   <div key={h} className="flex items-start gap-2.5 rounded-xl border border-gigar-navy/10 bg-gigar-mist p-4">
                     <FiCheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-gigar-red" />
                     <span className="text-sm font-medium text-gigar-navy/85">{h}</span>
