@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import {
   FiMapPin, FiPhone, FiMail, FiClock, FiArrowUp,
   FiFacebook, FiTwitter, FiLinkedin, FiYoutube, FiSend,
+  FiCheckCircle,
 } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 import { publicApi } from '../api/client'
@@ -91,9 +92,24 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="text-sm font-bold uppercase tracking-[0.18em] text-gigar-gold">Our Values</h4>
-            <p className="mt-2 text-sm leading-relaxed text-white/70">
-              Quality first · Customer success · Technical excellence · After-sales commitment — every installation backed by warranty, training and responsive support.
-            </p>
+            <ul className="mt-2 space-y-2">
+              <li className="flex items-start gap-2 text-sm text-white/70">
+                <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-gold" />
+                Quality First — equipment that meets international safety standards
+              </li>
+              <li className="flex items-start gap-2 text-sm text-white/70">
+                <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-gold" />
+                Customer Success — measured by long-term satisfaction, not single transactions
+              </li>
+              <li className="flex items-start gap-2 text-sm text-white/70">
+                <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-gold" />
+                Technical Excellence — certified engineers continuously trained on latest technology
+              </li>
+              <li className="flex items-start gap-2 text-sm text-white/70">
+                <FiCheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-gigar-gold" />
+                After-Sales Commitment — every installation backed by warranty and support
+              </li>
+            </ul>
           </div>
         </div>
       </div>
