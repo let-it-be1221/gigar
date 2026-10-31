@@ -54,9 +54,9 @@ export default function Customers() {
         <div className="absolute inset-0 -z-10">
           <SmartImage
             src="https://images.unsplash.com/photo-1542362567-b07e54358753?w=1600&q=80&auto=format&fit=crop"
-            alt="" className="h-full w-full object-cover opacity-25"
+            alt="" className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-gigar-navy via-gigar-navy/85 to-gigar-red/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
         </div>
         <div className="container-page relative">
           <AnimatedSection>

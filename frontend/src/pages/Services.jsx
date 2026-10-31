@@ -104,8 +104,8 @@ export default function Services() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-gigar-navy py-16 text-white lg:py-20">
         <div className="absolute inset-0 -z-10">
-          <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1600&q=80&auto=format&fit=crop" alt="" className="h-full w-full object-cover opacity-25" />
-          <div className="absolute inset-0 bg-gradient-to-r from-gigar-navy via-gigar-navy/85 to-gigar-red/70" />
+          <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1600&q=80&auto=format&fit=crop" alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
         </div>
         <div className="container-page">
           <AnimatedSection>

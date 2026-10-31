@@ -68,9 +68,9 @@ export default function CustomerDetail() {
             src={customer.cover_image}
             alt={customer.name}
             fallbackSeed={customer.slug || customer.name}
-            className="h-full w-full object-cover opacity-30"
+            className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-gigar-navy via-gigar-navy/90 to-gigar-red/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
         </div>
         <div className="container-page relative">
           <AnimatedSection>
