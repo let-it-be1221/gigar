@@ -152,7 +152,7 @@ export default function CustomerDetail() {
                     {customer.equipment_category.replace(/-/g, ' ')}
                   </div>
                   <Link
-                    to="/products"
+                    to="/services#products"
                     className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-gigar-red hover:gap-2 transition-all"
                   >
                     View this product line <FiChevronRight className="h-4 w-4" />

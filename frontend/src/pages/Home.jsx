@@ -320,7 +320,7 @@ export default function Home() {
                           ))}
                         </div>
                       )}
-                      <Link to="/products" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-gigar-red transition-all hover:gap-2">
+                      <Link to="/services#products" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-gigar-red transition-all hover:gap-2">
                         View details <FiArrowRight className="h-3 w-3" />
                       </Link>
                     </div>
@@ -331,7 +331,7 @@ export default function Home() {
           )}
 
           <AnimatedSection className="mt-12 text-center">
-            <Link to="/products" className="btn-primary">
+            <Link to="/services#products" className="btn-primary">
               View all products <FiArrowRight />
             </Link>
           </AnimatedSection>

@@ -195,7 +195,7 @@ export default function HeroCarousel() {
                     {current.cta_text || 'Learn more'} <FiArrowRight />
                   </Link>
                 )}
-                <Link to="/products" className="btn-ghost">
+                <Link to="/services#products" className="btn-ghost">
                   View products <FiChevronRight />
                 </Link>
               </div>
