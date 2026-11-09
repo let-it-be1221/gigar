@@ -257,31 +257,23 @@ export default function Customers() {
         </div>
       </section>
 
-      {/* Sector tabs — "All Sectors" + 6 named sectors */}
+      {/* Sector tabs — "All Sectors" + 6 named sectors.
+          No icons, no numbers — just bold text. */}
       <section className="sticky top-16 z-30 border-b border-gigar-navy/10 bg-white/95 py-3 backdrop-blur lg:top-24 xl:top-28">
         <div className="container-page">
           <div className="flex gap-2 overflow-x-auto py-1 hide-scrollbar">
-            {SECTOR_TABS.map((tab, i) => {
+            {SECTOR_TABS.map((tab) => {
               const isActive = activeTab === tab.id
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold transition ${
+                  className={`flex flex-shrink-0 items-center rounded-full px-5 py-3 text-sm font-extrabold transition ${
                     isActive
                       ? 'bg-gigar-red text-white shadow-gigar-glow'
                       : 'bg-gigar-navy/5 text-gigar-navy hover:bg-gigar-navy/10'
                   }`}
                 >
-                  {tab.id === 'all' ? (
-                    <span className="text-base">🌐</span>
-                  ) : (
-                    <span className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-extrabold ${
-                      isActive ? 'bg-white text-gigar-red' : 'bg-gigar-navy/10 text-gigar-navy'
-                    }`}>
-                      {String(i).padStart(2, '0')}
-                    </span>
-                  )}
                   <span className="whitespace-nowrap">{tab.short}</span>
                 </button>
               )
@@ -301,20 +293,15 @@ export default function Customers() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.4 }}
             >
-              {/* Sector header */}
+              {/* Sector header (no icon) */}
               {activeTab !== 'all' ? (
-                <div className="mb-8 flex items-center gap-4">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gigar-red text-3xl shadow-gigar-glow">
-                    {activeSector.icon}
+                <div className="mb-8">
+                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-gigar-red">
+                    Customer sector
                   </span>
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-gigar-red">
-                      Customer sector
-                    </span>
-                    <h2 className="font-display text-2xl font-extrabold text-gigar-navy sm:text-3xl">
-                      {activeSector.title}
-                    </h2>
-                  </div>
+                  <h2 className="font-display text-2xl font-extrabold text-gigar-navy sm:text-3xl">
+                    {activeSector.title}
+                  </h2>
                 </div>
               ) : (
                 <div className="mb-8">
@@ -327,41 +314,54 @@ export default function Customers() {
                 </div>
               )}
 
-              {/* Sub-segment cards with images — same design as the customer story cards.
-                  Each sub-segment is a card with an image header (gradient overlay + name)
-                  + description in the body. */}
-              {activeTab !== 'all' && activeSector.segments.length > 0 && (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {activeSector.segments.map((seg, i) => (
-                    <motion.div
-                      key={seg.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: i * 0.06 }}
-                      whileHover={{ y: -6 }}
-                      className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
-                    >
-                      {/* Image header */}
-                      <div className="relative h-44 overflow-hidden">
-                        <SmartImage
-                          src={seg.image}
-                          alt={seg.name}
-                          fallbackSeed={seg.name}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 via-gigar-navy/30 to-transparent" />
-                        <div className="absolute bottom-4 left-5 right-5">
-                          <h3 className="font-display text-lg font-bold text-white drop-shadow-md">{seg.name}</h3>
+              {/* Sub-segment cards with images.
+                  For sector tabs: show that sector's segments.
+                  For 'All Sectors' tab: show ALL segments from ALL sectors. */}
+              {(() => {
+                const allSegments = activeTab === 'all'
+                  ? SECTOR_TABS.filter(t => t.id !== 'all').flatMap(t =>
+                      t.segments.map(s => ({ ...s, sectorTitle: t.title }))
+                    )
+                  : (activeSector.segments || [])
+
+                if (allSegments.length === 0) return null
+
+                return (
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {allSegments.map((seg, i) => (
+                      <motion.div
+                        key={seg.name}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: (i % 6) * 0.06 }}
+                        whileHover={{ y: -6 }}
+                        className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
+                      >
+                        <div className="relative h-44 overflow-hidden">
+                          <SmartImage
+                            src={seg.image}
+                            alt={seg.name}
+                            fallbackSeed={seg.name}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 via-gigar-navy/30 to-transparent" />
+                          {activeTab === 'all' && seg.sectorTitle && (
+                            <span className="absolute right-4 top-4 rounded-full bg-gigar-red/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
+                              {seg.sectorTitle.split(' ')[0]}
+                            </span>
+                          )}
+                          <div className="absolute bottom-4 left-5 right-5">
+                            <h3 className="font-display text-lg font-bold text-white drop-shadow-md">{seg.name}</h3>
+                          </div>
                         </div>
-                      </div>
-                      {/* Body */}
-                      <div className="flex flex-1 flex-col p-6">
-                        <p className="text-sm leading-relaxed text-gigar-navy/75">{seg.items}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
+                        <div className="flex flex-1 flex-col p-6">
+                          <p className="text-sm leading-relaxed text-gigar-navy/75">{seg.items}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )
+              })()}
 
               {/* CTA */}
               <div className="mt-8 flex flex-wrap gap-3">
