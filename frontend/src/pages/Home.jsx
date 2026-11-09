@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   FiArrowRight, FiCheckCircle, FiAward, FiTruck,
   FiShield, FiHeadphones, FiZap,
@@ -97,9 +97,6 @@ export default function Home() {
   const [custStats, setCustStats] = useState({})
   const [loading, setLoading] = useState(true)
 
-  const { scrollYProgress } = useScroll()
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
-
   useEffect(() => {
     // Single combined call to /public/home — replaces the 4 parallel calls
     // we used to make (services, products, featuredPosts, customerStats).
@@ -122,12 +119,6 @@ export default function Home() {
 
   return (
     <>
-      {/* Reading progress bar */}
-      <motion.div
-        style={{ width: progressWidth }}
-        className="fixed left-0 top-0 z-50 h-1 bg-gigar-red"
-      />
-
       {/* HERO CAROUSEL */}
       <HeroCarousel />
 
