@@ -10,8 +10,18 @@ import SmartImage from '../components/SmartImage'
 import Loader from '../components/Loader'
 import { publicApi } from '../api/client'
 
-// ----- 6 sector tabs (per user request) -----
+// ----- 6 sector tabs + "All Sectors" (per user request) -----
+// Each sector has sub-segments with an image, name, and description.
+// The sub-segments use the SAME card design as the customer story
+// cards (image header + body with name + description).
 const SECTOR_TABS = [
+  {
+    id: 'all',
+    short: 'All Sectors',
+    title: 'All Sectors',
+    icon: '🌐',
+    segments: [],
+  },
   {
     id: 'institutional-public',
     short: 'Institutional & Public',
@@ -21,18 +31,22 @@ const SECTOR_TABS = [
       {
         name: 'Governmental Organizations',
         items: 'Federal ministries, regional bureaus, municipal authorities, public infrastructure agencies, and public utility enterprises.',
+        image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Defense & Security Forces',
         items: 'National defense forces, federal and regional police, correctional facilities, and emergency management agencies.',
+        image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Public Educational Institutions',
         items: 'State universities, vocational training colleges (TVETs), and public research institutes.',
+        image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'State-Owned Enterprises (SOEs)',
         items: 'National transport/aviation corporations, public telecom operators, state commercial banks, and industrial park development corporations.',
+        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80&auto=format&fit=crop',
       },
     ],
   },
@@ -45,14 +59,17 @@ const SECTOR_TABS = [
       {
         name: 'Diplomatic Communities',
         items: 'Foreign embassies, consulates, bilateral trade missions, and diplomatic staff residences.',
+        image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'International Organizations',
         items: 'United Nations (UN) agencies, African Union (AU), regional economic blocs (e.g., IGAD, COMESA), and international financial institutions (World Bank, IMF, AfDB).',
+        image: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Non-Governmental Organizations (NGOs)',
         items: 'International NGOs (INGOs), local civil society organizations (CSOs), humanitarian aid foundations, and charitable trusts.',
+        image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80&auto=format&fit=crop',
       },
     ],
   },
@@ -65,26 +82,32 @@ const SECTOR_TABS = [
       {
         name: 'Real Estate Developers & Property Management',
         items: 'Residential apartment complexes, commercial office towers, gated communities, and shopping malls.',
+        image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Hospitality & Leisure Industry',
         items: 'Star-rated hotels, resorts, lodges, banquet venues, commercial restaurants, and recreation centers.',
+        image: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Healthcare & Medical Facilities',
         items: 'Private hospitals, specialized clinics, diagnostic labs, rehabilitation centers, and pharmaceutical manufacturers.',
+        image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Automotive & Fleet Operators',
         items: 'Vehicle dealerships, commercial garage networks, logistics/freight companies, public transport operators, car rental agencies, and fleet managers.',
+        image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Financial Institutions',
         items: 'Private commercial banks, insurance companies, microfinance institutions, and fintech headquarters.',
+        image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Retail & Supermarket Chains',
         items: 'Department stores, hypermarkets, wholesale cash-and-carry centers, and dry-cleaning services.',
+        image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80&auto=format&fit=crop',
       },
     ],
   },
@@ -97,18 +120,22 @@ const SECTOR_TABS = [
       {
         name: 'Manufacturing & Industrial Plants',
         items: 'Agro-processing factories, textile and garment mills, chemical plants, metal processing facilities, and bottling plants.',
+        image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Construction & Engineering Contractors',
         items: 'General EPC (Engineering, Procurement, and Construction) contractors, MEP (Mechanical, Electrical, and Plumbing) subcontractors, civil engineering firms, and architectural consultancies.',
+        image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Mining & Energy Projects',
         items: 'Mining operations, cement plants, solar and thermal energy projects, and power generation sub-stations.',
+        image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Logistics & Freight Services',
         items: 'Dry ports, warehousing complexes, cold-chain storage facilities, and freight forwarding hubs.',
+        image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop',
       },
     ],
   },
@@ -121,10 +148,12 @@ const SECTOR_TABS = [
       {
         name: 'High-Net-Worth Individuals (HNWIs)',
         items: 'Luxury homeowners buying private villas, residential lifts, home stair lifts, or high-end standby power generators.',
+        image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'General Household Consumers',
         items: 'Individual retail customers purchasing small residential appliances, basic maintenance parts, or car wash services.',
+        image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80&auto=format&fit=crop',
       },
     ],
   },
@@ -137,10 +166,12 @@ const SECTOR_TABS = [
       {
         name: 'Distributors & Resellers',
         items: 'Equipment dealers, regional stockists, and retail spare-parts traders.',
+        image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80&auto=format&fit=crop',
       },
       {
         name: 'Consultants & System Integrators',
         items: 'Architectural design firms, MEP engineering consultants, and technical procurement agencies buying on behalf of end-users.',
+        image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80&auto=format&fit=crop',
       },
     ],
   },
@@ -151,7 +182,7 @@ export default function Customers() {
   const [stats, setStats]         = useState({})
   const [loading, setLoading]     = useState(true)
   const [total, setTotal]         = useState(0)
-  const [activeTab, setActiveTab] = useState(SECTOR_TABS[0].id)
+  const [activeTab, setActiveTab] = useState('all')
 
   useEffect(() => {
     publicApi.customerStats()
@@ -226,7 +257,7 @@ export default function Customers() {
         </div>
       </section>
 
-      {/* 6 sector tabs */}
+      {/* Sector tabs — "All Sectors" + 6 named sectors */}
       <section className="sticky top-16 z-30 border-b border-gigar-navy/10 bg-white/95 py-3 backdrop-blur lg:top-24 xl:top-28">
         <div className="container-page">
           <div className="flex gap-2 overflow-x-auto py-1 hide-scrollbar">
@@ -242,11 +273,15 @@ export default function Customers() {
                       : 'bg-gigar-navy/5 text-gigar-navy hover:bg-gigar-navy/10'
                   }`}
                 >
-                  <span className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-extrabold ${
-                    isActive ? 'bg-white text-gigar-red' : 'bg-gigar-navy/10 text-gigar-navy'
-                  }`}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
+                  {tab.id === 'all' ? (
+                    <span className="text-base">🌐</span>
+                  ) : (
+                    <span className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-extrabold ${
+                      isActive ? 'bg-white text-gigar-red' : 'bg-gigar-navy/10 text-gigar-navy'
+                    }`}>
+                      {String(i).padStart(2, '0')}
+                    </span>
+                  )}
                   <span className="whitespace-nowrap">{tab.short}</span>
                 </button>
               )
@@ -255,7 +290,7 @@ export default function Customers() {
         </div>
       </section>
 
-      {/* Active sector content — detailed sub-segment breakdown */}
+      {/* Content area */}
       <section className="py-12 lg:py-16">
         <div className="container-page">
           <AnimatePresence mode="wait">
@@ -266,167 +301,166 @@ export default function Customers() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.4 }}
             >
-              {/* Sector header */}
-              <div className="mb-8 flex items-center gap-4">
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gigar-red text-3xl shadow-gigar-glow">
-                  {activeSector.icon}
-                </span>
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-gigar-red">
-                    Customer sector
+              {/* Sector header (only for non-"all" tabs) */}
+              {activeTab !== 'all' && activeSector.segments.length > 0 && (
+                <div className="mb-8 flex items-center gap-4">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gigar-red text-3xl shadow-gigar-glow">
+                    {activeSector.icon}
                   </span>
-                  <h2 className="font-display text-2xl font-extrabold text-gigar-navy sm:text-3xl">
-                    {activeSector.title}
-                  </h2>
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-gigar-red">
+                      Customer sector
+                    </span>
+                    <h2 className="font-display text-2xl font-extrabold text-gigar-navy sm:text-3xl">
+                      {activeSector.title}
+                    </h2>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Sub-segment cards grid */}
-              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                {activeSector.segments.map((seg, i) => (
-                  <motion.div
-                    key={seg.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: i * 0.08 }}
-                    whileHover={{ y: -4 }}
-                    className="card-soft p-5 hover:border-gigar-red/30"
-                  >
-                    <div className="flex items-start gap-3">
-                      <FiCheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-gigar-red" />
-                      <div>
-                        <h3 className="font-display text-base font-bold text-gigar-navy">{seg.name}</h3>
-                        <p className="mt-2 text-sm leading-relaxed text-gigar-navy/70">{seg.items}</p>
+              {/* Sub-segment cards with images (shown for sector tabs, not "all") */}
+              {activeTab !== 'all' && activeSector.segments.length > 0 && (
+                <div className="mb-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {activeSector.segments.map((seg, i) => (
+                    <motion.div
+                      key={seg.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: i * 0.06 }}
+                      whileHover={{ y: -6 }}
+                      className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
+                    >
+                      {/* Image header */}
+                      <div className="relative h-40 overflow-hidden">
+                        <SmartImage
+                          src={seg.image}
+                          alt={seg.name}
+                          fallbackSeed={seg.name}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/80 via-transparent to-transparent" />
+                        <div className="absolute bottom-3 left-4 right-4">
+                          <h3 className="font-display text-base font-bold text-white drop-shadow-md">{seg.name}</h3>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                      {/* Body */}
+                      <div className="flex flex-1 flex-col p-5">
+                        <p className="text-sm leading-relaxed text-gigar-navy/75">{seg.items}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
 
-              {/* CTA for this sector */}
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link to="/contact" className="btn-primary">
-                  Contact us about {activeSector.short.toLowerCase()} <FiArrowRight />
-                </Link>
-                <a href="tel:+251115518267" className="btn-outline">
-                  Call +251 115 51 82 67
-                </a>
-              </div>
+              {/* Customer story cards (shown for ALL tabs) */}
+              {/* The existing customer story design — cover image, logo, sector chip, project, testimonial */}
+              {loading ? (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {[0,1,2,3,4,5].map((i) => <div key={i} className="h-96 rounded-2xl shimmer" />)}
+                </div>
+              ) : customers.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                  <FiInbox className="h-16 w-16 text-gigar-navy/30" />
+                  <h3 className="mt-4 font-display text-xl font-bold text-gigar-navy">No customer stories yet</h3>
+                  <p className="mt-2 text-gigar-navy/60">Customer stories will appear here once the admin adds them.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-6 flex items-center justify-between">
+                    <h3 className="font-display text-xl font-bold text-gigar-navy">
+                      {activeTab === 'all' ? 'All customer stories' : `${activeSector.short} — featured stories`}
+                    </h3>
+                    <p className="text-sm text-gigar-navy/60">{customers.length} stories</p>
+                  </div>
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <AnimatePresence mode="popLayout">
+                      {customers.map((c, i) => (
+                        <motion.article
+                          key={c.id}
+                          layout
+                          initial={{ opacity: 0, y: 28 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.4, delay: i * 0.05 }}
+                          whileHover={{ y: -8 }}
+                          className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
+                        >
+                          <Link to={`/customers/${c.slug}`} className="absolute inset-0 z-10" aria-label={`View ${c.name} story`} />
+                          <div className="relative h-48 overflow-hidden">
+                            <SmartImage
+                              src={c.cover_image}
+                              alt={c.name}
+                              fallbackSeed={c.slug || c.name}
+                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 via-gigar-navy/30 to-transparent" />
+                            <div className="absolute left-4 top-4 flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-white/95 shadow-gigar-soft backdrop-blur">
+                              <SmartImage src={c.logo_url} alt={c.name} fallbackSeed={`${c.slug || c.name}-logo`} className="h-full w-full object-contain p-1" />
+                            </div>
+                            {c.sector && (
+                              <span className="absolute right-4 top-4 rounded-full bg-gigar-red px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow">
+                                {c.sector}
+                              </span>
+                            )}
+                            <div className="absolute inset-x-0 bottom-0 p-5">
+                              <h3 className="font-display text-xl font-bold text-white drop-shadow-md">{c.name}</h3>
+                              <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-white/85">
+                                {c.location && (
+                                  <span className="inline-flex items-center gap-1"><FiMapPin className="h-3.5 w-3.5" /> {c.location}</span>
+                                )}
+                                {c.year && (
+                                  <span className="inline-flex items-center gap-1"><FiCalendar className="h-3.5 w-3.5" /> {c.year}</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-1 flex-col p-6">
+                            {c.project_name && (
+                              <div className="mb-3 rounded-lg bg-gigar-mist px-3 py-2 text-sm font-semibold text-gigar-navy">
+                                <span className="text-gigar-red">Project:</span> {c.project_name}
+                              </div>
+                            )}
+                            {c.description && (
+                              <div
+                                className="text-sm leading-relaxed text-gigar-navy/75 line-clamp-3 markdown-body"
+                                dangerouslySetInnerHTML={{ __html: c.description }}
+                              />
+                            )}
+                            {(c.units_installed || c.equipment_category) && (
+                              <div className="mt-4 flex flex-wrap gap-2">
+                                {c.units_installed > 0 && (
+                                  <span className="inline-flex items-center gap-1 rounded-md bg-gigar-red/10 px-2.5 py-1 text-xs font-semibold text-gigar-red">
+                                    <FiCheckCircle className="h-3.5 w-3.5" /> {c.units_installed.toLocaleString()} units installed
+                                  </span>
+                                )}
+                                {c.equipment_category && (
+                                  <span className="rounded-md bg-gigar-navy/5 px-2.5 py-1 text-xs font-semibold text-gigar-navy/70 capitalize">
+                                    {c.equipment_category.replace(/-/g, ' ')}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                            {c.testimonial && (
+                              <blockquote className="mt-4 border-l-2 border-gigar-red/40 pl-3 italic text-sm text-gigar-navy/75">
+                                <FiMessageSquare className="mb-1 h-3.5 w-3.5 text-gigar-red/50" />
+                                "{c.testimonial}"
+                                {c.testimonial_author && (
+                                  <footer className="mt-1 not-italic text-xs text-gigar-navy/60">— {c.testimonial_author}</footer>
+                                )}
+                              </blockquote>
+                            )}
+                            <div className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-gigar-red opacity-0 transition group-hover:opacity-100">
+                              Read full story <FiChevronRight className="h-3.5 w-3.5" />
+                            </div>
+                          </div>
+                        </motion.article>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                </>
+              )}
             </motion.div>
           </AnimatePresence>
-        </div>
-      </section>
-
-      {/* Customer stories grid (existing featured customers) */}
-      <section className="bg-gigar-mist py-16 lg:py-20">
-        <div className="container-page">
-          <AnimatedSection className="mb-10 text-center">
-            <span className="section-eyebrow">Featured Stories</span>
-            <h2 className="mt-3 font-display text-2xl font-extrabold text-gigar-navy sm:text-3xl">
-              Customer success stories
-            </h2>
-            <p className="mt-2 text-sm text-gigar-navy/70">
-              Real installations across Ethiopia — click any card to read the full story.
-            </p>
-          </AnimatedSection>
-
-          {loading ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {[0,1,2,3,4,5].map((i) => <div key={i} className="h-96 rounded-2xl shimmer" />)}
-            </div>
-          ) : customers.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <FiInbox className="h-16 w-16 text-gigar-navy/30" />
-              <h3 className="mt-4 font-display text-xl font-bold text-gigar-navy">No customer stories yet</h3>
-              <p className="mt-2 text-gigar-navy/60">Customer stories will appear here once the admin adds them.</p>
-            </div>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <AnimatePresence mode="popLayout">
-                {customers.map((c, i) => (
-                  <motion.article
-                    key={c.id}
-                    layout
-                    initial={{ opacity: 0, y: 28 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.4, delay: i * 0.05 }}
-                    whileHover={{ y: -8 }}
-                    className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
-                  >
-                    <Link to={`/customers/${c.slug}`} className="absolute inset-0 z-10" aria-label={`View ${c.name} story`} />
-                    <div className="relative h-48 overflow-hidden">
-                      <SmartImage
-                        src={c.cover_image}
-                        alt={c.name}
-                        fallbackSeed={c.slug || c.name}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 via-gigar-navy/30 to-transparent" />
-                      <div className="absolute left-4 top-4 flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-white/95 shadow-gigar-soft backdrop-blur">
-                        <SmartImage src={c.logo_url} alt={c.name} fallbackSeed={`${c.slug || c.name}-logo`} className="h-full w-full object-contain p-1" />
-                      </div>
-                      {c.sector && (
-                        <span className="absolute right-4 top-4 rounded-full bg-gigar-red px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow">
-                          {c.sector}
-                        </span>
-                      )}
-                      <div className="absolute inset-x-0 bottom-0 p-5">
-                        <h3 className="font-display text-xl font-bold text-white drop-shadow-md">{c.name}</h3>
-                        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-white/85">
-                          {c.location && (
-                            <span className="inline-flex items-center gap-1"><FiMapPin className="h-3.5 w-3.5" /> {c.location}</span>
-                          )}
-                          {c.year && (
-                            <span className="inline-flex items-center gap-1"><FiCalendar className="h-3.5 w-3.5" /> {c.year}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-1 flex-col p-6">
-                      {c.project_name && (
-                        <div className="mb-3 rounded-lg bg-gigar-mist px-3 py-2 text-sm font-semibold text-gigar-navy">
-                          <span className="text-gigar-red">Project:</span> {c.project_name}
-                        </div>
-                      )}
-                      {c.description && (
-                        <div
-                          className="text-sm leading-relaxed text-gigar-navy/75 line-clamp-3 markdown-body"
-                          dangerouslySetInnerHTML={{ __html: c.description }}
-                        />
-                      )}
-                      {(c.units_installed || c.equipment_category) && (
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {c.units_installed > 0 && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-gigar-red/10 px-2.5 py-1 text-xs font-semibold text-gigar-red">
-                              <FiCheckCircle className="h-3.5 w-3.5" /> {c.units_installed.toLocaleString()} units installed
-                            </span>
-                          )}
-                          {c.equipment_category && (
-                            <span className="rounded-md bg-gigar-navy/5 px-2.5 py-1 text-xs font-semibold text-gigar-navy/70 capitalize">
-                              {c.equipment_category.replace(/-/g, ' ')}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      {c.testimonial && (
-                        <blockquote className="mt-4 border-l-2 border-gigar-red/40 pl-3 italic text-sm text-gigar-navy/75">
-                          <FiMessageSquare className="mb-1 h-3.5 w-3.5 text-gigar-red/50" />
-                          "{c.testimonial}"
-                          {c.testimonial_author && (
-                            <footer className="mt-1 not-italic text-xs text-gigar-navy/60">— {c.testimonial_author}</footer>
-                          )}
-                        </blockquote>
-                      )}
-                      <div className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-gigar-red opacity-0 transition group-hover:opacity-100">
-                        Read full story <FiChevronRight className="h-3.5 w-3.5" />
-                      </div>
-                    </div>
-                  </motion.article>
-                ))}
-              </AnimatePresence>
-            </div>
-          )}
         </div>
       </section>
 
