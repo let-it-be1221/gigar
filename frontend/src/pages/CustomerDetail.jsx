@@ -9,6 +9,7 @@ import AnimatedSection from '../components/AnimatedSection'
 import SmartImage from '../components/SmartImage'
 import Loader from '../components/Loader'
 import { publicApi } from '../api/client'
+import { sanitizeHtml } from '../utils/sanitize'
 
 export default function CustomerDetail() {
   const { slug } = useParams()
@@ -135,7 +136,7 @@ export default function CustomerDetail() {
               {customer.description ? (
                 <div
                   className="markdown-body mt-5"
-                  dangerouslySetInnerHTML={{ __html: customer.description }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(customer.description) }}
                 />
               ) : (
                 <p className="mt-5 text-base text-gigar-navy/70">

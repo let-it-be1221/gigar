@@ -10,6 +10,7 @@ import BlogCard from '../components/BlogCard'
 import AnimatedSection from '../components/AnimatedSection'
 import { publicApi } from '../api/client'
 import { formatDate, getMediaPath } from '../utils/format'
+import { sanitizeHtml } from '../utils/sanitize'
 
 export default function BlogPost() {
   const { slug } = useParams()
@@ -139,7 +140,7 @@ export default function BlogPost() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="markdown-body"
           >
-            <div dangerouslySetInnerHTML={{ __html: post.description }} />
+            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.description) }} />
           </motion.div>
 
           {/* Tags */}

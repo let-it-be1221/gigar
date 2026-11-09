@@ -31,17 +31,19 @@ Route::prefix('public')->group(function () {
     Route::get('/customers/stats', [CustomerController::class, 'stats']);
     Route::get('/customers/{slug}', [CustomerController::class, 'show']);
 
-    Route::post('/contact', [PublicController::class, 'contact']);        // contact form submission
-    Route::post('/newsletter', [PublicController::class, 'newsletter']);  // footer newsletter signup
+    // SAST FIX (CWE-770): Rate limit contact + newsletter to prevent abuse
+    Route::post('/contact', [PublicController::class, 'contact'])->middleware('throttle:10,1');
+    Route::post('/newsletter', [PublicController::class, 'newsletter'])->middleware('throttle:5,1');
 });
 
 /*
 |--------------------------------------------------------------------------
-| Admin authentication
+| Admin authentication (rate-limited to prevent brute force)
 |--------------------------------------------------------------------------
 */
 Route::prefix('auth')->group(function () {
-    Route::post('login', [AuthController::class, 'login']);
+    // SAST FIX (CWE-770): Limit login attempts to 5 per minute per IP
+    Route::post('login', [AuthController::class, 'login'])->middleware('throttle:5,1');
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);

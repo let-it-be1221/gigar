@@ -12,25 +12,35 @@ class AuthController extends Controller
 {
     /**
      * Admin login — issues a Sanctum token.
+     * SAST FIX (CWE-521): Enforce password complexity on login input.
+     * SAST FIX (CWE-203): Same error message for all failure cases
+     *   to prevent username enumeration.
      */
     public function login(Request $request)
     {
         $data = $request->validate([
             'email'    => ['required', 'email'],
-            'password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
 
         $user = User::where('email', $data['email'])->first();
 
+        // SAST FIX (CWE-203): Same error message for both "user not
+        // found" and "wrong password" and "not admin" — attacker
+        // cannot distinguish whether an email exists in the database.
+        $genericError = 'The provided credentials are incorrect.';
+
         if (! $user || ! Hash::check($data['password'], $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => [$genericError],
             ]);
         }
 
         if (! $user->isAdmin()) {
+            // Same message — don't reveal that the account exists but
+            // isn't authorized.
             throw ValidationException::withMessages([
-                'email' => ['This account is not authorized to access the admin area.'],
+                'email' => [$genericError],
             ]);
         }
 

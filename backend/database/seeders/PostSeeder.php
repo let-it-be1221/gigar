@@ -13,12 +13,11 @@ class PostSeeder extends Seeder
     {
         $admin = User::where('role', 'admin')->first();
         if (! $admin) {
-            $admin = User::create([
-                'name'     => 'Gigar Admin',
-                'email'    => 'admin@gigartrading.com',
-                'password' => bcrypt('Gigar@2024!'),
-                'role'     => 'admin',
-            ]);
+            // SAST FIX (CWE-798): Don't create an admin with a hardcoded
+            // password. The AdminUserSeeder should have created one. If
+            // it didn't, skip seeding and warn the operator.
+            $this->command->warn('No admin user found. Run AdminUserSeeder first.');
+            return;
         }
 
         $posts = $this->samplePosts();

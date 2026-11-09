@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import AdminShell from '../../components/AdminShell'
 import Loader from '../../components/Loader'
 import { adminApi } from '../../api/client'
+import { sanitizeHtml } from '../../utils/sanitize'
 
 const EMPTY = {
   title: '', slug: '', excerpt: '', description: '',
@@ -351,7 +352,7 @@ export default function AdminPostEditor() {
                 </button>
               </div>
               {form.excerpt && <p className="mt-2 text-gigar-navy/70">{form.excerpt}</p>}
-              <div className="mt-6 markdown-body" dangerouslySetInnerHTML={{ __html: form.description }} />
+              <div className="mt-6 markdown-body" dangerouslySetInnerHTML={{ __html: sanitizeHtml(form.description) }} />
             </motion.div>
           </motion.div>
         )}

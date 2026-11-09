@@ -119,8 +119,23 @@ class PostController extends Controller
             return response()->json(['message' => 'No path provided.'], 422);
         }
 
-        $full = storage_path('app/public/' . ltrim($path, '/'));
-        if (file_exists($full) && is_file($full)) {
+        // CRITICAL FIX (CWE-22): Validate the resolved path stays within
+        // the public storage directory. Without this check, an attacker
+        // could pass ../../etc/passwd or ../../.env to delete arbitrary
+        // files on the server.
+        $publicDir = realpath(storage_path('app/public'));
+        $full = realpath(storage_path('app/public/' . ltrim($path, '/')));
+
+        if ($full === false || $publicDir === false) {
+            return response()->json(['message' => 'File not found.'], 404);
+        }
+
+        // Ensure the resolved path is inside the public storage directory
+        if (! str_starts_with($full, $publicDir . DIRECTORY_SEPARATOR)) {
+            return response()->json(['message' => 'Invalid path.'], 403);
+        }
+
+        if (is_file($full)) {
             unlink($full);
         }
 

@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
     "axios": "^1.7.7",
+    "dompurify": "^3.4.17",
     "framer-motion": "^11.5.4",
     "lucide-react": "^0.453.0",
     "react": "^18.3.1",

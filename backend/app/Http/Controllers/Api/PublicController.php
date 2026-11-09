@@ -312,8 +312,12 @@ class PublicController extends Controller
             'message' => ['required', 'string', 'max:5000'],
         ]);
 
-        // Log the contact message (so it persists even if mail is not configured)
-        logger()->info('Contact form submission', $data);
+        // SAST FIX (CWE-532): Log only non-sensitive fields (name + subject),
+        // NOT the email, phone, or message body which are PII.
+        logger()->info('Contact form submission', [
+            'name'    => $data['name'],
+            'subject' => $data['subject'] ?? '(none)',
+        ]);
 
         // Try to send mail (silently no-op if mail driver is `log`)
         try {
@@ -347,7 +351,9 @@ class PublicController extends Controller
             'email' => ['required', 'email', 'max:200'],
         ]);
 
-        logger()->info('Newsletter signup', ['email' => $data['email']]);
+        // SAST FIX (CWE-532): Don't log the actual email address —
+        // log a truncated/hashed version to avoid storing PII in logs.
+        logger()->info('Newsletter signup', ['email_hash' => sha1($data['email'])]);
 
         try {
             Mail::raw(
