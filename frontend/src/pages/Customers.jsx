@@ -290,7 +290,7 @@ export default function Customers() {
         </div>
       </section>
 
-      {/* Content area — tabs only, no sub-segment cards or customer stories */}
+      {/* Content area — sub-segment cards with images (like customer story cards) */}
       <section className="py-12 lg:py-16">
         <div className="container-page">
           <AnimatePresence mode="wait">
@@ -301,7 +301,7 @@ export default function Customers() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.4 }}
             >
-              {/* Sector title only (no sub-segment cards) */}
+              {/* Sector header */}
               {activeTab !== 'all' ? (
                 <div className="mb-8 flex items-center gap-4">
                   <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gigar-red text-3xl shadow-gigar-glow">
@@ -327,8 +327,44 @@ export default function Customers() {
                 </div>
               )}
 
+              {/* Sub-segment cards with images — same design as the customer story cards.
+                  Each sub-segment is a card with an image header (gradient overlay + name)
+                  + description in the body. */}
+              {activeTab !== 'all' && activeSector.segments.length > 0 && (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {activeSector.segments.map((seg, i) => (
+                    <motion.div
+                      key={seg.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: i * 0.06 }}
+                      whileHover={{ y: -6 }}
+                      className="group relative flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow"
+                    >
+                      {/* Image header */}
+                      <div className="relative h-44 overflow-hidden">
+                        <SmartImage
+                          src={seg.image}
+                          alt={seg.name}
+                          fallbackSeed={seg.name}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 via-gigar-navy/30 to-transparent" />
+                        <div className="absolute bottom-4 left-5 right-5">
+                          <h3 className="font-display text-lg font-bold text-white drop-shadow-md">{seg.name}</h3>
+                        </div>
+                      </div>
+                      {/* Body */}
+                      <div className="flex flex-1 flex-col p-6">
+                        <p className="text-sm leading-relaxed text-gigar-navy/75">{seg.items}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+
               {/* CTA */}
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap gap-3">
                 <Link to="/contact" className="btn-primary">
                   Contact us about {activeTab === 'all' ? 'our services' : activeSector.short.toLowerCase()} <FiArrowRight />
                 </Link>
