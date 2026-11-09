@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   FiMenu, FiX, FiLogOut, FiShield,
-  FiHome, FiInfo, FiGrid, FiBox, FiUsers, FiFileText, FiMail,
+  FiHome, FiInfo, FiGrid, FiUsers, FiFileText, FiMail,
 } from 'react-icons/fi'
 import { useAuth } from '../context/AuthContext'
 
@@ -11,7 +11,6 @@ const NAV = [
   { label: 'Home',      to: '/',          icon: FiHome },
   { label: 'About',     to: '/about',     icon: FiInfo },
   { label: 'Services',  to: '/services',  icon: FiGrid },
-  { label: 'Products',  to: '/products',  icon: FiBox },
   { label: 'Customers', to: '/customers', icon: FiUsers },
   { label: 'Blog',      to: '/blog',      icon: FiFileText },
   { label: 'Contact',   to: '/contact',   icon: FiMail },

@@ -7,6 +7,7 @@ import {
 import AnimatedSection from '../components/AnimatedSection'
 import SmartImage from '../components/SmartImage'
 import Loader from '../components/Loader'
+import TechnicalSpecs from '../components/TechnicalSpecs'
 import { publicApi } from '../api/client'
 
 // The 5 product categories shown as a vertical list on the LEFT margin of the
@@ -19,12 +20,14 @@ const SIDEBAR_CATEGORIES = [
   'vehicle-test-equipment',
 ]
 
-// The 4 service lines — Vehicle Inspection Test is the 4th tab.
+// The 5 service lines — Products is the 5th tab (moved from its own
+// navbar item into Services per user request).
 const SERVICE_LINES = [
   { id: 'supplying-and-installing', short: 'Supplying & Installing',  full: 'Supplying & Installing Equipments' },
   { id: 'maintenance-service',      short: 'Maintenance',             full: 'Maintenance Service' },
   { id: 'technical-consultancy',    short: 'Technical Consultancy',   full: 'Technical Consultancy' },
   { id: 'vehicle-inspection-test',  short: 'Vehicle Inspection Test', full: 'Vehicle Inspection Test' },
+  { id: 'products',                 short: 'Products',                full: 'Products' },
 ]
 
 // Static content for Maintenance Service + Technical Consultancy + Vehicle Inspection
@@ -60,6 +63,18 @@ const VEHICLE_INSPECTION_HIGHLIGHTS = [
 ]
 const VEHICLE_INSPECTION_DESC = 'Gigar Trading operates complete VTEQ vehicle test lanes for government and private inspection centers across Ethiopia. Our certified inspectors run brake, suspension, side-slip and headlight alignment tests for commercial fleets, pre-purchase assessments and annual recertifications — issuing government-compliant inspection reports on every vehicle.'
 const VEHICLE_INSPECTION_IMAGE = 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&q=80&auto=format&fit=crop'
+
+// Product images for the Products tab (mirrored from the old /products page)
+const PRODUCT_IMAGES = {
+  'building-elevators':       { image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop' },
+  'building-lifts':           { image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&auto=format&fit=crop' },
+  'paint-booths':            { image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop' },
+  'vehicle-test-equipment':   { image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80&auto=format&fit=crop' },
+  'facility-equipment':       { image: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&q=80&auto=format&fit=crop' },
+  'car-lifts':               { image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format&fit=crop' },
+  'gps-speed-limit':         { image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&q=80&auto=format&fit=crop' },
+  'heavy-equipment':         { image: 'https://picsum.photos/seed/heavy-equipment/800/600' },
+}
 
 export default function Services() {
   const [products, setProducts]   = useState([])
@@ -113,7 +128,7 @@ export default function Services() {
               Our Services
             </span>
             <h1 className="mt-5 max-w-3xl font-display text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
-              Four service lines, one trusted partner
+              Five service lines, one trusted partner
             </h1>
             <p className="mt-4 max-w-2xl text-base text-white/80 sm:text-lg">
               From equipment supply and installation to lifetime maintenance, engineering consultancy and vehicle inspection — Gigar Trading delivers end-to-end industrial solutions across Ethiopia.
@@ -305,8 +320,65 @@ export default function Services() {
             </div>
           </div>
         </section>
+      ) : activeLine === 'products' ? (
+        // PRODUCTS tab — full product catalog grid + TechnicalSpecs card.
+        <section className="py-12 lg:py-16">
+          <div className="container-page">
+            <motion.div key="products-tab" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+              <div className="mb-6 flex items-center gap-4">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gigar-red text-xl font-extrabold text-white shadow-gigar-glow">05</span>
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-gigar-red">Service line</span>
+                  <h2 className="font-display text-3xl font-extrabold text-gigar-navy sm:text-4xl">Products</h2>
+                </div>
+              </div>
+              <p className="mb-6 max-w-3xl text-base leading-relaxed text-gigar-navy/80">
+                Building elevators, lifts, paint booths, vehicle test equipment, facility equipment and more — supplied, installed and serviced by certified Gigar technicians across Ethiopia.
+              </p>
+              {loading ? (
+                <div className="flex justify-center py-16"><Loader label="Loading products…" /></div>
+              ) : (
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                  {products.map((p, i) => {
+                    const imgMeta = PRODUCT_IMAGES[p.id] || { image: `https://picsum.photos/seed/${p.id}/600/450` }
+                    const img = imgMeta.image || imgMeta
+                    return (
+                      <motion.div key={p.id || p.title} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5, delay: i * 0.06 }} whileHover={{ y: -8 }} className="group flex flex-col overflow-hidden rounded-2xl border border-gigar-navy/10 bg-white shadow-gigar-soft transition-all hover:border-gigar-red/30 hover:shadow-gigar-glow">
+                        <div className="relative h-56 overflow-hidden">
+                          <SmartImage src={img} alt={p.title} fallbackSeed={p.id} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-gigar-navy/85 via-gigar-navy/30 to-transparent" />
+                          <span className="absolute right-4 top-4 rounded-full bg-gigar-red/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">{p.id.split('-')[0]}</span>
+                          <div className="absolute inset-x-0 bottom-0 p-5">
+                            <h3 className="font-display text-xl font-bold text-white drop-shadow-md">{p.title}</h3>
+                            <p className="mt-1 text-sm font-semibold text-gigar-gold drop-shadow">{p.tagline}</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-1 flex-col p-6">
+                          <p className="flex-1 text-sm leading-relaxed text-gigar-navy/75">{p.description}</p>
+                          {p.features && p.features.length > 0 && (
+                            <div className="mt-4 grid grid-cols-2 gap-2">
+                              {p.features.map((f) => (
+                                <div key={f} className="flex items-start gap-1.5 rounded-lg bg-gigar-mist px-2.5 py-1.5 text-xs font-medium text-gigar-navy/80">
+                                  <FiCheckCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-gigar-red" /> {f}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          <div className="mt-6 flex items-center justify-between border-t border-gigar-navy/10 pt-4">
+                            <Link to="/contact" className="inline-flex items-center gap-1.5 text-sm font-semibold text-gigar-red transition-all hover:gap-2.5">Request a quote <FiArrowRight className="h-4 w-4" /></Link>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
+                </div>
+              )}
+              <div className="mt-16"><TechnicalSpecs /></div>
+            </motion.div>
+          </div>
+        </section>
       ) : (
-        // MAINTENANCE SERVICE or TECHNICAL CONSULTANCY — simple single-column layout
+        // MAINTENANCE / TECHNICAL CONSULTANCY / VEHICLE INSPECTION TEST
         <section className="py-12 lg:py-16">
           <div className="container-page">
             <motion.div
